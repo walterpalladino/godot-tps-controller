@@ -1,14 +1,9 @@
 extends CharacterBody3D
 
 @onready var collision_shape = get_node("CollisionShape3D")
-#@onready var animation_player : AnimationPlayer = get_node("Model/AnimationPlayer")
-#@export var animation_player : AnimationPlayer
 @onready var animation_tree : AnimationTree = get_node("AnimationTree")
-#@onready var state_machine := animation_tree.get("parameters/side_scroller_sm/playback") as AnimationNodeStateMachinePlayback
-
 
 @onready var model = get_node("Model")
-
 
 @export_category("Ground Movement")
 
@@ -44,19 +39,11 @@ var lastLookAtDirection : Vector3
 
 
 const STEP_RAY_LENGTH = 0.2
-#const STEP_OFFSET = Vector3(0.0, 0.1, 0.0)
 
-#var last_direction = Vector2(1.0, 0.0)
-
-#var last_floor_y : float = 0.0
-#var last_floor_time : float = 0.0
 
 # steps
-#@export_group("Steps", "steps") # All variables with name starting with "prefix" are added to the group.
 @export_category("Steps")
 @export var max_step_height : float = 0.40
-
-#var on_walkable_step : bool = false
 
 @export var step_max_slope_degree : float = 40.0
 
@@ -82,7 +69,6 @@ func _ready() -> void:
 
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-	#animation_player.connect("animation_finished", animation_finished)
 	setup_input()
 
 
@@ -100,36 +86,10 @@ func _input(event: InputEvent) -> void:
 		
 		print_debug(camera_mount.rotation.x)
 
-	
-func _process(delta: float) -> void:
-	#print_debug("_process")
-	#print_debug(animation_tree.get_animation_player())
-	
-	#animation_player = get_node( animation_tree.get_animation_player() )
-	#print_debug(animation_player.is_playing())
-	#print_debug(animation_player.current_animation)
-	#if (is_animation_playing("Idle")):
-	#	print_debug("animation playing")
-	
-	
-	# in process or elsewhere:
-	#var current_node = state_machine.get_current_node()
-	#print_debug(current_node)
-	pass
-	
-#func _unhandled_key_input(event: InputEvent) -> void:
-
-#	if event is InputEventKey:
-#		if event.pressed and event.keycode == KEY_C:
-#			crouch = !crouch
-
 
 func _physics_process(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
-	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	#var direction = Vector3.RIGHT * sign(input_dir.x) 
-	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
@@ -141,14 +101,6 @@ func _physics_process(delta):
 	else:
 		is_in_air = true
 
-	# Test Movement
-	#var test_motion_result : PhysicsTestMotionResult3D = PhysicsTestMotionResult3D.new()
-	#var test_motion_parameters : PhysicsTestMotionParameters3D	= PhysicsTestMotionParameters3D.new()
-	
-	#var test_result : bool = PhysicsServer3D.body_test_motion(get_rid(), test_motion_parameters, test_motion_result)	
-	#if test_result:
-	#	print("Collided with something trying to move...")
-
 	if Input.is_action_just_pressed("move_crouch_stand"):
 		crouch = !crouch 
 
@@ -158,12 +110,6 @@ func _physics_process(delta):
 		running = Input.is_action_pressed("move_run")
 
 	var new_velocity = Vector3.ZERO
-	#if direction:
-	#	new_velocity.x = direction.x * walk_speed
-	#	new_velocity.z = 0 # No lateral movement - to and from screen
-	#else:
-	#	new_velocity.x = move_toward(new_velocity.x, 0, walk_speed)
-	#	new_velocity.z = 0 # No lateral movement - to and from screen
 	var movement_speed = walk_speed if (!running) else run_speed 
 	movement_speed = crouch_speed if crouch else movement_speed
 	
@@ -174,17 +120,12 @@ func _physics_process(delta):
 		new_velocity.x = move_toward(velocity.x, 0, movement_speed)
 		new_velocity.z = move_toward(velocity.z, 0, movement_speed)
 	
-	
-	
 	is_step = check_step(delta, new_velocity)
 
 	# Handle Jump.
 	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 	if is_on_floor():
-#		is_step = check_step(delta, new_velocity)
 
-		#if input_dir.y < 0.0 and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
-		#if Input.is_action_just_pressed("ui_accept") and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 		if Input.is_action_just_pressed("move_jump") and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 			is_jumping = true
 			is_in_air = false
@@ -204,8 +145,6 @@ func _physics_process(delta):
 	velocity = new_velocity
 	move_and_slide()
 	
-	#update_model_facing(movement)
-
 	update_animations(input_dir)
 
 	if is_jumping :
@@ -306,14 +245,6 @@ func check_distance_to_floor():
 	else:
 		return clamp(transform.origin.y - result.position.y, 0.0, 100.0)
 						
-
-
-func update_model_facing(movement : Vector2):
-	
-	if movement.length() != 0.0:
-		var lerpDirection = lerp(lastLookAtDirection, Vector3(lookAt.global_position.x, global_position.y, lookAt.global_position.z), turn_speed)
-		look_at(Vector3(lerpDirection.x, global_position.y, lerpDirection.z))
-		lastLookAtDirection = lerpDirection
 
 
 # Update animations
