@@ -1,0 +1,90 @@
+[gd_scene load_steps=17 format=3 uid="uid://bj8etsqb0mkgi"]
+
+[ext_resource type="Script" path="res://assets/side-scroller/scripts/character.gd" id="1_b3vey"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_3cyqs"]
+[ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_c85l6"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_6fgbh"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hd206"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dddkx"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_grrd3"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vbvs8"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yoahk"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ih3y1"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"on_air"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u8wir"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"grounded"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_seslx"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"walking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2pter"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6soog"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"on_air"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_x14bm"]
+states/Idle/node = SubResource("AnimationNodeAnimation_dddkx")
+states/Idle/position = Vector2(420.5, 61)
+"states/On Air/node" = SubResource("AnimationNodeAnimation_grrd3")
+"states/On Air/position" = Vector2(566.5, 85)
+states/Start/position = Vector2(200, 99.75)
+states/Walk/node = SubResource("AnimationNodeAnimation_vbvs8")
+states/Walk/position = Vector2(420.25, 184)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_yoahk"), "Idle", "On Air", SubResource("AnimationNodeStateMachineTransition_ih3y1"), "On Air", "Idle", SubResource("AnimationNodeStateMachineTransition_u8wir"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_seslx"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_2pter"), "Walk", "On Air", SubResource("AnimationNodeStateMachineTransition_6soog")]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
+graph_offset = Vector2(-403.816, 2.58899)
+nodes/side_scroller_sm/node = SubResource("AnimationNodeStateMachine_x14bm")
+nodes/side_scroller_sm/position = Vector2(-250, 90)
+node_connections = [&"output", 0, &"side_scroller_sm"]
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_b3vey")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+shape = SubResource("CapsuleShape3D_hd206")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="y-bot" parent="Model" instance=ExtResource("2_3cyqs")]
+
+[node name="x-bot" parent="Model" instance=ExtResource("3_c85l6")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model/y-bot")
+libraries = {
+"mixamo-basic-locomotion": ExtResource("4_6fgbh")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model/y-bot")
+tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
+anim_player = NodePath("../AnimationPlayer")
+parameters/side_scroller_sm/conditions/grounded = false
+parameters/side_scroller_sm/conditions/idle = false
+parameters/side_scroller_sm/conditions/on_air = false
+parameters/side_scroller_sm/conditions/walking = false

@@ -1,0 +1,44 @@
+[remap]
+
+importer="animation_library"
+importer_version=1
+type="AnimationLibrary"
+uid="uid://dgaegdtadtq6p"
+path="res://.godot/imported/mixamo-talk.fbx-e53f2cb0d2473d1d1537d425eaa4cdf2.res"
+
+[deps]
+
+source_file="res://assets/mixamo-animations/animations/mixamo-talk.fbx"
+dest_files=["res://.godot/imported/mixamo-talk.fbx-e53f2cb0d2473d1d1537d425eaa4cdf2.res"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=true
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+_subresources={
+"nodes": {
+"PATH:Armature/Skeleton3D": {
+"rest_pose/external_animation_library": null,
+"retarget/bone_map": Resource("res://assets/mixamo-animations/bone-maps/mixamo-ybot_bone_map.tres")
+}
+}
+}
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1

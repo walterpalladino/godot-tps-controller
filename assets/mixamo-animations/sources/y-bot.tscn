@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfcc0yqynb36c"]
+
+[ext_resource type="PackedScene" uid="uid://bgrf5x75c3lwu" path="res://assets/mixamo-animations/sources/mixamo-ybot.fbx" id="1_d21ak"]
+
+[node name="y-bot" instance=ExtResource("1_d21ak")]

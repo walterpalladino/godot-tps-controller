@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmh0gyy12o80p"]
+
+[ext_resource type="PackedScene" uid="uid://bsa5gjlsplitn" path="res://assets/tps-controller/models/man_001/man_001.glb" id="1_sgh6q"]
+[ext_resource type="Material" uid="uid://ydcsqw1cbdva" path="res://assets/tps-controller/models/man_001/man_001_material.tres" id="2_amp4h"]
+
+[node name="man_001" instance=ExtResource("1_sgh6q")]
+
+[node name="Clean Slim Male 80s 003" parent="Clean Slim Armature/GeneralSkeleton" index="0"]
+surface_material_override/0 = ExtResource("2_amp4h")

@@ -1,0 +1,275 @@
+[gd_scene load_steps=48 format=3 uid="uid://jkhenibiwgyh"]
+
+[ext_resource type="Script" path="res://assets/tps-controller/scripts/character-tps.gd" id="1_cy2va"]
+[ext_resource type="PackedScene" uid="uid://bmh0gyy12o80p" path="res://assets/tps-controller/models/man_001/man_001.tscn" id="2_tssjn"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_ycyyq"]
+[ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_ue2wr"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_fallm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hd206"]
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2swil"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_t1qpm"]
+xfade_time = 0.2
+input_0/name = "idle_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "walking_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "running_state"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "on_air_state"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+input_4/name = "crouch_state"
+input_4/auto_advance = false
+input_4/break_loop_at_end = false
+input_4/reset = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_iy0an"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_63khx"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_lgwli"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dicir"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_b6j16"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Walk Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pkrii"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Walk Backward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_8vne2"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Walk Right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gyqdp"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Walk Left"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_fmab0"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_dicir")
+blend_point_0/pos = Vector2(0, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_b6j16")
+blend_point_1/pos = Vector2(0, 1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_pkrii")
+blend_point_2/pos = Vector2(0, -1)
+blend_point_3/node = SubResource("AnimationNodeAnimation_8vne2")
+blend_point_3/pos = Vector2(1, 0)
+blend_point_4/node = SubResource("AnimationNodeAnimation_gyqdp")
+blend_point_4/pos = Vector2(-1, 0)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dpkmr"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Hard Landing"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cwcuf"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ikmx2"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a2we3"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_51wg0"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Right Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mt58l"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7qoi7"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Right Backward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6m5u0"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Backward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4vihu"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Left Backward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rlxjl"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3swhb"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Left Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pqkcu"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_o3oay"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_a2we3")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_51wg0")
+blend_point_1/pos = Vector2(1, 1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_mt58l")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_7qoi7")
+blend_point_3/pos = Vector2(1, -1)
+blend_point_4/node = SubResource("AnimationNodeAnimation_6m5u0")
+blend_point_4/pos = Vector2(0, -1)
+blend_point_5/node = SubResource("AnimationNodeAnimation_4vihu")
+blend_point_5/pos = Vector2(-1, -1)
+blend_point_6/node = SubResource("AnimationNodeAnimation_rlxjl")
+blend_point_6/pos = Vector2(-1, 0)
+blend_point_7/node = SubResource("AnimationNodeAnimation_3swhb")
+blend_point_7/pos = Vector2(-1, 1)
+blend_point_8/node = SubResource("AnimationNodeAnimation_pqkcu")
+blend_point_8/pos = Vector2(0, 0)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dddkx"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_grrd3"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vbvs8"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yoahk"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ih3y1"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"on_air"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u8wir"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"grounded"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_seslx"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"walking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2pter"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6soog"]
+xfade_time = 0.2
+advance_mode = 2
+advance_condition = &"on_air"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_x14bm"]
+states/Idle/node = SubResource("AnimationNodeAnimation_dddkx")
+states/Idle/position = Vector2(420.5, 61)
+"states/On Air/node" = SubResource("AnimationNodeAnimation_grrd3")
+"states/On Air/position" = Vector2(566.5, 85)
+states/Start/position = Vector2(200, 99.75)
+states/Walk/node = SubResource("AnimationNodeAnimation_vbvs8")
+states/Walk/position = Vector2(420.25, 184)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_yoahk"), "Idle", "On Air", SubResource("AnimationNodeStateMachineTransition_ih3y1"), "On Air", "Idle", SubResource("AnimationNodeStateMachineTransition_u8wir"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_seslx"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_2pter"), "Walk", "On Air", SubResource("AnimationNodeStateMachineTransition_6soog")]
+graph_offset = Vector2(70, 12)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1tmok"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uqegx"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Backwards"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_krlnp"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walk Strafe Right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gd55j"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walk Strafe Left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pxxee"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_d5vtv"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_1tmok")
+blend_point_0/pos = Vector2(0, 1)
+blend_point_1/node = SubResource("AnimationNodeAnimation_uqegx")
+blend_point_1/pos = Vector2(0, -1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_krlnp")
+blend_point_2/pos = Vector2(1, 0)
+blend_point_3/node = SubResource("AnimationNodeAnimation_gd55j")
+blend_point_3/pos = Vector2(-1, 0)
+blend_point_4/node = SubResource("AnimationNodeAnimation_pxxee")
+blend_point_4/pos = Vector2(0, 0)
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
+graph_offset = Vector2(-636.94, 42.4206)
+nodes/OneShot/node = SubResource("AnimationNodeOneShot_2swil")
+nodes/OneShot/position = Vector2(90, 110)
+nodes/State/node = SubResource("AnimationNodeTransition_t1qpm")
+nodes/State/position = Vector2(-380, -40)
+"nodes/TimeScale Crouch/node" = SubResource("AnimationNodeTimeScale_iy0an")
+"nodes/TimeScale Crouch/position" = Vector2(-660, 540)
+"nodes/TimeScale Run/node" = SubResource("AnimationNodeTimeScale_63khx")
+"nodes/TimeScale Run/position" = Vector2(-690, 200)
+"nodes/TimeScale Walk/node" = SubResource("AnimationNodeTimeScale_lgwli")
+"nodes/TimeScale Walk/position" = Vector2(-700, 20)
+nodes/crouch_blend/node = SubResource("AnimationNodeBlendSpace2D_fmab0")
+nodes/crouch_blend/position = Vector2(-890, 540)
+nodes/hard_land_anim/node = SubResource("AnimationNodeAnimation_dpkmr")
+nodes/hard_land_anim/position = Vector2(-380, 290)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_cwcuf")
+nodes/idle_anim/position = Vector2(-900, -140)
+nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_ikmx2")
+nodes/on_air_anim/position = Vector2(-920, 380)
+nodes/output/position = Vector2(250, -30)
+nodes/run_blend/node = SubResource("AnimationNodeBlendSpace2D_o3oay")
+nodes/run_blend/position = Vector2(-890, 200)
+nodes/side_scroller_sm/node = SubResource("AnimationNodeStateMachine_x14bm")
+nodes/side_scroller_sm/position = Vector2(390, 220)
+nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
+nodes/walk_blend/position = Vector2(-890, 20)
+node_connections = [&"OneShot", 0, &"State", &"OneShot", 1, &"hard_land_anim", &"State", 0, &"idle_anim", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"output", 0, &"OneShot"]
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_cy2va")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+shape = SubResource("CapsuleShape3D_hd206")
+
+[node name="Model" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+
+[node name="man_001" parent="Model" instance=ExtResource("2_tssjn")]
+
+[node name="y-bot" parent="Model" instance=ExtResource("2_ycyyq")]
+visible = false
+
+[node name="x-bot" parent="Model" instance=ExtResource("3_ue2wr")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model/man_001")
+libraries = {
+"mixamo-basic-locomotion": ExtResource("4_fallm")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model/man_001")
+tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
+anim_player = NodePath("../AnimationPlayer")
+parameters/OneShot/active = false
+parameters/OneShot/internal_active = false
+parameters/OneShot/request = 0
+parameters/State/current_state = "walking_state"
+parameters/State/transition_request = ""
+parameters/State/current_index = 1
+"parameters/TimeScale Crouch/scale" = 1.0
+"parameters/TimeScale Run/scale" = 1.0
+"parameters/TimeScale Walk/scale" = 1.0
+parameters/crouch_blend/blend_position = Vector2(0, 0)
+parameters/run_blend/blend_position = Vector2(0, 0)
+parameters/side_scroller_sm/conditions/grounded = false
+parameters/side_scroller_sm/conditions/idle = false
+parameters/side_scroller_sm/conditions/on_air = false
+parameters/side_scroller_sm/conditions/walking = false
+parameters/walk_blend/blend_position = Vector2(0, 0)
+
+[node name="LookAt" type="Node3D" parent="."]
+transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 2.08165e-12, 1.4, 2.08165e-12)

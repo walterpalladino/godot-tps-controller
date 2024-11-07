@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://cdi1k5y206rfh"]
+
+[ext_resource type="PackedScene" uid="uid://bwecwj46dbfja" path="res://Kurt.glb" id="1_hh0oj"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5pjc7"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hpwd4"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_owetl"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_v2pwx"]
+states/Idle/node = SubResource("AnimationNodeAnimation_5pjc7")
+states/Idle/position = Vector2(340.5, 52)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_hpwd4"), "Idle", "End", SubResource("AnimationNodeStateMachineTransition_owetl")]
+graph_offset = Vector2(156, 0)
+
+[node name="Kurt" instance=ExtResource("1_hh0oj")]
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="1"]
+tree_root = SubResource("AnimationNodeStateMachine_v2pwx")
+anim_player = NodePath("../AnimationPlayer")

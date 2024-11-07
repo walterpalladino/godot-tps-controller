@@ -1,0 +1,50 @@
+[gd_scene load_steps=10 format=3 uid="uid://brw0fxlglrn0m"]
+
+[ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="1_5o0ey"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_hifmh"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="3_b2lex"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i8wyk"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Forward"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ug1jb"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4rhwb"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ah1j7"]
+advance_mode = 2
+advance_condition = &"running"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_prci6"]
+advance_mode = 2
+advance_condition = &"walking"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_avsbv"]
+"states/Running Forward/node" = SubResource("AnimationNodeAnimation_i8wyk")
+"states/Running Forward/position" = Vector2(469, 206.5)
+states/Start/position = Vector2(108, 99.375)
+"states/Walking Forward/node" = SubResource("AnimationNodeAnimation_ug1jb")
+"states/Walking Forward/position" = Vector2(468.5, 93.5)
+transitions = ["Start", "Walking Forward", SubResource("AnimationNodeStateMachineTransition_4rhwb"), "Walking Forward", "Running Forward", SubResource("AnimationNodeStateMachineTransition_ah1j7"), "Running Forward", "Walking Forward", SubResource("AnimationNodeStateMachineTransition_prci6")]
+graph_offset = Vector2(-38, 26.697)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="x-bot" parent="." instance=ExtResource("1_5o0ey")]
+
+[node name="y-bot" parent="." instance=ExtResource("2_hifmh")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../y-bot")
+libraries = {
+"mixamo-basic-locomotion": ExtResource("3_b2lex")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../y-bot")
+tree_root = SubResource("AnimationNodeStateMachine_avsbv")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/running = false
+parameters/conditions/walking = false
