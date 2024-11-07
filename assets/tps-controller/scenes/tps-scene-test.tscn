@@ -180,6 +180,7 @@ transform = Transform3D(0.946649, 0.322266, 3.48787e-16, -0.322266, 0.946649, -3
 shape = SubResource("BoxShape3D_8vtcx")
 
 [node name="CameraController" type="Node3D" parent="." node_paths=PackedStringArray("target") groups=["CameraController"]]
+visible = false
 script = ExtResource("4_jru2u")
 sensitivity = 1
 target = NodePath("../Character")

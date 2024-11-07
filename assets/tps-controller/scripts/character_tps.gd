@@ -13,7 +13,7 @@ extends CharacterBody3D
 @export_category("Ground Movement")
 
 @export var walk_speed = 2.0
-@export var run_speed = 6.0
+@export var run_speed = 4.50
 @export var crouch_speed = 1.0
 
 var running : bool = false
@@ -35,7 +35,9 @@ var last_jump_time : float = 0
 var lastLookAtDirection : Vector3
 @export var turn_speed = .05
 
+@export var mouse_sensitivity : float = 2
 
+@onready var camera_mount : Node3D = get_node("CameraMount")
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 #var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -77,10 +79,28 @@ var last_face_direction : float = 1
 
 
 func _ready() -> void:
+
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 	#animation_player.connect("animation_finished", animation_finished)
-	pass
+	setup_input()
 
 
+func _input(event: InputEvent) -> void:
+	
+	if event is InputEventMouseMotion:
+		#	rotate the player
+		rotate_y( -event.relative.x / 1000 * mouse_sensitivity )
+
+		#	rotate the camera around its pivot
+		#	clamp the value
+		var tempRot = camera_mount.rotation.x - event.relative.y / 1000 * mouse_sensitivity
+		tempRot = clamp(tempRot, -0.8, 1.0) # -1, 0.25
+		camera_mount.rotation.x = tempRot
+		
+		print_debug(camera_mount.rotation.x)
+
+	
 func _process(delta: float) -> void:
 	#print_debug("_process")
 	#print_debug(animation_tree.get_animation_player())
@@ -97,11 +117,11 @@ func _process(delta: float) -> void:
 	#print_debug(current_node)
 	pass
 	
-func _unhandled_key_input(event: InputEvent) -> void:
+#func _unhandled_key_input(event: InputEvent) -> void:
 
-	if event is InputEventKey:
-		if event.pressed and event.keycode == KEY_C:
-			crouch = !crouch
+#	if event is InputEventKey:
+#		if event.pressed and event.keycode == KEY_C:
+#			crouch = !crouch
 
 
 func _physics_process(delta):
@@ -109,7 +129,8 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	#var direction = Vector3.RIGHT * sign(input_dir.x) 
-	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	#var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
 	movement = Vector2(input_dir.x, -input_dir.y)
@@ -128,10 +149,13 @@ func _physics_process(delta):
 	#if test_result:
 	#	print("Collided with something trying to move...")
 
+	if Input.is_action_just_pressed("move_crouch_stand"):
+		crouch = !crouch 
+
 	if crouch:
 		running = false
 	else:
-		running = Input.is_key_pressed(KEY_SHIFT)
+		running = Input.is_action_pressed("move_run")
 
 	var new_velocity = Vector3.ZERO
 	#if direction:
@@ -141,6 +165,8 @@ func _physics_process(delta):
 	#	new_velocity.x = move_toward(new_velocity.x, 0, walk_speed)
 	#	new_velocity.z = 0 # No lateral movement - to and from screen
 	var movement_speed = walk_speed if (!running) else run_speed 
+	movement_speed = crouch_speed if crouch else movement_speed
+	
 	if direction:
 		new_velocity.x = direction.x * movement_speed
 		new_velocity.z = direction.z * movement_speed
@@ -158,7 +184,8 @@ func _physics_process(delta):
 #		is_step = check_step(delta, new_velocity)
 
 		#if input_dir.y < 0.0 and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
-		if Input.is_action_just_pressed("ui_accept") and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
+		#if Input.is_action_just_pressed("ui_accept") and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
+		if Input.is_action_just_pressed("move_jump") and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 			is_jumping = true
 			is_in_air = false
 			new_velocity.y = calculate_jump_vertical_speed()
@@ -177,7 +204,7 @@ func _physics_process(delta):
 	velocity = new_velocity
 	move_and_slide()
 	
-	update_model_facing(movement)
+	#update_model_facing(movement)
 
 	update_animations(input_dir)
 
@@ -334,3 +361,32 @@ func update_animations(input_dir):
 		
 func calculate_jump_vertical_speed():
 	return sqrt(2.0 * gravity * jump_height)
+
+#	Setup used inputs
+func setup_input():
+	
+	add_action_key("move_left", KEY_A)
+	add_action_key("move_right", KEY_D)
+	add_action_key("move_forward", KEY_W)
+	add_action_key("move_backward", KEY_S)
+
+	add_action_key("move_jump", KEY_SPACE)
+
+	add_action_key("move_crouch_stand", KEY_C)
+
+	add_action_key("move_run", KEY_SHIFT)
+
+
+
+func add_action_key(action, key_code):
+	
+	if InputMap.has_action(action):
+		InputMap.erase_action(action)
+
+	InputMap.add_action(action)
+	var event
+	event = InputEventKey.new()
+	event.keycode = key_code
+	InputMap.action_add_event(action, event)
+	
+	print_debug(InputMap.get_actions())
