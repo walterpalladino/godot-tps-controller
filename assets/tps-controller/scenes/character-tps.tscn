@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://jkhenibiwgyh"]
+[gd_scene load_steps=53 format=3 uid="uid://jkhenibiwgyh"]
 
 [ext_resource type="Script" path="res://assets/tps-controller/scripts/character_tps.gd" id="1_cy2va"]
 [ext_resource type="PackedScene" uid="uid://bmh0gyy12o80p" path="res://assets/tps-controller/models/man_001/man_001.tscn" id="2_tssjn"]
@@ -34,6 +34,8 @@ input_4/break_loop_at_end = false
 input_4/reset = true
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_iy0an"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_u5c7k"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_63khx"]
 
@@ -71,6 +73,23 @@ animation = &"mixamo-basic-locomotion/Basic Locomotion|Hard Landing"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cwcuf"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lbadu"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d3pxj"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Right Turn 90 in place"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_36lu1"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Left Turn 90 in place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_ftpw8"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_lbadu")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_d3pxj")
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource("AnimationNodeAnimation_36lu1")
+blend_point_2/pos = -1.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ikmx2"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
@@ -198,15 +217,17 @@ blend_point_4/node = SubResource("AnimationNodeAnimation_pxxee")
 blend_point_4/pos = Vector2(0, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-636.94, 42.4206)
+graph_offset = Vector2(-741.437, -147.029)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_2swil")
 nodes/OneShot/position = Vector2(90, 110)
 nodes/State/node = SubResource("AnimationNodeTransition_t1qpm")
 nodes/State/position = Vector2(-380, -40)
 "nodes/TimeScale Crouch/node" = SubResource("AnimationNodeTimeScale_iy0an")
 "nodes/TimeScale Crouch/position" = Vector2(-660, 540)
+"nodes/TimeScale In Place/node" = SubResource("AnimationNodeTimeScale_u5c7k")
+"nodes/TimeScale In Place/position" = Vector2(-700, -140)
 "nodes/TimeScale Run/node" = SubResource("AnimationNodeTimeScale_63khx")
-"nodes/TimeScale Run/position" = Vector2(-690, 200)
+"nodes/TimeScale Run/position" = Vector2(-700, 200)
 "nodes/TimeScale Walk/node" = SubResource("AnimationNodeTimeScale_lgwli")
 "nodes/TimeScale Walk/position" = Vector2(-700, 20)
 nodes/crouch_blend/node = SubResource("AnimationNodeBlendSpace2D_fmab0")
@@ -214,7 +235,9 @@ nodes/crouch_blend/position = Vector2(-890, 540)
 nodes/hard_land_anim/node = SubResource("AnimationNodeAnimation_dpkmr")
 nodes/hard_land_anim/position = Vector2(-380, 290)
 nodes/idle_anim/node = SubResource("AnimationNodeAnimation_cwcuf")
-nodes/idle_anim/position = Vector2(-900, -140)
+nodes/idle_anim/position = Vector2(-1510, -170)
+nodes/in_place_blend/node = SubResource("AnimationNodeBlendSpace1D_ftpw8")
+nodes/in_place_blend/position = Vector2(-890, -140)
 nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_ikmx2")
 nodes/on_air_anim/position = Vector2(-920, 380)
 nodes/output/position = Vector2(250, -30)
@@ -224,7 +247,7 @@ nodes/side_scroller_sm/node = SubResource("AnimationNodeStateMachine_x14bm")
 nodes/side_scroller_sm/position = Vector2(390, 220)
 nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
 nodes/walk_blend/position = Vector2(-890, 20)
-node_connections = [&"OneShot", 0, &"State", &"OneShot", 1, &"hard_land_anim", &"State", 0, &"idle_anim", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"output", 0, &"OneShot"]
+node_connections = [&"OneShot", 0, &"State", &"OneShot", 1, &"hard_land_anim", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"output", 0, &"OneShot"]
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_cy2va")
@@ -257,13 +280,15 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/OneShot/active = false
 parameters/OneShot/internal_active = false
 parameters/OneShot/request = 0
-parameters/State/current_state = "walking_state"
+parameters/State/current_state = "idle_state"
 parameters/State/transition_request = ""
-parameters/State/current_index = 1
+parameters/State/current_index = 0
 "parameters/TimeScale Crouch/scale" = 1.0
+"parameters/TimeScale In Place/scale" = 1.0
 "parameters/TimeScale Run/scale" = 1.0
 "parameters/TimeScale Walk/scale" = 1.0
 parameters/crouch_blend/blend_position = Vector2(0, 0)
+parameters/in_place_blend/blend_position = 0.0
 parameters/run_blend/blend_position = Vector2(0, 0)
 parameters/side_scroller_sm/conditions/grounded = false
 parameters/side_scroller_sm/conditions/idle = false

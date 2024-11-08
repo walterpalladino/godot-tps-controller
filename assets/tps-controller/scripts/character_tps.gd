@@ -16,6 +16,8 @@ var crouch : bool = false
 
 var movement : Vector2 = Vector2.ZERO
 
+var last_turning_value : float = 0
+
 @export_category("On AIr")
 
 @export var gravity = 9.81
@@ -80,15 +82,17 @@ func _input(event: InputEvent) -> void:
 
 		#	rotate the camera around its pivot
 		#	clamp the value
-		var tempRot = camera_mount.rotation.x - event.relative.y / 1000 * mouse_sensitivity
-		tempRot = clamp(tempRot, -0.8, 1.0) # -1, 0.25
-		camera_mount.rotation.x = tempRot
+		var temp_rot = camera_mount.rotation.x - event.relative.y / 1000 * mouse_sensitivity
+		temp_rot = clamp(temp_rot, -0.8, 1.0) # -1, 0.25
+		camera_mount.rotation.x = temp_rot
 		
-		print_debug(camera_mount.rotation.x)
+		#print_debug(camera_mount.rotation.x)
+		
+		
 
 
 func _physics_process(delta):
-	
+
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -145,7 +149,7 @@ func _physics_process(delta):
 	velocity = new_velocity
 	move_and_slide()
 	
-	update_animations(input_dir)
+	update_animations(delta, input_dir)
 
 	if is_jumping :
 		is_jumping = false
@@ -248,7 +252,13 @@ func check_distance_to_floor():
 
 
 # Update animations
-func update_animations(input_dir):
+func update_animations(delta, input_dir):
+
+	#	calculate turning value when character turn when idle
+	var turning = (Input.get_last_mouse_velocity().x / 1000 * mouse_sensitivity)
+	turning = clamp(turning, -1.0, 1.0)
+	turning = lerp(last_turning_value, turning, delta * 25.0)
+	last_turning_value = turning
 
 	var is_idle : bool = input_dir.x == 0.0 && (is_on_floor() || is_step)
 	var is_walking : bool = velocity.x != 0.0 && (is_on_floor() || is_step)
@@ -278,6 +288,7 @@ func update_animations(input_dir):
 		
 			if is_idle:
 				animation_tree.set("parameters/State/transition_request", "idle_state")
+				animation_tree.set("parameters/in_place_blend/blend_position", turning)
 			if is_running:
 				animation_tree.set("parameters/State/transition_request", "running_state")
 				animation_tree.set("parameters/run_blend/blend_position", movement)
