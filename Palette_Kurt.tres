@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ckw2wjp1688cl"]
-
-[ext_resource type="Texture2D" uid="uid://4klxohpf7ah1" path="res://Palette_Kurt.png" id="1_wyram"]
-
-[resource]
-albedo_texture = ExtResource("1_wyram")
