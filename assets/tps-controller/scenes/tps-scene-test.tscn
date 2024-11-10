@@ -1,9 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://5b548nge5gek"]
+[gd_scene load_steps=19 format=3 uid="uid://5b548nge5gek"]
 
 [ext_resource type="PackedScene" uid="uid://jkhenibiwgyh" path="res://assets/tps-controller/scenes/character-tps.tscn" id="1_pronh"]
 [ext_resource type="Material" uid="uid://ccsk0p3g8edai" path="res://assets/side-scroller/materials/ground_material.tres" id="2_2moem"]
 [ext_resource type="Material" uid="uid://crb7yl6ebhwlu" path="res://assets/side-scroller/materials/obstacle_material.tres" id="3_c2b8d"]
-[ext_resource type="Script" path="res://assets/tps-controller/scripts/camera_controller_tps.gd" id="4_jru2u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ifwe"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -56,7 +55,7 @@ size = Vector3(3, 1, 10)
 [node name="Tps-scene-test" type="Node3D"]
 
 [node name="Character" parent="." node_paths=PackedStringArray("lookAt") instance=ExtResource("1_pronh")]
-lookAt = NodePath("../CameraController/LookAt")
+lookAt = NodePath("")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -178,19 +177,3 @@ surface_material_override/0 = ExtResource("3_c2b8d")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ramp2/StaticBody3D"]
 transform = Transform3D(0.946649, 0.322266, 3.48787e-16, -0.322266, 0.946649, -3.48787e-16, -4.42581e-16, 2.17777e-16, 1, 2.08165e-12, -0.5, 2.08165e-12)
 shape = SubResource("BoxShape3D_8vtcx")
-
-[node name="CameraController" type="Node3D" parent="." node_paths=PackedStringArray("target") groups=["CameraController"]]
-visible = false
-script = ExtResource("4_jru2u")
-sensitivity = 1
-target = NodePath("../Character")
-
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraController"]
-collision_mask = 2
-spring_length = 5.0
-
-[node name="Camera3D" type="Camera3D" parent="CameraController/SpringArm3D"]
-transform = Transform3D(0.656296, 0, 0.754503, 0, 1, 0, -0.754503, 0, 0.656296, 3.12393, 1.5454, -1.48207)
-
-[node name="LookAt" type="Node3D" parent="CameraController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.854967, -2.69753)
