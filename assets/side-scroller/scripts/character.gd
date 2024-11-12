@@ -14,6 +14,13 @@ extends CharacterBody3D
 
 @export var walk_speed = 2.0
 @export var run_speed = 6.0
+@export var crouch_speed = 1.0
+@export var speed_change = 5.0
+
+var walking : bool = false
+var running : bool = false
+var crouch : bool = false
+
 
 @export_category("On AIr")
 
@@ -64,7 +71,25 @@ var last_face_direction : float = 1
 
 func _ready() -> void:
 	#animation_player.connect("animation_finished", animation_finished)
-	pass
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+	setup_input()
+
+
+func _input(event: InputEvent) -> void:
+		
+	if event is InputEventMouseButton:
+		if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		
+		
+	if event is InputEventKey:
+		if event.is_released():
+			if event.keycode == KEY_ESCAPE:
+			#  if event.is_action_pressed("ui_cancel"):
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+
 
 func _process(delta: float) -> void:
 	#print_debug("_process")
@@ -79,14 +104,14 @@ func _process(delta: float) -> void:
 	
 	# in process or elsewhere:
 	var current_node = state_machine.get_current_node()
-	print_debug(current_node)
+	#print_debug(current_node)
 	pass
 	
 
 func _physics_process(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
 
 	if is_on_floor():
@@ -255,7 +280,10 @@ func update_animations(input_dir):
 
 	var is_idle : bool = input_dir.x == 0.0 && (is_on_floor() || is_step)
 	var is_walking : bool = velocity.x != 0.0 && (is_on_floor() || is_step)
-	
+	var is_running : bool = is_walking and running
+
+	var is_crouched : bool = crouch && (is_on_floor() || is_step)
+
 	#	Check distance to floor
 	var distance_to_floor : float  = check_distance_to_floor()
 	if is_on_floor() || is_step:
@@ -263,31 +291,59 @@ func update_animations(input_dir):
 	#print_debug(distance_to_floor)
 
 	var is_grounded : bool = (is_on_floor() || is_step) || (distance_to_floor <= max_step_height)
-
-	animation_tree.set("parameters/side_scroller_sm/conditions/idle", is_idle)
-	animation_tree.set("parameters/side_scroller_sm/conditions/idle", is_idle)
-	animation_tree.set("parameters/side_scroller_sm/conditions/walking", is_walking)
-	animation_tree.set("parameters/side_scroller_sm/conditions/grounded", is_grounded)
-	animation_tree.set("parameters/side_scroller_sm/conditions/on_air", !is_grounded)
-	#$AnimationTree.set("parameters/conditions/straifLeft", input_dir.x == -1 && is_on_floor())
-	#$AnimationTree.set("parameters/conditions/straifRight", input_dir.x == 1 && is_on_floor())
-	#$AnimationTree.set("parameters/conditions/falling", !is_on_floor())
-	#$AnimationTree.set("parameters/conditions/landed", is_on_floor())
-
-
-#func animation_finished(anim_name:String):
-#	print_debug("animation_finished : " + anim_name)
 	
-#func add_animation_callback(anim_name:String):
-#	animation_tree.connect("animation_finished", animation_finished)
+	if !is_grounded:
+		animation_tree.set("parameters/State/transition_request", "on_air_state")
+	else:
+		if is_crouched:
+			animation_tree.set("parameters/State/transition_request", "crouch_state")
+			#animation_tree.set("parameters/crouch_blend/blend_position", movement)
+		else:
 	
-#func is_animation_playing(anim_name:String):
-#	if (animation_tree .is_playing()):
-#		print_debug("something playing...")
-#	if (animation_tree.is_playing() && animation_tree.current_animation == anim_name):
-#		return true
-#	else:
-#		return false
+			if is_idle:
+				animation_tree.set("parameters/State/transition_request", "idle_state")
+				#animation_tree.set("parameters/in_place_blend/blend_position", turning)
+			if is_running:
+				animation_tree.set("parameters/State/transition_request", "running_state")
+				#animation_tree.set("parameters/run_blend/blend_position", movement)
+				#print_debug(movement)
+			elif is_walking:
+				animation_tree.set("parameters/State/transition_request", "walking_state")
+				#animation_tree.set("parameters/walk_blend/blend_position", movement)
+				#print_debug(movement)
+
+
 		
 func calculate_jump_vertical_speed():
 	return sqrt(2.0 * gravity * jump_height)
+
+
+#	Setup used inputs
+func setup_input():
+	
+	add_action_key("move_left", KEY_A)
+	add_action_key("move_right", KEY_D)
+	add_action_key("move_forward", KEY_W)
+	add_action_key("move_backward", KEY_S)
+
+	add_action_key("move_jump", KEY_SPACE)
+
+	add_action_key("move_crouch_stand", KEY_C)
+
+	add_action_key("move_run", KEY_SHIFT)
+
+
+
+func add_action_key(action, key_code):
+	
+	if InputMap.has_action(action):
+		InputMap.erase_action(action)
+
+	InputMap.add_action(action)
+	var event
+	event = InputEventKey.new()
+	event.keycode = key_code
+	InputMap.action_add_event(action, event)
+	
+	#print_debug(InputMap.get_actions())
+	

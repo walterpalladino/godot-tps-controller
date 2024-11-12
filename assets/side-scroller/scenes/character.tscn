@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bj8etsqb0mkgi"]
+[gd_scene load_steps=26 format=3 uid="uid://bj8etsqb0mkgi"]
 
 [ext_resource type="Script" path="res://assets/side-scroller/scripts/character.gd" id="1_b3vey"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_3cyqs"]
@@ -6,6 +6,42 @@
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_6fgbh"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hd206"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6jbmv"]
+xfade_time = 0.2
+input_0/name = "idle_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "walking_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "running_state"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "on_air_state"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_lku0s"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1gpcx"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_7uk80"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_boy6i"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0i2e2"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_srs5w"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_u24m7"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Forward"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dddkx"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
@@ -54,11 +90,33 @@ states/Walk/node = SubResource("AnimationNodeAnimation_vbvs8")
 states/Walk/position = Vector2(420.25, 184)
 transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_yoahk"), "Idle", "On Air", SubResource("AnimationNodeStateMachineTransition_ih3y1"), "On Air", "Idle", SubResource("AnimationNodeStateMachineTransition_u8wir"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_seslx"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_2pter"), "Walk", "On Air", SubResource("AnimationNodeStateMachineTransition_6soog")]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yjupl"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-403.816, 2.58899)
+graph_offset = Vector2(-633.074, 81.0464)
+nodes/State/node = SubResource("AnimationNodeTransition_6jbmv")
+nodes/State/position = Vector2(-300, 310)
+"nodes/TimeScale Idle/node" = SubResource("AnimationNodeTimeScale_lku0s")
+"nodes/TimeScale Idle/position" = Vector2(-620, 120)
+"nodes/TimeScale On Air/node" = SubResource("AnimationNodeTimeScale_1gpcx")
+"nodes/TimeScale On Air/position" = Vector2(-620, 620)
+"nodes/TimeScale Run/node" = SubResource("AnimationNodeTimeScale_7uk80")
+"nodes/TimeScale Run/position" = Vector2(-620, 460)
+"nodes/TimeScale Walk/node" = SubResource("AnimationNodeTimeScale_boy6i")
+"nodes/TimeScale Walk/position" = Vector2(-620, 290)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_0i2e2")
+nodes/idle_anim/position = Vector2(-1020, 120)
+nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_srs5w")
+nodes/on_air_anim/position = Vector2(-1090, 620)
+nodes/output/position = Vector2(340, 410)
+nodes/run_anim/node = SubResource("AnimationNodeAnimation_u24m7")
+nodes/run_anim/position = Vector2(-1090, 460)
 nodes/side_scroller_sm/node = SubResource("AnimationNodeStateMachine_x14bm")
-nodes/side_scroller_sm/position = Vector2(-250, 90)
-node_connections = [&"output", 0, &"side_scroller_sm"]
+nodes/side_scroller_sm/position = Vector2(10, 110)
+nodes/walk_anim/node = SubResource("AnimationNodeAnimation_yjupl")
+nodes/walk_anim/position = Vector2(-1090, 290)
+node_connections = [&"State", 0, &"TimeScale Idle", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"TimeScale On Air", &"TimeScale Idle", 0, &"idle_anim", &"TimeScale On Air", 0, &"on_air_anim", &"TimeScale Run", 0, &"run_anim", &"TimeScale Walk", 0, &"walk_anim", &"output", 0, &"State"]
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_b3vey")
@@ -84,6 +142,13 @@ libraries = {
 root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
+parameters/State/current_state = "idle_state"
+parameters/State/transition_request = ""
+parameters/State/current_index = 0
+"parameters/TimeScale Idle/scale" = 1.0
+"parameters/TimeScale On Air/scale" = 1.0
+"parameters/TimeScale Run/scale" = 1.0
+"parameters/TimeScale Walk/scale" = 1.0
 parameters/side_scroller_sm/conditions/grounded = false
 parameters/side_scroller_sm/conditions/idle = false
 parameters/side_scroller_sm/conditions/on_air = false
