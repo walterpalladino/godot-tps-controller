@@ -1,11 +1,8 @@
 extends CharacterBody3D
 
 @onready var collision_shape = get_node("CollisionShape3D")
-#@onready var animation_player : AnimationPlayer = get_node("Model/AnimationPlayer")
-#@export var animation_player : AnimationPlayer
 @onready var animation_tree : AnimationTree = get_node("AnimationTree")
 @onready var state_machine := animation_tree.get("parameters/side_scroller_sm/playback") as AnimationNodeStateMachinePlayback
-
 
 @onready var model = get_node("Model")
 
@@ -57,9 +54,6 @@ var step_diff_position : Vector3 = Vector3.ZERO
 
 
 
-var on_walkable_slope : bool = false
-var surface_angle : float = 0.0
-
 var on_floor : bool = false
 
 var is_jumping: bool = false
@@ -70,7 +64,7 @@ var last_face_direction : float = 1
 
 
 func _ready() -> void:
-	#animation_player.connect("animation_finished", animation_finished)
+
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 	setup_input()
@@ -90,23 +84,6 @@ func _input(event: InputEvent) -> void:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-
-func _process(delta: float) -> void:
-	#print_debug("_process")
-	#print_debug(animation_tree.get_animation_player())
-	
-	#animation_player = get_node( animation_tree.get_animation_player() )
-	#print_debug(animation_player.is_playing())
-	#print_debug(animation_player.current_animation)
-	#if (is_animation_playing("Idle")):
-	#	print_debug("animation playing")
-	
-	
-	# in process or elsewhere:
-	var current_node = state_machine.get_current_node()
-	#print_debug(current_node)
-	pass
-	
 
 func _physics_process(delta):
 	
@@ -163,7 +140,7 @@ func _physics_process(delta):
 	velocity = new_velocity
 	move_and_slide()
 	
-	update_model_facing(input_dir)
+	update_model_facing(delta, input_dir)
 
 	update_animations(input_dir)
 
@@ -267,12 +244,16 @@ func check_distance_to_floor():
 						
 
 
-func update_model_facing(input_dir):
+func update_model_facing(delta, input_dir):
 	
 	if input_dir.x != 0.0:
-		var face_direction = Vector3( 0.0, sign(input_dir.x) * 90.0, 0.0)
-		model.set_rotation_degrees(face_direction)
+		var facing_angle : float = sign(input_dir.x) * 90.0
+		#var face_direction = Vector3( 0.0, facing_angle, 0.0)
+		#model.set_rotation_degrees(face_direction)
+		model.global_rotation.y = lerp_angle( model.global_rotation.y, deg_to_rad(facing_angle), delta * 10.0 )
 		last_face_direction = sign(input_dir.x)
+
+
 
 
 # Update animations
