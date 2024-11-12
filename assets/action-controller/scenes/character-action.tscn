@@ -154,7 +154,6 @@ blend_point_1/node = SubResource("AnimationNodeAnimation_fyuet")
 blend_point_1/pos = 1.0
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-401.148, -115.304)
 nodes/Duck/node = SubResource("AnimationNodeOneShot_q82t8")
 nodes/Duck/position = Vector2(120, 110)
 "nodes/Hard Land/node" = SubResource("AnimationNodeOneShot_2swil")

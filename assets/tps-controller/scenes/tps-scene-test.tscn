@@ -54,8 +54,7 @@ size = Vector3(3, 1, 10)
 
 [node name="Tps-scene-test" type="Node3D"]
 
-[node name="Character" parent="." node_paths=PackedStringArray("lookAt") instance=ExtResource("1_pronh")]
-lookAt = NodePath("")
+[node name="Character" parent="." instance=ExtResource("1_pronh")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)

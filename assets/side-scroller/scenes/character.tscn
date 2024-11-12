@@ -1,6 +1,6 @@
 [gd_scene load_steps=26 format=3 uid="uid://bj8etsqb0mkgi"]
 
-[ext_resource type="Script" path="res://assets/side-scroller/scripts/character.gd" id="1_b3vey"]
+[ext_resource type="Script" path="res://assets/side-scroller/scripts/character_side_scroller.gd" id="1_ompkv"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_3cyqs"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_c85l6"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_6fgbh"]
@@ -119,7 +119,7 @@ nodes/walk_anim/position = Vector2(-1090, 290)
 node_connections = [&"State", 0, &"TimeScale Idle", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"TimeScale On Air", &"TimeScale Idle", 0, &"idle_anim", &"TimeScale On Air", 0, &"on_air_anim", &"TimeScale Run", 0, &"run_anim", &"TimeScale Walk", 0, &"walk_anim", &"output", 0, &"State"]
 
 [node name="Character" type="CharacterBody3D"]
-script = ExtResource("1_b3vey")
+script = ExtResource("1_ompkv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
