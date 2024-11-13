@@ -2,13 +2,16 @@ extends CharacterBody3D
 class_name CharacterController3D
 
 @export_category("Steps")
-@export var max_step_height : float = 0.40
+@export var max_step_height : float = 0.40		# max height for steps
+@export var min_step_height : float = 0.001	#	min distance for steps
 
-@export var step_max_slope_degree : float = 40.0
+@export var step_max_slope_degree : float = 15.0
 
 var is_step : bool = false
 var is_step_up : bool = false	# true: step up false : step down
 var step_diff_position : Vector3 = Vector3.ZERO
+
+var step_margin : float = 0.05
 
 
 func check_step(delta:float, main_velocity:Vector3):
@@ -17,81 +20,117 @@ func check_step(delta:float, main_velocity:Vector3):
 	is_step_up = false
 	step_diff_position = Vector3.ZERO
 	
+	#	if not on floor nothing to check
+	if not is_on_floor():
+		return false
+		
 	# do not check if character is idle in case try to jump to avoid detecting collissions with nearby walls
-	if (main_velocity.length() == 0):
+	if main_velocity.length() == 0:
 		return false
 	
 	var test_motion_result: PhysicsTestMotionResult3D = PhysicsTestMotionResult3D.new()
 	var transform3d: Transform3D = global_transform
 	var motion: Vector3 = main_velocity * delta
 	
-	# test first if can horizontally move
+	# ---------------------------------------
+	# 1 - test first if can horizontally move
+	# ---------------------------------------
 	var test_motion_params: PhysicsTestMotionParameters3D = PhysicsTestMotionParameters3D.new()
+
 	test_motion_params.from = transform3d
 	test_motion_params.motion = motion
 	test_motion_params.recovery_as_collision = true
 
-	var is_player_collided: bool = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+	var is_character_collided: bool = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
 	
-	# check if hits something up that can not be a step and return
-	if is_player_collided and test_motion_result.get_collision_normal().y < 0:
-		return false
-	
-	# check if there is a step ahead
-	# can move at step height
-	transform3d.origin += Vector3.UP * (max_step_height - 0.05)
-	motion = main_velocity * delta
-	test_motion_params.from = transform3d
-	test_motion_params.motion = motion
-	
-	is_player_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
-			
-	# collided at step height with a wall or step higher than allowed
-	if (is_player_collided):
-		pass
+	#	the character could move to the end
+	if test_motion_result.get_remainder().length() == 0.0:
 		
-	# havent collided with nothing at higher than step height
-	if not is_player_collided:
+		#	check if there is a step or void bellow
+		transform3d.origin += motion
+		motion = Vector3.DOWN * max_step_height
 
-		transform3d.origin += motion #- Vector3.UP * 0.05
-		
-		# check any step up to maximum height
-		motion = - Vector3.UP * max_step_height
 		test_motion_params.from = transform3d
 		test_motion_params.motion = motion
-		
-		is_player_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
-		
-		# found a step
-		if is_player_collided:
+		test_motion_params.recovery_as_collision = true
 
-			if test_motion_result.get_collision_normal().angle_to(Vector3.UP) >= deg_to_rad(step_max_slope_degree):
+		is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+
+		if not is_character_collided:
+			#	character is in the air
+			return false
+		
+		#	if collided with something check if could be a valid step
+		if is_character_collided and -test_motion_result.get_travel().y < max_step_height and -test_motion_result.get_travel().y > min_step_height :
+	
+			var collision_angle = rad_to_deg(test_motion_result.get_collision_normal().angle_to(Vector3.UP))
+			if collision_angle <= step_max_slope_degree:
+		
+				#print_debug("step down")
+				#print_debug(-test_motion_result.get_travel().y )
+				is_step = true
+				is_step_up = false
+				step_diff_position = test_motion_result.get_travel()
+				#	adjust the character position
+				global_transform.origin += step_diff_position
+				
+				return true
+				
+		return false
+		
+	elif test_motion_result.get_remainder().length() != 0.0:
+		#	tried to move but collided with something vertical
+
+		#	now try to move teh controller up to the step height
+		#	and check if can move from there
+		transform3d.origin += Vector3.UP * (max_step_height + step_margin)
+
+		test_motion_params.from = transform3d
+		test_motion_params.motion = motion
+		test_motion_params.recovery_as_collision = true
+
+		is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+
+		if is_character_collided:
+			#print_debug("cant walk there. higher than step")
+			return false
+		elif not is_character_collided:
+			#print_debug("----")
+		
+			#print_debug(test_motion_result)
+			#	check step casting down 
+			transform3d.origin += motion 
+			motion = Vector3.DOWN * (max_step_height + step_margin)
+	
+			test_motion_params.from = transform3d
+			test_motion_params.motion = motion
+			test_motion_params.recovery_as_collision = true
+	
+			is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+	
+			if not is_character_collided:
+				return false
+	
+			var collision_angle = rad_to_deg(test_motion_result.get_collision_normal().angle_to(Vector3.UP))
+			#print_debug(collision_angle)
+			if collision_angle >= step_max_slope_degree:
+				#print_debug("no step, may be a slope")
+				return false
+				
+			if is_character_collided and test_motion_result.get_travel().y < max_step_height + step_margin :#and collision_angle <= step_max_slope_degree:
+		
+				#print_debug("step up")
 				is_step = true
 				is_step_up = true
 				step_diff_position = -test_motion_result.get_remainder()
-				return true
-		else:
-			# no step up ahead
-			# check for step down
-			transform3d.origin += motion
-			motion = - Vector3.UP * max_step_height
-			test_motion_params.from = transform3d
-			test_motion_params.motion = motion
+				#	adjust the character position
+				global_transform.origin += step_diff_position
 				
-			is_player_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
-			if is_player_collided and test_motion_result.get_travel().y < max_step_height:
-				if test_motion_result.get_collision_normal().angle_to(Vector3.UP) >= deg_to_rad(step_max_slope_degree):
-					is_step = true
-					is_step_up = false
-					step_diff_position = test_motion_result.get_travel()
-					return true
-
+				return true
+				
 	return false
 
 
-
-
-		
 func check_distance_to_floor():
 	var space_state = get_world_3d().direct_space_state
 	

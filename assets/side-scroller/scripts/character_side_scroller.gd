@@ -49,6 +49,7 @@ var is_in_air: bool = false
 var last_face_direction : float = 1
 
 
+	
 
 func _ready() -> void:
 
@@ -70,14 +71,15 @@ func _input(event: InputEvent) -> void:
 			#  if event.is_action_pressed("ui_cancel"):
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-
+	
 
 func _physics_process(delta):
-	
+		
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
-
+	var jump : bool = input_dir.y < 0.0
+	
 	if is_on_floor():
 		is_jumping = false
 		is_in_air = false
@@ -99,14 +101,14 @@ func _physics_process(delta):
 	if is_on_floor():
 #		is_step = check_step(delta, new_velocity)
 
-		if input_dir.y < 0.0 and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
+		if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 			is_jumping = true
 			is_in_air = false
 			new_velocity.y = calculate_jump_vertical_speed()
 			last_jump_time = Time.get_ticks_msec()
 
-	if is_step:
-		global_transform.origin += step_diff_position
+	#if is_step:
+	#	global_transform.origin += step_diff_position
 
 	# Add the gravity.
 	if not is_on_floor() :
@@ -114,7 +116,7 @@ func _physics_process(delta):
 	else:
 		if (new_velocity.y < 0.0):
 			new_velocity.y = -0.1
-				
+							
 	velocity = new_velocity
 	move_and_slide()
 	

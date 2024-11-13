@@ -121,8 +121,8 @@ func _physics_process(delta):
 			new_velocity.y = calculate_jump_vertical_speed()
 			last_jump_time = Time.get_ticks_msec()
 
-	if is_step:
-		global_transform.origin += step_diff_position
+	#if is_step:
+	#	global_transform.origin += step_diff_position
 
 	# Add the gravity.
 	if not is_on_floor() :
