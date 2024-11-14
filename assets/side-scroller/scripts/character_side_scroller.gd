@@ -64,14 +64,12 @@ func _input(event: InputEvent) -> void:
 		if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		
-		
 	if event is InputEventKey:
 		if event.is_released():
 			if event.keycode == KEY_ESCAPE:
 			#  if event.is_action_pressed("ui_cancel"):
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
-	
 
 func _physics_process(delta):
 		
@@ -94,34 +92,28 @@ func _physics_process(delta):
 		new_velocity.x = move_toward(new_velocity.x, 0, walk_speed)
 		new_velocity.z = 0 # No lateral movement - to and from screen
 	
-	check_step(delta, new_velocity)
+	#check_step(new_velocity)
 
 	# Handle Jump.
-	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 	if is_on_floor():
-#		is_step = check_step(delta, new_velocity)
 
 		if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 			is_jumping = true
 			is_in_air = false
 			new_velocity.y = calculate_jump_vertical_speed()
 			last_jump_time = Time.get_ticks_msec()
-
-	#if is_step:
-	#	global_transform.origin += step_diff_position
-
-	# Add the gravity.
-	if not is_on_floor() :
-		new_velocity.y = velocity.y - gravity * delta
-	else:
-		if (new_velocity.y < 0.0):
+		
+		elif (new_velocity.y < 0.0):
 			new_velocity.y = -0.1
-							
-	velocity = new_velocity
-	move_and_slide()
+	else:
+		# Add the gravity.
+		new_velocity.y = velocity.y - gravity * delta
 	
-	update_model_facing(delta, input_dir)
-
+	velocity = new_velocity
+	#move_and_slide()
+	check_step_move_and_slide()
+	
+	update_model_facing(input_dir)
 	update_animations(input_dir)
 
 	if is_jumping :
@@ -129,16 +121,14 @@ func _physics_process(delta):
 		is_in_air = true
 
 
-			
 
-
-func update_model_facing(delta, input_dir):
+func update_model_facing(input_dir):
 	
 	if input_dir.x != 0.0:
 		var facing_angle : float = sign(input_dir.x) * 90.0
 		#var face_direction = Vector3( 0.0, facing_angle, 0.0)
 		#model.set_rotation_degrees(face_direction)
-		model.global_rotation.y = lerp_angle( model.global_rotation.y, deg_to_rad(facing_angle), delta * 10.0 )
+		model.global_rotation.y = lerp_angle( model.global_rotation.y, deg_to_rad(facing_angle), get_physics_process_delta_time() * 10.0 )
 		last_face_direction = sign(input_dir.x)
 
 
@@ -166,23 +156,16 @@ func update_animations(input_dir):
 	else:
 		if is_crouched:
 			animation_tree.set("parameters/State/transition_request", "crouch_state")
-			#animation_tree.set("parameters/crouch_blend/blend_position", movement)
 		else:
 	
 			if is_idle:
 				animation_tree.set("parameters/State/transition_request", "idle_state")
-				#animation_tree.set("parameters/in_place_blend/blend_position", turning)
 			if is_running:
 				animation_tree.set("parameters/State/transition_request", "running_state")
-				#animation_tree.set("parameters/run_blend/blend_position", movement)
-				#print_debug(movement)
 			elif is_walking:
 				animation_tree.set("parameters/State/transition_request", "walking_state")
-				#animation_tree.set("parameters/walk_blend/blend_position", movement)
-				#print_debug(movement)
 
 
-		
 func calculate_jump_vertical_speed():
 	return sqrt(2.0 * gravity * jump_height)
 

@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_ue2wr"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_fallm"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hd206"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ttot8"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2swil"]
 
@@ -254,7 +254,7 @@ script = ExtResource("1_cy2va")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-shape = SubResource("CapsuleShape3D_hd206")
+shape = SubResource("CylinderShape3D_ttot8")
 
 [node name="Model" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)

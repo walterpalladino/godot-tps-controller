@@ -14,7 +14,15 @@ var step_diff_position : Vector3 = Vector3.ZERO
 var step_margin : float = 0.05
 
 
-func check_step(delta:float, main_velocity:Vector3):
+
+func check_step_move_and_slide():
+	var check_velocity : Vector3 = velocity
+	check_velocity.y = 0.0
+	check_step(check_velocity)
+	move_and_slide()
+	
+	
+func check_step(main_velocity:Vector3):
 	
 	is_step = false
 	is_step_up = false
@@ -30,7 +38,7 @@ func check_step(delta:float, main_velocity:Vector3):
 	
 	var test_motion_result: PhysicsTestMotionResult3D = PhysicsTestMotionResult3D.new()
 	var transform3d: Transform3D = global_transform
-	var motion: Vector3 = main_velocity * delta
+	var motion: Vector3 = main_velocity * get_physics_process_delta_time()
 	
 	# ---------------------------------------
 	# 1 - test first if can horizontally move

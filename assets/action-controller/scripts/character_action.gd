@@ -139,14 +139,8 @@ func _physics_process(delta):
 	new_velocity.x = direction.x * speed
 	new_velocity.z = direction.z * speed
 	
-	#if direction:
-	#	new_velocity.x = direction.x * speed
-	#	new_velocity.z = direction.z * speed
-	#else:
-	#	new_velocity.x = move_toward(velocity.x, 0, speed)
-	#	new_velocity.z = move_toward(velocity.z, 0, speed)
 	
-	check_step(delta, new_velocity)
+	check_step(new_velocity)
 
 	# Handle Jump.
 	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
@@ -158,8 +152,6 @@ func _physics_process(delta):
 			new_velocity.y = calculate_jump_vertical_speed()
 			last_jump_time = Time.get_ticks_msec()
 
-	#if is_step:
-	#	global_transform.origin += step_diff_position
 
 	# Add the gravity.
 	if not is_on_floor() :

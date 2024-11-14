@@ -6,7 +6,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://cvd5q5ueqnrht" path="res://assets/mixamo-animations/animations/mixamo-simple-sword.fbx" id="5_bi0b6"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="5_ircuj"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hd206"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vr88a"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_q82t8"]
 fadein_time = 0.6
@@ -212,7 +212,7 @@ script = ExtResource("1_48s82")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-shape = SubResource("CapsuleShape3D_hd206")
+shape = SubResource("CylinderShape3D_vr88a")
 
 [node name="Model" type="Node3D" parent="."]
 

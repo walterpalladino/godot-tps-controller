@@ -187,7 +187,6 @@ surface_material_override/0 = ExtResource("2_lwtwo")
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ramp"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ramp/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_lplyk")
 
 [node name="Ramp2" type="MeshInstance3D" parent="Environment"]
@@ -198,7 +197,6 @@ surface_material_override/0 = ExtResource("2_lwtwo")
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ramp2"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ramp2/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_lplyk")
 
 [node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
