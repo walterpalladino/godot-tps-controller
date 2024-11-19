@@ -45,6 +45,7 @@ var on_floor : bool = false
 
 var is_jumping: bool = false
 var is_in_air: bool = false
+var was_on_air : bool = false
 
 var last_face_direction : float = 1
 
@@ -73,12 +74,23 @@ func _input(event: InputEvent) -> void:
 
 func _physics_process(delta):
 		
+	
+	if is_blocking_animation_running():
+		return
+		
+	update_character(delta)
+	
+
+func update_character(delta):
+	
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
 	var jump : bool = input_dir.y < 0.0
 	
 	if is_on_floor():
+		if is_in_air:
+			was_on_air = true
 		is_jumping = false
 		is_in_air = false
 	else:
@@ -121,7 +133,6 @@ func _physics_process(delta):
 		is_in_air = true
 
 
-
 func update_model_facing(input_dir):
 	
 	if input_dir.x != 0.0:
@@ -154,7 +165,10 @@ func update_animations(input_dir):
 	if !is_grounded:
 		animation_tree.set("parameters/State/transition_request", "on_air_state")
 	else:
-		if is_crouched:
+		if was_on_air:
+			was_on_air = false
+			animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		elif is_crouched:
 			animation_tree.set("parameters/State/transition_request", "crouch_state")
 		else:
 	
@@ -164,6 +178,16 @@ func update_animations(input_dir):
 				animation_tree.set("parameters/State/transition_request", "running_state")
 			elif is_walking:
 				animation_tree.set("parameters/State/transition_request", "walking_state")
+
+
+#	add here any animation that should be tested to block
+#	the cahracter interaction
+func is_blocking_animation_running():
+	
+	if animation_tree.get("parameters/landed/active"):
+		return true
+	
+	return false
 
 
 func calculate_jump_vertical_speed():
