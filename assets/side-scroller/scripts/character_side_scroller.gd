@@ -24,20 +24,13 @@ var crouch : bool = false
 @export var gravity = 9.81
 @export var jump_height : float = 2.0
 @export var min_time_between_jumps = 1.0 # in seconds
-var last_jump_time : float = 0
+var last_jump_time : float = 0.0
+var last_y_in_floor : float = 0.0
 
-
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-#var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 const STEP_RAY_LENGTH = 0.2
-#const STEP_OFFSET = Vector3(0.0, 0.1, 0.0)
 
-#var last_direction = Vector2(1.0, 0.0)
-
-#var last_floor_y : float = 0.0
-#var last_floor_time : float = 0.0
 
 
 
@@ -57,6 +50,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 	setup_input()
+	
 
 
 func _input(event: InputEvent) -> void:
@@ -73,20 +67,15 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta):
-		
 	
 	if is_blocking_animation_running():
 		return
 		
 	update_character(delta)
-	
+
+
 
 func update_character(delta):
-	
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	var direction = Vector3.RIGHT * sign(input_dir.x) 
-	var jump : bool = input_dir.y < 0.0
 	
 	if is_on_floor():
 		if is_in_air:
@@ -95,7 +84,14 @@ func update_character(delta):
 		is_in_air = false
 	else:
 		is_in_air = true
+		
+		
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var direction = Vector3.RIGHT * sign(input_dir.x) 
+	var jump : bool = input_dir.y < 0.0
 
+	#	evaluate movement velocity
 	var new_velocity = Vector3.ZERO
 	if direction:
 		new_velocity.x = direction.x * walk_speed
@@ -103,8 +99,7 @@ func update_character(delta):
 	else:
 		new_velocity.x = move_toward(new_velocity.x, 0, walk_speed)
 		new_velocity.z = 0 # No lateral movement - to and from screen
-	
-	#check_step(new_velocity)
+
 
 	# Handle Jump.
 	if is_on_floor():
@@ -114,41 +109,44 @@ func update_character(delta):
 			is_in_air = false
 			new_velocity.y = calculate_jump_vertical_speed()
 			last_jump_time = Time.get_ticks_msec()
-		
+
 		elif (new_velocity.y < 0.0):
 			new_velocity.y = -0.1
 	else:
 		# Add the gravity.
 		new_velocity.y = velocity.y - gravity * delta
+		
+		if transform.origin.y > last_y_in_floor:
+			last_y_in_floor = transform.origin.y
+
 	
 	velocity = new_velocity
-	#move_and_slide()
+
 	check_step_move_and_slide()
 	
-	update_model_facing(input_dir)
-	update_animations(input_dir)
+	update_model_facing()
+	update_animations()
 
 	if is_jumping :
 		is_jumping = false
 		is_in_air = true
 
 
-func update_model_facing(input_dir):
+func update_model_facing():
 	
-	if input_dir.x != 0.0:
-		var facing_angle : float = sign(input_dir.x) * 90.0
+	if velocity.x != 0.0:
+		var facing_angle : float = sign(velocity.x) * 90.0
 		#var face_direction = Vector3( 0.0, facing_angle, 0.0)
 		#model.set_rotation_degrees(face_direction)
 		model.global_rotation.y = lerp_angle( model.global_rotation.y, deg_to_rad(facing_angle), get_physics_process_delta_time() * 10.0 )
-		last_face_direction = sign(input_dir.x)
-
+		last_face_direction = sign(velocity.x)
 
 
 
 # Update animations
-func update_animations(input_dir):
+func update_animations():
 
-	var is_idle : bool = input_dir.x == 0.0 && (is_on_floor() || is_step)
+	var is_idle : bool = velocity.x == 0.0 && (is_on_floor() || is_step)
 	var is_walking : bool = velocity.x != 0.0 && (is_on_floor() || is_step)
 	var is_running : bool = is_walking and running
 
@@ -160,14 +158,19 @@ func update_animations(input_dir):
 		distance_to_floor = 0.0
 	#print_debug(distance_to_floor)
 
-	var is_grounded : bool = (is_on_floor() || is_step) || (distance_to_floor <= max_step_height)
-	
+	var is_grounded : bool = (is_on_floor() || is_step) 
+	if velocity.y <= 0:
+		is_grounded = is_grounded || (distance_to_floor <= 1.5 * max_step_height)
+		
 	if !is_grounded:
 		animation_tree.set("parameters/State/transition_request", "on_air_state")
 	else:
 		if was_on_air:
 			was_on_air = false
+			
 			animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+				
+			last_y_in_floor = transform.origin.y
 		elif is_crouched:
 			animation_tree.set("parameters/State/transition_request", "crouch_state")
 		else:
