@@ -1,7 +1,6 @@
-[gd_scene load_steps=53 format=3 uid="uid://jkhenibiwgyh"]
+[gd_scene load_steps=52 format=3 uid="uid://jkhenibiwgyh"]
 
 [ext_resource type="Script" path="res://assets/tps-controller/scripts/character_tps.gd" id="1_cy2va"]
-[ext_resource type="PackedScene" uid="uid://bmh0gyy12o80p" path="res://assets/tps-controller/models/man_001/man_001.tscn" id="2_tssjn"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_ycyyq"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_ue2wr"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_fallm"]
@@ -259,22 +258,19 @@ shape = SubResource("CylinderShape3D_ttot8")
 [node name="Model" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="man_001" parent="Model" instance=ExtResource("2_tssjn")]
-
 [node name="y-bot" parent="Model" instance=ExtResource("2_ycyyq")]
-visible = false
 
 [node name="x-bot" parent="Model" instance=ExtResource("3_ue2wr")]
 visible = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../Model/man_001")
+root_node = NodePath("../Model/y-bot")
 libraries = {
 "mixamo-basic-locomotion": ExtResource("4_fallm")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-root_node = NodePath("../Model/man_001")
+root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
 parameters/OneShot/active = false

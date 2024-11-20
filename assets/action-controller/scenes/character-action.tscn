@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://ci2itwnf7p7ws"]
+[gd_scene load_steps=45 format=3 uid="uid://ci2itwnf7p7ws"]
 
 [ext_resource type="Script" path="res://assets/action-controller/scripts/character_action.gd" id="1_48s82"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="3_2ai8g"]
@@ -19,6 +19,11 @@ fadeout_time = 0.4
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_8340l"]
 fadein_time = 0.4
 fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3h5yf"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling To landing From Foot"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_8oaso"]
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_n0rlo"]
 fadein_time = 0.2
@@ -60,6 +65,8 @@ input_4/reset = true
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_63khx"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_lgwli"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_4tvq8"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_yjwyx"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Idle"
@@ -154,26 +161,33 @@ blend_point_1/node = SubResource("AnimationNodeAnimation_fyuet")
 blend_point_1/pos = 1.0
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
+graph_offset = Vector2(-47.4267, -125.815)
 nodes/Duck/node = SubResource("AnimationNodeOneShot_q82t8")
-nodes/Duck/position = Vector2(120, 110)
+nodes/Duck/position = Vector2(-110, 820)
 "nodes/Hard Land/node" = SubResource("AnimationNodeOneShot_2swil")
-"nodes/Hard Land/position" = Vector2(390, 310)
+"nodes/Hard Land/position" = Vector2(160, 1020)
 "nodes/Kick Half Body/node" = SubResource("AnimationNodeOneShot_8340l")
-"nodes/Kick Half Body/position" = Vector2(650, 570)
+"nodes/Kick Half Body/position" = Vector2(420, 1280)
+"nodes/Land Anim/node" = SubResource("AnimationNodeAnimation_3h5yf")
+"nodes/Land Anim/position" = Vector2(-340, 280)
+nodes/Landed/node = SubResource("AnimationNodeOneShot_8oaso")
+nodes/Landed/position = Vector2(340, -60)
 "nodes/Right Hook/node" = SubResource("AnimationNodeOneShot_n0rlo")
-"nodes/Right Hook/position" = Vector2(920, 700)
+"nodes/Right Hook/position" = Vector2(690, 1410)
 nodes/State/node = SubResource("AnimationNodeTransition_t1qpm")
 nodes/State/position = Vector2(-380, -40)
+nodes/TimeScale/node = SubResource("AnimationNodeTimeScale_4tvq8")
+nodes/TimeScale/position = Vector2(190, 150)
 "nodes/TimeScale Crouch/node" = SubResource("AnimationNodeTimeScale_iy0an")
 "nodes/TimeScale Crouch/position" = Vector2(-660, 570)
 "nodes/TimeScale Duck/node" = SubResource("AnimationNodeTimeScale_r3d05")
-"nodes/TimeScale Duck/position" = Vector2(-100, 260)
+"nodes/TimeScale Duck/position" = Vector2(-330, 970)
 "nodes/TimeScale In Place/node" = SubResource("AnimationNodeTimeScale_u5c7k")
 "nodes/TimeScale In Place/position" = Vector2(-700, -140)
 "nodes/TimeScale Kick/node" = SubResource("AnimationNodeTimeScale_a6c5a")
-"nodes/TimeScale Kick/position" = Vector2(500, 680)
+"nodes/TimeScale Kick/position" = Vector2(270, 1390)
 "nodes/TimeScale Right Hook/node" = SubResource("AnimationNodeTimeScale_aumi3")
-"nodes/TimeScale Right Hook/position" = Vector2(730, 880)
+"nodes/TimeScale Right Hook/position" = Vector2(500, 1590)
 "nodes/TimeScale Run/node" = SubResource("AnimationNodeTimeScale_63khx")
 "nodes/TimeScale Run/position" = Vector2(-700, 200)
 "nodes/TimeScale Walk/node" = SubResource("AnimationNodeTimeScale_lgwli")
@@ -181,9 +195,9 @@ nodes/State/position = Vector2(-380, -40)
 nodes/crouch_movement_blend/node = SubResource("AnimationNodeBlendSpace1D_5dxdh")
 nodes/crouch_movement_blend/position = Vector2(-900, 570)
 "nodes/ducking anim/node" = SubResource("AnimationNodeAnimation_ktodm")
-"nodes/ducking anim/position" = Vector2(-370, 290)
+"nodes/ducking anim/position" = Vector2(-600, 1000)
 nodes/hard_land_anim/node = SubResource("AnimationNodeAnimation_dpkmr")
-nodes/hard_land_anim/position = Vector2(-80, 490)
+nodes/hard_land_anim/position = Vector2(-310, 1200)
 "nodes/idle neck stretching/node" = SubResource("AnimationNodeAnimation_3q4la")
 "nodes/idle neck stretching/position" = Vector2(-1580, 150)
 "nodes/idle straight/node" = SubResource("AnimationNodeAnimation_mx10e")
@@ -195,17 +209,17 @@ nodes/idle_blend/position = Vector2(-920, -160)
 nodes/idle_states/node = SubResource("AnimationNodeTransition_rl08i")
 nodes/idle_states/position = Vector2(-1212.78, -116.221)
 "nodes/kicking half body anim/node" = SubResource("AnimationNodeAnimation_aj2ac")
-"nodes/kicking half body anim/position" = Vector2(170, 690)
+"nodes/kicking half body anim/position" = Vector2(-60, 1400)
 nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_ikmx2")
 nodes/on_air_anim/position = Vector2(-920, 380)
-nodes/output/position = Vector2(1080, 510)
+nodes/output/position = Vector2(900, -50)
 "nodes/right hook anim/node" = SubResource("AnimationNodeAnimation_3ygm1")
-"nodes/right hook anim/position" = Vector2(450, 880)
+"nodes/right hook anim/position" = Vector2(220, 1590)
 nodes/run_movement_blend/node = SubResource("AnimationNodeBlendSpace1D_btby7")
 nodes/run_movement_blend/position = Vector2(-920, 210)
 nodes/walk_movement_blend/node = SubResource("AnimationNodeBlendSpace1D_53snq")
 nodes/walk_movement_blend/position = Vector2(-920, 0)
-node_connections = [&"Duck", 0, &"State", &"Duck", 1, &"TimeScale Duck", &"Hard Land", 0, &"Duck", &"Hard Land", 1, &"hard_land_anim", &"Kick Half Body", 0, &"Hard Land", &"Kick Half Body", 1, &"TimeScale Kick", &"Right Hook", 0, &"Kick Half Body", &"Right Hook", 1, &"TimeScale Right Hook", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_movement_blend", &"TimeScale Duck", 0, &"ducking anim", &"TimeScale In Place", 0, &"idle_blend", &"TimeScale Kick", 0, &"kicking half body anim", &"TimeScale Right Hook", 0, &"right hook anim", &"TimeScale Run", 0, &"run_movement_blend", &"TimeScale Walk", 0, &"walk_movement_blend", &"idle_states", 0, &"idle straight", &"idle_states", 1, &"idle straight breathing", &"idle_states", 2, &"idle neck stretching", &"output", 0, &"Right Hook"]
+node_connections = [&"Duck", 1, &"TimeScale Duck", &"Hard Land", 0, &"Duck", &"Hard Land", 1, &"hard_land_anim", &"Kick Half Body", 0, &"Hard Land", &"Kick Half Body", 1, &"TimeScale Kick", &"Landed", 0, &"State", &"Landed", 1, &"TimeScale", &"Right Hook", 0, &"Kick Half Body", &"Right Hook", 1, &"TimeScale Right Hook", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale", 0, &"Land Anim", &"TimeScale Crouch", 0, &"crouch_movement_blend", &"TimeScale Duck", 0, &"ducking anim", &"TimeScale In Place", 0, &"idle_blend", &"TimeScale Kick", 0, &"kicking half body anim", &"TimeScale Right Hook", 0, &"right hook anim", &"TimeScale Run", 0, &"run_movement_blend", &"TimeScale Walk", 0, &"walk_movement_blend", &"idle_states", 0, &"idle straight", &"idle_states", 1, &"idle straight breathing", &"idle_states", 2, &"idle neck stretching", &"output", 0, &"Landed"]
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_48s82")
@@ -240,12 +254,16 @@ parameters/Duck/request = 0
 "parameters/Kick Half Body/active" = false
 "parameters/Kick Half Body/internal_active" = false
 "parameters/Kick Half Body/request" = 0
+parameters/Landed/active = false
+parameters/Landed/internal_active = false
+parameters/Landed/request = 0
 "parameters/Right Hook/active" = false
 "parameters/Right Hook/internal_active" = false
 "parameters/Right Hook/request" = 0
 parameters/State/current_state = "idle_state"
 parameters/State/transition_request = ""
 parameters/State/current_index = 0
+parameters/TimeScale/scale = 1.0
 "parameters/TimeScale Crouch/scale" = 1.0
 "parameters/TimeScale Duck/scale" = 1.0
 "parameters/TimeScale In Place/scale" = 1.0
@@ -265,4 +283,4 @@ parameters/walk_movement_blend/blend_position = -0.000615358
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraMount"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31, 0.12, 0.89)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.31, 0.12, 1.07)

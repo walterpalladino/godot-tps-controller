@@ -1,6 +1,14 @@
 extends CharacterBody3D
 class_name CharacterController3D
 
+
+@export_category("On AIr")
+
+@export var gravity = 9.81
+@export var jump_height : float = 2.0
+
+
+
 @export_category("Steps")
 @export var max_step_height : float = 0.40		# max height for steps
 @export var min_step_height : float = 0.001	#	min distance for steps
@@ -153,6 +161,9 @@ func check_distance_to_floor():
 	else:
 		return clamp(transform.origin.y - result.position.y, 0.0, 100.0)
 			
+
+func calculate_jump_vertical_speed():
+	return sqrt(2.0 * gravity * jump_height)
 
 
 func add_action_key(action, key_code):

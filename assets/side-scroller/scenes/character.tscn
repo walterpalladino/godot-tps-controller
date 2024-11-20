@@ -57,7 +57,6 @@ animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Forward"
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-811.21, 274.854)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_17kx8")
 nodes/Animation/position = Vector2(-1130, 780)
 nodes/State/node = SubResource("AnimationNodeTransition_6jbmv")

@@ -20,8 +20,6 @@ var last_turning_value : float = 0
 
 @export_category("On AIr")
 
-@export var gravity = 9.81
-@export var jump_height : float = 2.0
 @export var min_time_between_jumps = 1.0 # in seconds
 var last_jump_time : float = 0
 
@@ -73,6 +71,16 @@ func _input(event: InputEvent) -> void:
 		
 		#print_debug(camera_mount.rotation.x)
 		
+	if event is InputEventMouseButton:
+		if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		
+		
+	if event is InputEventKey:
+		if event.is_released():
+			if event.keycode == KEY_ESCAPE:
+			#  if event.is_action_pressed("ui_cancel"):
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		
 
 
@@ -189,9 +197,6 @@ func update_animations(delta, input_dir):
 		
 	#animation_tree.set("parameters/State/transition_request", "on_air_state")
 
-		
-func calculate_jump_vertical_speed():
-	return sqrt(2.0 * gravity * jump_height)
 
 #	Setup used inputs
 func setup_input():

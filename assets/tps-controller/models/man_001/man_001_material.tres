@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ydcsqw1cbdva"]
-
-[ext_resource type="Texture2D" uid="uid://bxqq7d5jt5f1j" path="res://assets/tps-controller/models/man_001/man_001_Palette-16x16-512x512-80s.png" id="1_1gwdm"]
-
-[resource]
-albedo_texture = ExtResource("1_1gwdm")

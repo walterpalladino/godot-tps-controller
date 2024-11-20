@@ -23,8 +23,6 @@ var last_speed : float = 0.0
 
 @export_category("On AIr")
 
-@export var gravity = 9.81
-@export var jump_height : float = 2.0
 @export var min_time_between_jumps = 1.0 # in seconds
 var last_jump_time : float = 0
 
@@ -94,7 +92,16 @@ func _input(event: InputEvent) -> void:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
+
 func _physics_process(delta):
+	
+	if is_blocking_animation_running():
+		return
+		
+	update_character(delta)
+
+
+func update_character(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
@@ -140,7 +147,7 @@ func _physics_process(delta):
 	new_velocity.z = direction.z * speed
 	
 	
-	check_step(new_velocity)
+	#check_step(new_velocity)
 
 	# Handle Jump.
 	#if Input.is_action_just_pressed("ui_accept") and is_on_floor():
@@ -161,9 +168,10 @@ func _physics_process(delta):
 			new_velocity.y = -0.1
 				
 	velocity = new_velocity
-	move_and_slide()
+	#move_and_slide()
+	check_step_move_and_slide()
 	
-	update_model_facing(delta, new_velocity.normalized())
+	update_model_facing()
 	update_animations()
 
 	if is_jumping :
@@ -174,16 +182,15 @@ func _physics_process(delta):
 		last_on_floor_height = global_position.y
 
 
-func update_model_facing(delta : float, direction : Vector3):
+func update_model_facing():
 
-	if Vector2(direction.x, direction.z).length() != 0.0:
+	if velocity.x != 0.0 || velocity.z != 0.0:
 
 		# no interpolation
 		#var target_position : Vector3 = model.global_position + Vector3(direction.x, 0, direction.z)
 		#model.look_at(target_position)
 
-		#model.global_rotation.y = atan2(direction.normalized().x, direction.normalized().z) + PI
-		model.global_rotation.y = lerp_angle( model.global_rotation.y, atan2(direction.normalized().x, direction.normalized().z) + PI, delta * 10.0 )
+		model.global_rotation.y = lerp_angle( model.global_rotation.y, atan2(velocity.normalized().x, velocity.normalized().z) + PI, get_physics_process_delta_time() * 10.0 )
 
 
 
@@ -231,9 +238,17 @@ func update_animations():
 		
 	#animation_tree.set("parameters/State/transition_request", "on_air_state")
 
+
+
+#	add here any animation that should be tested to block
+#	the cahracter interaction
+func is_blocking_animation_running():
+	
+	if animation_tree.get("parameters/landed/active"):
+		return true
+	
+	return false
 		
-func calculate_jump_vertical_speed():
-	return sqrt(2.0 * gravity * jump_height)
 
 #	Setup used inputs
 func setup_input():

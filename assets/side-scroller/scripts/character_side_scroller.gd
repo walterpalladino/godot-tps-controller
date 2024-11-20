@@ -21,17 +21,9 @@ var crouch : bool = false
 
 @export_category("On AIr")
 
-@export var gravity = 9.81
-@export var jump_height : float = 2.0
 @export var min_time_between_jumps = 1.0 # in seconds
 var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
-
-
-
-const STEP_RAY_LENGTH = 0.2
-
-
 
 
 var on_floor : bool = false
@@ -192,9 +184,6 @@ func is_blocking_animation_running():
 	
 	return false
 
-
-func calculate_jump_vertical_speed():
-	return sqrt(2.0 * gravity * jump_height)
 
 
 #	Setup used inputs
