@@ -1,10 +1,11 @@
+@icon("res://assets/x-controller/CharacterBody3D-X.svg")
+
 extends CharacterController3D
 
 #	character_side_action_controller
 
 @onready var collision_shape = get_node("CollisionShape3D")
 @onready var animation_tree : AnimationTree = get_node("AnimationTree")
-
 @onready var model = get_node("Model")
 
 
@@ -18,15 +19,11 @@ var crouch : bool = false
 
 
 @export_category("On AIr")
-
 ## Lapse in mili seconds
 @export var min_time_between_jumps : float = 1.0 # in seconds
 var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
-@export var in_air_movement_factor : float = 0.5
 
-
-var on_floor : bool = false
 
 var is_jumping: bool = false
 var is_in_air: bool = false
@@ -83,26 +80,27 @@ func update_character(delta):
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
 	var jump : bool = input_dir.y < 0.0
 
-
-	if Input.is_action_just_pressed("move_crouch_stand"):
+	
+	if is_on_floor() && (velocity.x < max_character_speed * 0.5) && (Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward")):
 		crouch = !crouch 
 
 
 	#	evaluate movement velocity
 	var new_velocity = Vector3.ZERO
-	var target_speed = 0.0
+	var target_speed = 0.0	# depends on if the target is stand or crouched 
 	
-	var in_air_factor = 1.0
-	if not is_on_floor():
-		in_air_factor = in_air_movement_factor
-		
 	if direction.x != 0.0:
 		if crouch:
 			target_speed = crouch_speed
 		else:
 			target_speed = max_character_speed
-			
-	new_velocity.x = lerp(abs(velocity.x), target_speed, in_air_factor * speed_change * delta) * sign(direction.x)
+	
+	if is_on_floor() || is_on_wall():
+		new_velocity.x = lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
+	else:
+		#	when on air the character keeps moving when the
+		#	previously acquired horizontal speed
+		new_velocity.x = velocity.x
 	new_velocity.z = 0 # No lateral movement - to and from screen
 	
 		
@@ -112,11 +110,13 @@ func update_character(delta):
 		if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 			is_jumping = true
 			is_in_air = false
+			crouch = false
 			new_velocity.y = calculate_jump_vertical_speed()
 			last_jump_time = Time.get_ticks_msec()
 
 		elif (new_velocity.y < 0.0):
 			new_velocity.y = -0.1
+			
 	else:
 		#	if character is in air...
 		#	add the gravity.
@@ -152,17 +152,14 @@ func update_model_facing():
 # Update animations
 func update_animations():
 
-
 	#	Check distance to floor
 	var distance_to_floor : float  = check_distance_to_floor()
 	if is_on_floor() || is_step:
 		distance_to_floor = 0.0
-	#print_debug(distance_to_floor)
 
 	var is_grounded : bool = (is_on_floor() || is_step) 
 	if velocity.y <= 0:
-		is_grounded = is_grounded || (distance_to_floor <= 1.5 * max_step_height)
-		
+		is_grounded = is_grounded || (distance_to_floor <= 1.5 * max_step_height)		
 		
 	var is_idle : bool = velocity.x == 0.0 && is_grounded
 	var is_moving : bool = velocity.x != 0.0 && is_grounded
@@ -174,20 +171,15 @@ func update_animations():
 	else:
 		if was_on_air:
 			was_on_air = false
-			
 			animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-				
 			last_y_in_floor = transform.origin.y
 		elif is_crouched:
 			animation_tree.set("parameters/Crouch/blend_position", abs(velocity.x) / crouch_speed)
 			animation_tree.set("parameters/State/transition_request", "crouch_state")
-		else:
-	
-#			if is_idle:
-#				animation_tree.set("parameters/State/transition_request", "idle_state")
-			if is_idle || is_moving:
-				animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed)
-				animation_tree.set("parameters/State/transition_request", "locomotion_state")
+		elif is_idle || is_moving:
+			animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed)
+			animation_tree.set("parameters/State/transition_request", "locomotion_state")
+
 
 
 #	add here any animation that should be tested to block

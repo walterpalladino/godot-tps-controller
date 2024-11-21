@@ -1,6 +1,6 @@
 extends CharacterBody3D
-class_name CharacterController3D
 
+class_name CharacterController3D
 
 @export_category("On AIr")
 

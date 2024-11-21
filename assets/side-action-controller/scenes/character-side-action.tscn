@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://befcn8vh0dsoy"]
+[gd_scene load_steps=25 format=3 uid="uid://befcn8vh0dsoy"]
 
 [ext_resource type="Script" path="res://assets/side-action-controller/scripts/character_side_action_controller.gd" id="1_artrr"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_0gkuu"]
@@ -19,9 +19,6 @@ blend_point_0/node = SubResource("AnimationNodeAnimation_odjsx")
 blend_point_0/pos = 0.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_g21m1")
 blend_point_1/pos = 1.0
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_17kx8"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling To landing From Foot"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qdahb"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Idle"
@@ -52,6 +49,10 @@ blend_point_1/pos = 0.5
 blend_point_2/node = SubResource("AnimationNodeAnimation_o16jn")
 blend_point_2/pos = 1.0
 
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ggdg0"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6jbmv"]
 xfade_time = 0.2
 input_0/name = "locomotion_state"
@@ -71,6 +72,9 @@ input_2/reset = true
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1gpcx"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_17kx8"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling To landing From Foot"
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ebjok"]
 fadein_time = 0.05
 fadeout_time = 0.3
@@ -78,28 +82,35 @@ fadeout_time = 0.3
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_srs5w"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3s47"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Slide - In Place"
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-586.088, 176.45)
+graph_offset = Vector2(-53.8387, 237.738)
 nodes/Air/node = SubResource("AnimationNodeBlendSpace1D_cqai1")
 nodes/Air/position = Vector2(-1040, 600)
-nodes/Animation/node = SubResource("AnimationNodeAnimation_17kx8")
-nodes/Animation/position = Vector2(-870, 1020)
 nodes/Crouch/node = SubResource("AnimationNodeBlendSpace1D_m1fca")
 nodes/Crouch/position = Vector2(-650, 640)
 nodes/Locomotion/node = SubResource("AnimationNodeBlendSpace1D_i3op0")
 nodes/Locomotion/position = Vector2(-850, 280)
+nodes/Slide/node = SubResource("AnimationNodeOneShot_ggdg0")
+nodes/Slide/position = Vector2(530, 500)
 nodes/State/node = SubResource("AnimationNodeTransition_6jbmv")
 nodes/State/position = Vector2(-300, 310)
 "nodes/TimeScale Land/node" = SubResource("AnimationNodeTimeScale_wrxym")
 "nodes/TimeScale Land/position" = Vector2(-360, 1020)
 "nodes/TimeScale On Air/node" = SubResource("AnimationNodeTimeScale_1gpcx")
 "nodes/TimeScale On Air/position" = Vector2(-660, 460)
+nodes/land_anim/node = SubResource("AnimationNodeAnimation_17kx8")
+nodes/land_anim/position = Vector2(-870, 1020)
 nodes/landed/node = SubResource("AnimationNodeOneShot_ebjok")
 nodes/landed/position = Vector2(-10, 410)
 nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_srs5w")
 nodes/on_air_anim/position = Vector2(-1120, 460)
-nodes/output/position = Vector2(340, 410)
-node_connections = [&"State", 0, &"Locomotion", &"State", 1, &"Air", &"State", 2, &"Crouch", &"TimeScale Land", 0, &"Animation", &"TimeScale On Air", 0, &"on_air_anim", &"landed", 0, &"State", &"landed", 1, &"TimeScale Land", &"output", 0, &"landed"]
+nodes/output/position = Vector2(800, 430)
+nodes/slide_anim/node = SubResource("AnimationNodeAnimation_i3s47")
+nodes/slide_anim/position = Vector2(20, 650)
+node_connections = [&"Slide", 0, &"landed", &"Slide", 1, &"slide_anim", &"State", 0, &"Locomotion", &"State", 1, &"Air", &"State", 2, &"Crouch", &"TimeScale Land", 0, &"land_anim", &"TimeScale On Air", 0, &"on_air_anim", &"landed", 0, &"State", &"landed", 1, &"TimeScale Land", &"output", 0, &"Slide"]
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_artrr")
@@ -128,6 +139,9 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/Air/blend_position = 0
 parameters/Crouch/blend_position = 0
 parameters/Locomotion/blend_position = 0
+parameters/Slide/active = false
+parameters/Slide/internal_active = false
+parameters/Slide/request = 0
 parameters/State/current_state = "locomotion_state"
 parameters/State/transition_request = ""
 parameters/State/current_index = 0
