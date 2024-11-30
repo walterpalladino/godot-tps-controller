@@ -60,6 +60,7 @@ size = Vector3(3, 1, 10)
 [node name="Character" parent="." instance=ExtResource("2_mb7kh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, 0)
 speed_change = 3.0
+climbing_model_offset = Vector3(0.15, 0, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -71,7 +72,7 @@ environment = SubResource("Environment_qeyb2")
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="Floor" type="MeshInstance3D" parent="Environment"]
-transform = Transform3D(50, 0, 0, 0, 0.5, 0, 0, 0, 10, 2.08165e-12, -0.25, 2.08165e-12)
+transform = Transform3D(100, 0, 0, 0, 0.5, 0, 0, 0, 10, 2.08165e-12, -0.25, 2.08165e-12)
 mesh = SubResource("BoxMesh_5co56")
 surface_material_override/0 = ExtResource("2_paymf")
 
@@ -178,6 +179,26 @@ surface_material_override/0 = ExtResource("3_ki58p")
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Obstacle4"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Obstacle4/StaticBody3D"]
+shape = SubResource("BoxShape3D_wj50s")
+
+[node name="Obstacle11" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 5, 0, 0, 0, 1, -31.5286, 9.49225, 2.08165e-12)
+mesh = SubResource("BoxMesh_h41wn")
+surface_material_override/0 = ExtResource("3_ki58p")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Obstacle11"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Obstacle11/StaticBody3D"]
+shape = SubResource("BoxShape3D_wj50s")
+
+[node name="Obstacle12" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 5, 0, 0, 0, 1, -36.5108, 4.42194, 2.08165e-12)
+mesh = SubResource("BoxMesh_h41wn")
+surface_material_override/0 = ExtResource("3_ki58p")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Obstacle12"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Obstacle12/StaticBody3D"]
 shape = SubResource("BoxShape3D_wj50s")
 
 [node name="Ramp" type="MeshInstance3D" parent="Environment"]

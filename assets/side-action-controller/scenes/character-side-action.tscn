@@ -1,9 +1,10 @@
-[gd_scene load_steps=25 format=3 uid="uid://befcn8vh0dsoy"]
+[gd_scene load_steps=30 format=3 uid="uid://befcn8vh0dsoy"]
 
 [ext_resource type="Script" path="res://assets/side-action-controller/scripts/character_side_action_controller.gd" id="1_artrr"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_0gkuu"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_08adu"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_l0kho"]
+[ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="5_2p2wf"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_2eef0"]
 radius = 0.3
@@ -18,6 +19,18 @@ animation = &"mixamo-basic-locomotion/Basic Locomotion|Jump Running - In Place -
 blend_point_0/node = SubResource("AnimationNodeAnimation_odjsx")
 blend_point_0/pos = 0.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_g21m1")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ir1vy"]
+animation = &"mixamo-climb-hang/Climb-Hang|Climbing Down Wall - In Place"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_npfs7"]
+animation = &"mixamo-climb-hang/Climb-Hang|Climbing Up Wall - In Place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_iyii2"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_ir1vy")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_npfs7")
 blend_point_1/pos = 1.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qdahb"]
@@ -67,6 +80,12 @@ input_2/name = "crouch_state"
 input_2/auto_advance = false
 input_2/break_loop_at_end = false
 input_2/reset = true
+input_3/name = "climbing_state"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_t7lbh"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_wrxym"]
 
@@ -86,9 +105,11 @@ animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Slide - In Place"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-53.8387, 237.738)
+graph_offset = Vector2(-549.345, 167.835)
 nodes/Air/node = SubResource("AnimationNodeBlendSpace1D_cqai1")
 nodes/Air/position = Vector2(-1040, 600)
+nodes/Climbing/node = SubResource("AnimationNodeBlendSpace1D_iyii2")
+nodes/Climbing/position = Vector2(-880, 830)
 nodes/Crouch/node = SubResource("AnimationNodeBlendSpace1D_m1fca")
 nodes/Crouch/position = Vector2(-650, 640)
 nodes/Locomotion/node = SubResource("AnimationNodeBlendSpace1D_i3op0")
@@ -97,6 +118,8 @@ nodes/Slide/node = SubResource("AnimationNodeOneShot_ggdg0")
 nodes/Slide/position = Vector2(530, 500)
 nodes/State/node = SubResource("AnimationNodeTransition_6jbmv")
 nodes/State/position = Vector2(-300, 310)
+"nodes/TimeScale Climbing/node" = SubResource("AnimationNodeTimeScale_t7lbh")
+"nodes/TimeScale Climbing/position" = Vector2(-680, 820)
 "nodes/TimeScale Land/node" = SubResource("AnimationNodeTimeScale_wrxym")
 "nodes/TimeScale Land/position" = Vector2(-360, 1020)
 "nodes/TimeScale On Air/node" = SubResource("AnimationNodeTimeScale_1gpcx")
@@ -110,7 +133,7 @@ nodes/on_air_anim/position = Vector2(-1120, 460)
 nodes/output/position = Vector2(800, 430)
 nodes/slide_anim/node = SubResource("AnimationNodeAnimation_i3s47")
 nodes/slide_anim/position = Vector2(20, 650)
-node_connections = [&"Slide", 0, &"landed", &"Slide", 1, &"slide_anim", &"State", 0, &"Locomotion", &"State", 1, &"Air", &"State", 2, &"Crouch", &"TimeScale Land", 0, &"land_anim", &"TimeScale On Air", 0, &"on_air_anim", &"landed", 0, &"State", &"landed", 1, &"TimeScale Land", &"output", 0, &"Slide"]
+node_connections = [&"Slide", 0, &"landed", &"Slide", 1, &"slide_anim", &"State", 0, &"Locomotion", &"State", 1, &"Air", &"State", 2, &"Crouch", &"State", 3, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Land", 0, &"land_anim", &"TimeScale On Air", 0, &"on_air_anim", &"landed", 0, &"State", &"landed", 1, &"TimeScale Land", &"output", 0, &"Slide"]
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_artrr")
@@ -129,7 +152,8 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Model/y-bot")
 libraries = {
-"mixamo-basic-locomotion": ExtResource("4_l0kho")
+"mixamo-basic-locomotion": ExtResource("4_l0kho"),
+"mixamo-climb-hang": ExtResource("5_2p2wf")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -137,6 +161,7 @@ root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Air/blend_position = 0
+parameters/Climbing/blend_position = 0
 parameters/Crouch/blend_position = 0
 parameters/Locomotion/blend_position = 0
 parameters/Slide/active = false
@@ -145,7 +170,8 @@ parameters/Slide/request = 0
 parameters/State/current_state = "locomotion_state"
 parameters/State/transition_request = ""
 parameters/State/current_index = 0
-"parameters/TimeScale Land/scale" = 1.2
+"parameters/TimeScale Climbing/scale" = 1.0
+"parameters/TimeScale Land/scale" = 1.0
 "parameters/TimeScale On Air/scale" = 1.0
 parameters/landed/active = false
 parameters/landed/internal_active = false

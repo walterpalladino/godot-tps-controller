@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 class_name CharacterController3D
 
+
 @export_category("On AIr")
 
 @export var gravity = 9.81
@@ -22,6 +23,15 @@ var step_diff_position : Vector3 = Vector3.ZERO
 var step_margin : float = 0.05
 
 
+@export_category("Walls")
+@export var wall_max_cast_dist : float = 0.05 + 0.30
+@export var wall_ray_top_offset : float = 1.70
+@export var wall_ray_mid_offset : float = 1.00
+@export var wall_ray_bottom_offset : float = 0.30
+
+var wall_ray_top_result : Dictionary
+var wall_ray_mid_result : Dictionary
+var wall_ray_bottom_result : Dictionary
 
 func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
@@ -179,3 +189,71 @@ func add_action_key(action, key_code):
 	
 	#print_debug(InputMap.get_actions())
 	
+
+
+
+#	check ray at head, middle and bottom if they hit a wall
+func check_can_climb_wall(direction : Vector3):
+
+
+	wall_ray_top_result = {}
+	wall_ray_mid_result = {}
+	wall_ray_bottom_result = {}
+
+	var space_state = get_world_3d().direct_space_state
+	#print_debug(direction)
+	
+	#	first ray : top	
+	var origin : Vector3 = transform.origin + Vector3.UP * wall_ray_top_offset
+	var end = origin + direction.normalized() * wall_max_cast_dist
+	var query_params : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.new()
+
+	query_params.from = origin
+	query_params.to = end
+	query_params.collide_with_areas = true
+	query_params.exclude = [self.get_rid()]
+
+	var result = space_state.intersect_ray(query_params)
+	if !result:
+		return false
+	#print_debug("Collided Wall at top")
+	wall_ray_top_result = result
+
+	#	second ray : middle	
+	origin = transform.origin + Vector3.UP * wall_ray_mid_offset
+	end = origin + direction.normalized() * wall_max_cast_dist
+	
+	query_params.from = origin
+	query_params.to = end
+	query_params.collide_with_areas = true
+	query_params.exclude = [self.get_rid()]
+
+	result = space_state.intersect_ray(query_params)
+	if !result:
+		return false
+	wall_ray_mid_result = result
+		
+	#print_debug("Collided Wall at middle")
+	#print_debug(result)
+
+	#	third ray : bottom	
+	origin = transform.origin + Vector3.UP * wall_ray_bottom_offset
+	end = origin + direction.normalized() * wall_max_cast_dist
+	
+	query_params.from = origin
+	query_params.to = end
+	query_params.collide_with_areas = true
+	query_params.exclude = [self.get_rid()]
+
+	result = space_state.intersect_ray(query_params)
+	if !result:
+		return false
+	wall_ray_bottom_result = result
+		
+	#print_debug("Collided Wall at bottom")
+
+	#print_debug(wall_ray_top_result)
+	#print_debug(wall_ray_mid_result)
+	#print_debug(wall_ray_bottom_result)
+
+	return true
