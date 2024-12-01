@@ -36,7 +36,6 @@ var was_on_air : bool = false
 @export var climbing_model_offset : Vector3 = Vector3(0.5, 0.0, 0.0)
 
 var was_climbing : bool = false
-#var is_climbing : bool = false
 
 
 
@@ -93,7 +92,7 @@ func update_character(delta):
 #-----------------------------------------------------
 func update_character_on_air(delta):
 	
-	var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
+	#var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
 	#check_can_climb_wall(facing_direction)
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
@@ -103,6 +102,15 @@ func update_character_on_air(delta):
 		was_on_air = true
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
+
+	if is_on_wall() and input_dir.y < 0.0:
+		#print_debug("Not on Floor and on Wall")
+		if check_can_climb_wall(get_facing_direction()):
+			print_debug("Now is climbing a wall")
+			was_climbing = false
+			controller_state = CONTROLLER_STATE.CLIMBING
+			return
+
 
 	var new_velocity = Vector3.ZERO
 	new_velocity.x = velocity.x
@@ -128,15 +136,30 @@ func update_character_climbing(delta):
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	
+	#	leaving from the ground
 	if is_on_floor() and input_dir.y > 0.0:
 		print_debug("Was climbing")
 		was_climbing = true
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
 
+	#	jumps away the wall
+	if input_dir.x != 0:
+		velocity.x = 6.0 * sign(input_dir.x)
+		velocity.y = 2.0
+		move_and_slide()
+		was_climbing = true
+		controller_state = CONTROLLER_STATE.ON_AIR
+		return
 
-	var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
-		
+	if !check_can_climb_wall(get_facing_direction()):
+		move_and_slide()
+		was_climbing = true
+		controller_state = CONTROLLER_STATE.ON_AIR
+		return
+
+
+	#var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
 
 	var new_velocity : Vector3 = Vector3.ZERO
 	new_velocity.y = climbing_speed * -input_dir.y
@@ -154,41 +177,24 @@ func update_character_climbing(delta):
 #-----------------------------------------------------
 func update_character_locomotion(delta):
 	
-
 	if !is_on_floor():
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 
-	var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
-	#check_can_climb_wall(facing_direction)
+	#var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
+
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 
-		
 	if is_on_wall() and input_dir.y < 0.0:
 		#print_debug("Not on Floor and on Wall")
-		if check_can_climb_wall(facing_direction):
+		if check_can_climb_wall(get_facing_direction()):
 			print_debug("Now is climbing a wall")
 			was_climbing = false
 			controller_state = CONTROLLER_STATE.CLIMBING
 			return
 			#global_transform.origin += climbing_model_offset
 
-#		if not is_climbing and is_on_wall() and input_dir.y < 0.0:
-#			#print_debug("Not on Floor and on Wall")
-#			if check_can_climb_wall(facing_direction):
-#				print_debug("Now is climbing a wall")
-#				is_climbing = true
-				
-				#global_transform.origin += climbing_model_offset
-
-	#if !check_can_climb_wall(facing_direction):
-	#	was_on_wall = true
-	#	is_climbing = false
-	#return 
-	
-	
-	
 	
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
@@ -222,18 +228,26 @@ func update_character_locomotion(delta):
 		is_crouched = false
 		new_velocity.y = calculate_jump_vertical_speed()
 		last_jump_time = Time.get_ticks_msec()
+		
+		velocity = new_velocity
+		controller_state = CONTROLLER_STATE.ON_AIR
+		move_and_slide()
+		return
 
 	elif (new_velocity.y < 0.0):
+		#	add a bit to keep the character grounded
 		new_velocity.y = -0.1
 
 	
 	velocity = new_velocity
-
 	check_step_move_and_slide()
 	
 	update_model_facing()
 	update_animations()
 
+
+func get_facing_direction():
+	return 	Vector3(sign(last_face_direction), 0.0, 0.0)
 
 		
 #-----------------------------------------------------
@@ -256,7 +270,6 @@ func update_model_facing():
 # Update animations
 func update_animations():
 
-
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
 			animate_locomotion()
@@ -265,55 +278,8 @@ func update_animations():
 		CONTROLLER_STATE.CLIMBING:
 			animate_climbing()
 	
-	return
 
 
-	#	Check distance to floor
-	var distance_to_floor : float  = check_distance_to_floor()
-	if is_on_floor() || is_step:
-		distance_to_floor = 0.0
-
-	var is_grounded : bool = (is_on_floor() || is_step) 
-	if velocity.y <= 0:
-		is_grounded = is_grounded || (distance_to_floor <= 1.5 * max_step_height)		
-		
-	var is_idle : bool = velocity.x == 0.0 && is_grounded
-	var is_moving : bool = velocity.x != 0.0 && is_grounded
-	#var is_crouched : bool = crouch && is_grounded
-	
-	if was_climbing:
-		#print_debug(is_climbing)
-		print_debug(is_idle)
-		print_debug(is_moving)
-		print_debug(is_crouched)
-		print_debug(is_grounded)
-		print_debug(was_on_air)
-	
-	#if is_climbing:
-		#
-		#animation_tree.set("parameters/Climbing/blend_position", velocity.y / climbing_speed)
-		#animation_tree.set("parameters/State/transition_request", "climbing_state")
-		#var climbingTimeScale = 1.0
-		#if (velocity.y == 0):
-			#climbingTimeScale = 0.0
-		#animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
-		#return
-	
-	
-	if !is_grounded:
-		animation_tree.set("parameters/Air/blend_position", abs(velocity.x) / max_character_speed)
-		animation_tree.set("parameters/State/transition_request", "on_air_state")
-	else:
-		if was_on_air:
-			was_on_air = false
-			animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-			last_y_in_floor = transform.origin.y
-		elif is_crouched:
-			animation_tree.set("parameters/Crouch/blend_position", abs(velocity.x) / crouch_speed)
-			animation_tree.set("parameters/State/transition_request", "crouch_state")
-		elif is_idle || is_moving:
-			animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed)
-			animation_tree.set("parameters/State/transition_request", "locomotion_state")
 
 #-----------------------------------------------------
 func animate_locomotion():
