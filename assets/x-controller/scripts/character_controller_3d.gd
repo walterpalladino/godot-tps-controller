@@ -38,6 +38,13 @@ enum WALL_COLLISION_RESULT { COLLISION_NONE = 0, COLLISION_TOP = 1, COLLISION_MI
 var wall_collision_result : WALL_COLLISION_RESULT = WALL_COLLISION_RESULT.COLLISION_NONE
 
 
+func is_grounded():
+	#	Check distance to floor
+	var distance_to_floor : float  = check_distance_to_floor()
+	#print_debug(distance_to_floor)
+	return is_on_floor() || is_step || distance_to_floor <= max_step_height
+		
+		
 func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
 	check_velocity.y = 0.0
@@ -165,7 +172,7 @@ func check_step(main_velocity:Vector3):
 func check_distance_to_floor():
 	var space_state = get_world_3d().direct_space_state
 	
-	var origin : Vector3 = transform.origin + Vector3.UP * 0.05
+	var origin : Vector3 = global_transform.origin + Vector3.UP * 0.05
 	var end = origin + Vector3.DOWN * 100.0
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = true

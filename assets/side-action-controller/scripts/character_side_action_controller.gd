@@ -36,8 +36,8 @@ var was_on_air : bool = false
 @export var climbing_model_offset : Vector3 = Vector3(0.5, 0.0, 0.0)
 
 var was_climbing : bool = false
-
-
+var climbing_leaving_from_top : bool = false
+@export var climbing_leaving_from_top_offset : Vector3 = Vector3(-0.50, 1.35, 0.0)
 
 var last_face_direction : float = 1
 
@@ -133,12 +133,28 @@ func update_character_on_air(delta):
 #-----------------------------------------------------	
 func update_character_climbing(delta):
 	
+	
+	if climbing_leaving_from_top:
+		
+		climbing_leaving_from_top = false
+		is_crouched = true
+		
+		global_transform.origin += climbing_leaving_from_top_offset
+
+		controller_state = CONTROLLER_STATE.LOCOMOTION
+		
+		velocity = Vector3.ZERO
+		move_and_slide()
+		
+		return
+	
+	
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	
 	#	leaving from the ground
 	if is_on_floor() and input_dir.y > 0.0:
-		print_debug("Was climbing")
+		#print_debug("Was climbing")
 		was_climbing = true
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
@@ -153,10 +169,18 @@ func update_character_climbing(delta):
 		return
 
 	if !check_can_climb_wall(get_facing_direction()):
-		move_and_slide()
-		was_climbing = true
-		controller_state = CONTROLLER_STATE.ON_AIR
-		return
+		
+		if wall_collision_result == (WALL_COLLISION_RESULT.COLLISION_MID | WALL_COLLISION_RESULT.COLLISION_BOTTOM):
+			#	climbing to the top
+			climbing_leaving_from_top = true
+			update_animations()
+			return
+		else:
+			# nothing to hold on to...
+			move_and_slide()
+			was_climbing = true
+			controller_state = CONTROLLER_STATE.ON_AIR
+			return
 
 
 	#var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
@@ -177,9 +201,13 @@ func update_character_climbing(delta):
 #-----------------------------------------------------
 func update_character_locomotion(delta):
 	
-	if !is_on_floor():
+	#if !is_on_floor():
+	if !is_grounded() :#and !climbing_leaving_from_top:
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
+
+	#if climbing_leaving_from_top:
+	#	climbing_leaving_from_top = false
 
 	#var facing_direction : Vector3 = Vector3(sign(last_face_direction), 0.0, 0.0)
 
@@ -293,6 +321,7 @@ func animate_locomotion():
 		was_on_air = false
 		animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		last_y_in_floor = transform.origin.y
+		is_crouched = false
 	
 	elif is_crouched:
 		
@@ -315,12 +344,23 @@ func animate_on_air():
 #-----------------------------------------------------
 func animate_climbing():
 	
-	animation_tree.set("parameters/Climbing/blend_position", velocity.y / climbing_speed)
-	animation_tree.set("parameters/State/transition_request", "climbing_state")
-	var climbingTimeScale = 1.0
-	if (velocity.y == 0):
-		climbingTimeScale = 0.0
-	animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
+	if climbing_leaving_from_top:
+
+		animation_tree.set("parameters/Crouch/blend_position", 0.0)
+		animation_tree.set("parameters/State/transition_request", "crouch_state")
+
+		animation_tree.set("parameters/BraceHangUp/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		
+	else:
+
+		var climbingTimeScale = 1.0
+		if (velocity.y == 0):
+			climbingTimeScale = 0.0
+		else:
+			animation_tree.set("parameters/Climbing/blend_position", velocity.y / climbing_speed)
+			animation_tree.set("parameters/State/transition_request", "climbing_state")
+
+		animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
 
 	
 	
@@ -333,6 +373,9 @@ func is_blocking_animation_running():
 	if animation_tree.get("parameters/landed/active"):
 		return true
 	
+	if animation_tree.get("parameters/BraceHangUp/active"):
+		return true
+
 	return false
 
 
