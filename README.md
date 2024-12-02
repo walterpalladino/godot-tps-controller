@@ -16,4 +16,16 @@ The .fbx files are included in the format of libraries.
 
 ### Retargeting the Character Controller
 To avoid rewrite code I created a structure on the character that allows to use any model with a Humanoid Bone Map.
-All you have to do 
+All you have to do is to add it under the **Model** node and retarget the animation player **Root Node** to this model.
+
+### Sample Scenes
+#### Side Action Controller
+Scene to test the controller full features on a side view scene
+
+#### TPS Controller
+Scene to test the controller (not all the features at this moment) on a third person view.
+
+
+## Extended Controller
+The folde x-controller includes the file character_controller_3d.gd contains the class CharacterController3D which yould be used for a new controller to extend instead of the standard CharacterBody3D.
+ 
