@@ -15,7 +15,6 @@ enum CONTROLLER_STATE {LOCOMOTION, ON_AIR, CLIMBING}
 @export_category("Ground Movement")
 
 @export var max_character_speed_ground = 6.0
-@export var max_character_speed_on_air = 6.0
 @export var max_character_speed_crouched = 2.0
 #@export var speed_change = 50.0
 #@export var crouch_speed = 2.0
@@ -25,6 +24,8 @@ var is_crouched : bool = false
 
 @export_category("On AIr")
 ## Lapse in mili seconds
+@export var max_character_speed_on_air = 6.0
+@export var reaction_character_speed_on_air = 1.0
 @export var min_time_between_jumps : float = 1.0 # in seconds
 var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
@@ -45,6 +46,9 @@ var last_face_direction : float = 1
 
 
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
+
+
+var rifle_enabled : bool = false
 
 
 #-----------------------------------------------------
@@ -82,6 +86,10 @@ func _physics_process(delta):
 #-----------------------------------------------------
 func update_character(delta):
 	
+	
+	update_weapons()
+	
+	
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
 			update_character_locomotion(delta)
@@ -90,6 +98,20 @@ func update_character(delta):
 		CONTROLLER_STATE.CLIMBING:
 			update_character_climbing(delta)
 		
+
+
+func update_weapons():
+	
+	if Input.is_action_just_pressed("rifle_enabled") :
+		
+		rifle_enabled = !rifle_enabled
+		
+		if rifle_enabled:
+			animation_tree.set("parameters/Armed/transition_request", "rifle_state")
+		else:
+			animation_tree.set("parameters/Armed/transition_request", "unarmed_state")
+
+
 
 #-----------------------------------------------------
 func update_character_on_air(delta):
@@ -106,7 +128,7 @@ func update_character_on_air(delta):
 	if is_on_wall() and input_dir.y < 0.0:
 		
 		if check_can_climb_wall(get_facing_direction()):
-			print_debug("Now is climbing a wall")
+			#print_debug("Now is climbing a wall")
 			was_climbing = false
 			controller_state = CONTROLLER_STATE.CLIMBING
 			return
@@ -114,6 +136,15 @@ func update_character_on_air(delta):
 
 	var new_velocity = Vector3.ZERO
 	new_velocity.x = velocity.x
+	
+	#	If being on air and no horizontal move
+	#	the character tries to move, will only be able to do that
+	#	on the actual facing direction at a very #	small speed
+	#	but enough to climb high steps 
+	if new_velocity.x == 0:
+		if sign(input_dir.x) == last_face_direction:
+			new_velocity.x = sign(input_dir.x) * reaction_character_speed_on_air
+	
 	
 	#	add the gravity.
 	new_velocity.y = velocity.y - gravity * delta
@@ -292,7 +323,7 @@ func update_animations():
 			animate_on_air()
 		CONTROLLER_STATE.CLIMBING:
 			animate_climbing()
-	
+
 
 
 
@@ -302,30 +333,53 @@ func animate_locomotion():
 	if was_on_air:
 
 		#	Set to be sure the transsition after the one shot is locomotion
-		animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
-		animation_tree.set("parameters/State/transition_request", "locomotion_state")
+		if rifle_enabled:
+			animation_tree.set("parameters/RifleLocomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
+			animation_tree.set("parameters/RifleState/transition_request", "locomotion_state")
+		else:
+			animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
+			animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
 
+		
+		if rifle_enabled:
+			animation_tree.set("parameters/rifle_landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		else:
+			animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		
 		was_on_air = false
-		animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		last_y_in_floor = transform.origin.y
 		is_crouched = false
 	
 	elif is_crouched:
 		
-		animation_tree.set("parameters/Crouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
-		animation_tree.set("parameters/State/transition_request", "crouch_state")
+		if rifle_enabled:
+			animation_tree.set("parameters/RifleCrouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
+			animation_tree.set("parameters/RifleState/transition_request", "crouch_state")
+		else:
+			animation_tree.set("parameters/Crouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
+			animation_tree.set("parameters/Unarmed/transition_request", "crouch_state")
 	
 	else:
-		
-		animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
-		animation_tree.set("parameters/State/transition_request", "locomotion_state")
+
+		if rifle_enabled:
+			animation_tree.set("parameters/RifleLocomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
+			animation_tree.set("parameters/RifleState/transition_request", "locomotion_state")
+		else:
+			animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
+			animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
 
 	
 #-----------------------------------------------------
 func animate_on_air():
 
-	animation_tree.set("parameters/Air/blend_position", abs(velocity.x) / max_character_speed_on_air)
-	animation_tree.set("parameters/State/transition_request", "on_air_state")
+	animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
+
+	if rifle_enabled:
+		animation_tree.set("parameters/RifleAir/blend_position", abs(velocity.x) / max_character_speed_on_air)
+		animation_tree.set("parameters/RifleState/transition_request", "on_air_state")
+	else:
+		animation_tree.set("parameters/Air/blend_position", abs(velocity.x) / max_character_speed_on_air)
+		animation_tree.set("parameters/Unarmed/transition_request", "on_air_state")
 
 	
 #-----------------------------------------------------
@@ -334,7 +388,8 @@ func animate_climbing():
 	if climbing_leaving_from_top:
 
 		animation_tree.set("parameters/Crouch/blend_position", 0.0)
-		animation_tree.set("parameters/State/transition_request", "crouch_state")
+		animation_tree.set("parameters/Unarmed/transition_request", "crouch_state")
+		animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
 
 		animation_tree.set("parameters/BraceHangUp/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		
@@ -344,8 +399,9 @@ func animate_climbing():
 		if (velocity.y == 0):
 			climbingTimeScale = 0.0
 		else:
+
 			animation_tree.set("parameters/Climbing/blend_position", velocity.y / climbing_speed)
-			animation_tree.set("parameters/State/transition_request", "climbing_state")
+			animation_tree.set("parameters/OverrideAction/transition_request", "climbing_state")
 
 		animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
 
@@ -362,6 +418,7 @@ func is_blocking_animation_running():
 	
 	if animation_tree.get("parameters/BraceHangUp/active"):
 		return true
+
 
 	return false
 
@@ -381,3 +438,5 @@ func setup_input():
 	add_action_key("move_crouch_stand", KEY_C)
 
 	add_action_key("move_run", KEY_SHIFT)
+
+	add_action_key("rifle_enabled", KEY_1)

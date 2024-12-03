@@ -1,10 +1,12 @@
-[gd_scene load_steps=32 format=3 uid="uid://befcn8vh0dsoy"]
+[gd_scene load_steps=45 format=3 uid="uid://befcn8vh0dsoy"]
 
 [ext_resource type="Script" path="res://assets/side-action-controller/scripts/character_side_action_controller.gd" id="1_artrr"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_0gkuu"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_08adu"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_l0kho"]
 [ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="5_2p2wf"]
+[ext_resource type="AnimationLibrary" uid="uid://d1hae7lg1qmsc" path="res://assets/mixamo-animations/animations/mixamo-rifle-hip.fbx" id="6_7jksn"]
+[ext_resource type="AnimationLibrary" uid="uid://1022qhp06sn5" path="res://assets/mixamo-animations/animations/mixamo-pro-rifle-pack.fbx" id="6_dmgph"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_2eef0"]
 radius = 0.3
@@ -20,6 +22,17 @@ blend_point_0/node = SubResource("AnimationNodeAnimation_odjsx")
 blend_point_0/pos = 0.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_g21m1")
 blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ga2jm"]
+xfade_time = 0.2
+input_0/name = "unarmed_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "rifle_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
 
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_037iw"]
 fadein_time = 0.2
@@ -61,9 +74,67 @@ blend_point_0/pos = 0.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_o16jn")
 blend_point_1/pos = 1.0
 
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_d1ahv"]
+xfade_time = 0.2
+input_0/name = "armed_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "climbing_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2kpnd"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Crouch Idle Aiming"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ek415"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Crouch Walk Forward - In Place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_0re4g"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_2kpnd")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_ek415")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pmev3"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Idle Aiming"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_stkgu"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Run Forward - In Place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_0wosj"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_pmev3")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_stkgu")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_62olr"]
+xfade_time = 0.2
+input_0/name = "locomotion_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "on_air_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "crouch_state"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ggdg0"]
 fadein_time = 0.2
 fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_2f7w5"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_t7lbh"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_wrxym"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_i63ms"]
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6jbmv"]
 xfade_time = 0.2
@@ -79,18 +150,6 @@ input_2/name = "crouch_state"
 input_2/auto_advance = false
 input_2/break_loop_at_end = false
 input_2/reset = true
-input_3/name = "climbing_state"
-input_3/auto_advance = false
-input_3/break_loop_at_end = false
-input_3/reset = true
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_2f7w5"]
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_t7lbh"]
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_wrxym"]
-
-[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1gpcx"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sbnwc"]
 animation = &"mixamo-climb-hang/Climb-Hang|Braced Hang To Crouch"
@@ -102,48 +161,69 @@ animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling To landing From F
 fadein_time = 0.05
 fadeout_time = 0.3
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_srs5w"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_klwso"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Jump Loop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_du7ea"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Jump End - From Foot"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bpf2n"]
+fadein_time = 0.05
+fadeout_time = 0.3
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3s47"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Slide - In Place"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(111.216, 420.781)
+graph_offset = Vector2(-675.983, 154.106)
 nodes/Air/node = SubResource("AnimationNodeBlendSpace1D_cqai1")
-nodes/Air/position = Vector2(-1040, 600)
+nodes/Air/position = Vector2(-1710, 370)
+nodes/Armed/node = SubResource("AnimationNodeTransition_ga2jm")
+nodes/Armed/position = Vector2(-680, 390)
 nodes/BraceHangUp/node = SubResource("AnimationNodeOneShot_037iw")
-nodes/BraceHangUp/position = Vector2(820, 680)
+nodes/BraceHangUp/position = Vector2(1890, 870)
 nodes/Climbing/node = SubResource("AnimationNodeBlendSpace1D_iyii2")
-nodes/Climbing/position = Vector2(-880, 830)
+nodes/Climbing/position = Vector2(-960, 890)
 nodes/Crouch/node = SubResource("AnimationNodeBlendSpace1D_m1fca")
-nodes/Crouch/position = Vector2(-650, 640)
+nodes/Crouch/position = Vector2(-1550, 460)
 nodes/Locomotion/node = SubResource("AnimationNodeBlendSpace1D_i3op0")
-nodes/Locomotion/position = Vector2(-850, 280)
+nodes/Locomotion/position = Vector2(-1450, 200)
+nodes/OverrideAction/node = SubResource("AnimationNodeTransition_d1ahv")
+nodes/OverrideAction/position = Vector2(-110, 450)
+nodes/RifleCrouch/node = SubResource("AnimationNodeBlendSpace1D_0re4g")
+nodes/RifleCrouch/position = Vector2(-1530, 1030)
+nodes/RifleLocomotion/node = SubResource("AnimationNodeBlendSpace1D_0wosj")
+nodes/RifleLocomotion/position = Vector2(-1640, 710)
+nodes/RifleState/node = SubResource("AnimationNodeTransition_62olr")
+nodes/RifleState/position = Vector2(-990, 600)
 nodes/Slide/node = SubResource("AnimationNodeOneShot_ggdg0")
-nodes/Slide/position = Vector2(530, 500)
-nodes/State/node = SubResource("AnimationNodeTransition_6jbmv")
-nodes/State/position = Vector2(-300, 310)
+nodes/Slide/position = Vector2(1600, 690)
 "nodes/TimeScale Brace Hang Up/node" = SubResource("AnimationNodeTimeScale_2f7w5")
-"nodes/TimeScale Brace Hang Up/position" = Vector2(-340, 1220)
+"nodes/TimeScale Brace Hang Up/position" = Vector2(1620, 1200)
 "nodes/TimeScale Climbing/node" = SubResource("AnimationNodeTimeScale_t7lbh")
-"nodes/TimeScale Climbing/position" = Vector2(-680, 820)
+"nodes/TimeScale Climbing/position" = Vector2(-780, 860)
 "nodes/TimeScale Land/node" = SubResource("AnimationNodeTimeScale_wrxym")
-"nodes/TimeScale Land/position" = Vector2(-360, 1020)
-"nodes/TimeScale On Air/node" = SubResource("AnimationNodeTimeScale_1gpcx")
-"nodes/TimeScale On Air/position" = Vector2(-660, 460)
+"nodes/TimeScale Land/position" = Vector2(200, 690)
+"nodes/TimeScale RifleLocomotion/node" = SubResource("AnimationNodeTimeScale_i63ms")
+"nodes/TimeScale RifleLocomotion/position" = Vector2(-1460, 700)
+nodes/Unarmed/node = SubResource("AnimationNodeTransition_6jbmv")
+nodes/Unarmed/position = Vector2(-970, 260)
 nodes/braced_hang_up_anim/node = SubResource("AnimationNodeAnimation_sbnwc")
-nodes/braced_hang_up_anim/position = Vector2(-760, 1250)
+nodes/braced_hang_up_anim/position = Vector2(1200, 1230)
 nodes/land_anim/node = SubResource("AnimationNodeAnimation_17kx8")
-nodes/land_anim/position = Vector2(-870, 1020)
+nodes/land_anim/position = Vector2(-290, 740)
 nodes/landed/node = SubResource("AnimationNodeOneShot_ebjok")
-nodes/landed/position = Vector2(-10, 410)
-nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_srs5w")
-nodes/on_air_anim/position = Vector2(-1120, 460)
-nodes/output/position = Vector2(1090, 720)
+nodes/landed/position = Vector2(390, 540)
+nodes/output/position = Vector2(2160, 910)
+nodes/rifle_jump_anim/node = SubResource("AnimationNodeAnimation_klwso")
+nodes/rifle_jump_anim/position = Vector2(-1660, 880)
+nodes/rifle_land_anim/node = SubResource("AnimationNodeAnimation_du7ea")
+nodes/rifle_land_anim/position = Vector2(-260, 920)
+nodes/rifle_landed/node = SubResource("AnimationNodeOneShot_bpf2n")
+nodes/rifle_landed/position = Vector2(640, 650)
 nodes/slide_anim/node = SubResource("AnimationNodeAnimation_i3s47")
-nodes/slide_anim/position = Vector2(20, 650)
-node_connections = [&"BraceHangUp", 0, &"Slide", &"BraceHangUp", 1, &"TimeScale Brace Hang Up", &"Slide", 0, &"landed", &"Slide", 1, &"slide_anim", &"State", 0, &"Locomotion", &"State", 1, &"Air", &"State", 2, &"Crouch", &"State", 3, &"TimeScale Climbing", &"TimeScale Brace Hang Up", 0, &"braced_hang_up_anim", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Land", 0, &"land_anim", &"TimeScale On Air", 0, &"on_air_anim", &"landed", 0, &"State", &"landed", 1, &"TimeScale Land", &"output", 0, &"BraceHangUp"]
+nodes/slide_anim/position = Vector2(1090, 840)
+node_connections = [&"Armed", 0, &"Unarmed", &"Armed", 1, &"RifleState", &"BraceHangUp", 0, &"Slide", &"BraceHangUp", 1, &"TimeScale Brace Hang Up", &"OverrideAction", 0, &"Armed", &"OverrideAction", 1, &"TimeScale Climbing", &"RifleState", 0, &"TimeScale RifleLocomotion", &"RifleState", 1, &"rifle_jump_anim", &"RifleState", 2, &"RifleCrouch", &"Slide", 0, &"rifle_landed", &"Slide", 1, &"slide_anim", &"TimeScale Brace Hang Up", 0, &"braced_hang_up_anim", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Land", 0, &"land_anim", &"TimeScale RifleLocomotion", 0, &"RifleLocomotion", &"Unarmed", 0, &"Locomotion", &"Unarmed", 1, &"Air", &"Unarmed", 2, &"Crouch", &"landed", 0, &"OverrideAction", &"landed", 1, &"TimeScale Land", &"output", 0, &"BraceHangUp", &"rifle_landed", 0, &"landed", &"rifle_landed", 1, &"rifle_land_anim"]
 
 [node name="Character" type="CharacterBody3D"]
 script = ExtResource("1_artrr")
@@ -163,7 +243,9 @@ visible = false
 root_node = NodePath("../Model/y-bot")
 libraries = {
 "mixamo-basic-locomotion": ExtResource("4_l0kho"),
-"mixamo-climb-hang": ExtResource("5_2p2wf")
+"mixamo-climb-hang": ExtResource("5_2p2wf"),
+"mixamo-pro-rifle-pack": ExtResource("6_dmgph"),
+"mixamo-rifle-hip": ExtResource("6_7jksn")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -171,22 +253,36 @@ root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Air/blend_position = 0
+parameters/Armed/current_state = "unarmed_state"
+parameters/Armed/transition_request = ""
+parameters/Armed/current_index = 0
 parameters/BraceHangUp/active = false
 parameters/BraceHangUp/internal_active = false
 parameters/BraceHangUp/request = 0
 parameters/Climbing/blend_position = 0.0
 parameters/Crouch/blend_position = 0
 parameters/Locomotion/blend_position = 0
+parameters/OverrideAction/current_state = "armed_state"
+parameters/OverrideAction/transition_request = ""
+parameters/OverrideAction/current_index = 0
+parameters/RifleCrouch/blend_position = 0
+parameters/RifleLocomotion/blend_position = 0
+parameters/RifleState/current_state = "locomotion_state"
+parameters/RifleState/transition_request = ""
+parameters/RifleState/current_index = 0
 parameters/Slide/active = false
 parameters/Slide/internal_active = false
 parameters/Slide/request = 0
-parameters/State/current_state = "locomotion_state"
-parameters/State/transition_request = ""
-parameters/State/current_index = 0
 "parameters/TimeScale Brace Hang Up/scale" = 1.0
 "parameters/TimeScale Climbing/scale" = 1.0
 "parameters/TimeScale Land/scale" = 1.0
-"parameters/TimeScale On Air/scale" = 1.0
+"parameters/TimeScale RifleLocomotion/scale" = 1.0
+parameters/Unarmed/current_state = "locomotion_state"
+parameters/Unarmed/transition_request = ""
+parameters/Unarmed/current_index = 0
 parameters/landed/active = false
 parameters/landed/internal_active = false
 parameters/landed/request = 0
+parameters/rifle_landed/active = false
+parameters/rifle_landed/internal_active = false
+parameters/rifle_landed/request = 0
