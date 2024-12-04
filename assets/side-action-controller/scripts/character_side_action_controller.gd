@@ -24,8 +24,11 @@ var is_crouched : bool = false
 
 @export_category("On AIr")
 ## Lapse in mili seconds
-@export var max_character_speed_on_air = 6.0
+@export var max_character_speed_on_air = 4.0
 @export var reaction_character_speed_on_air = 1.0
+
+@export var free_air_movement : bool = false
+
 @export var min_time_between_jumps : float = 1.0 # in seconds
 var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
@@ -86,9 +89,7 @@ func _physics_process(delta):
 #-----------------------------------------------------
 func update_character(delta):
 	
-	
 	update_weapons()
-	
 	
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
@@ -135,16 +136,23 @@ func update_character_on_air(delta):
 
 
 	var new_velocity = Vector3.ZERO
-	new_velocity.x = velocity.x
 	
-	#	If being on air and no horizontal move
-	#	the character tries to move, will only be able to do that
-	#	on the actual facing direction at a very #	small speed
-	#	but enough to climb high steps 
-	if new_velocity.x == 0:
-		if sign(input_dir.x) == last_face_direction:
-			new_velocity.x = sign(input_dir.x) * reaction_character_speed_on_air
-	
+	#	If enabled the Free Air Movement option
+	#	the character can change direction on air
+	if free_air_movement and input_dir.x != 0.0:
+		var direction = Vector3.RIGHT * sign(input_dir.x) 
+		new_velocity.x = max_character_speed_on_air * direction.x
+	else:
+		new_velocity.x = velocity.x
+		
+		#	If being on air and no horizontal move
+		#	the character tries to move, will only be able to do that
+		#	on the actual facing direction at a very #	small speed
+		#	but enough to climb high steps 
+		if new_velocity.x == 0:
+			if sign(input_dir.x) == last_face_direction:
+				new_velocity.x = sign(input_dir.x) * reaction_character_speed_on_air
+		
 	
 	#	add the gravity.
 	new_velocity.y = velocity.y - gravity * delta
