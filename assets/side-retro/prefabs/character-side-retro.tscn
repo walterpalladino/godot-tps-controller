@@ -1,0 +1,128 @@
+[gd_scene load_steps=20 format=3 uid="uid://b2k2guq33l84g"]
+
+[ext_resource type="Script" path="res://assets/side-retro/scripts/player-side-retro.gd" id="1_ldmdx"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_8ek0h"]
+[ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="3_hw27s"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="3_jqbit"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e2hjs"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wpnvj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_avppn"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_p4xik"]
+xfade_time = 0.1
+input_0/name = "state_idle"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "state_walk"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "state_on_air"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "state_crouch_idle"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+input_4/name = "state_crouch_walk"
+input_4/auto_advance = false
+input_4/break_loop_at_end = false
+input_4/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_m42kd"]
+animation = &"AnimationLibrary_Godot_Standard/Crouch_Fwd"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_s3exa"]
+animation = &"AnimationLibrary_Godot_Standard/Crouch_Idle"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_cyjs1"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_qqqtm"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_garox"]
+animation = &"AnimationLibrary_Godot_Standard/Idle"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_8fw4w"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_obhav"]
+animation = &"AnimationLibrary_Godot_Standard/Jump"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_p00g2"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l8b5l"]
+animation = &"AnimationLibrary_Godot_Standard/Walk"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1qpsb"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_oewrj"]
+graph_offset = Vector2(-211.149, 1023.1)
+nodes/Transition/node = SubResource("AnimationNodeTransition_p4xik")
+nodes/Transition/position = Vector2(430, 220)
+nodes/criuch_walk_anim/node = SubResource("AnimationNodeAnimation_m42kd")
+nodes/criuch_walk_anim/position = Vector2(-430, 890)
+nodes/crouch_idle_anim/node = SubResource("AnimationNodeAnimation_s3exa")
+nodes/crouch_idle_anim/position = Vector2(-440, 710)
+nodes/crouch_idle_time_scale/node = SubResource("AnimationNodeTimeScale_cyjs1")
+nodes/crouch_idle_time_scale/position = Vector2(10, 700)
+nodes/crouch_walk_time_scale/node = SubResource("AnimationNodeTimeScale_qqqtm")
+nodes/crouch_walk_time_scale/position = Vector2(20, 890)
+nodes/idle_anim/node = SubResource("AnimationNodeAnimation_garox")
+nodes/idle_anim/position = Vector2(-450, 140)
+nodes/idle_anim_time_scale/node = SubResource("AnimationNodeTimeScale_8fw4w")
+nodes/idle_anim_time_scale/position = Vector2(-10, 140)
+nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_obhav")
+nodes/on_air_anim/position = Vector2(-450, 500)
+nodes/on_air_anim_time_scale/node = SubResource("AnimationNodeTimeScale_p00g2")
+nodes/on_air_anim_time_scale/position = Vector2(0, 500)
+nodes/output/position = Vector2(740, 230)
+nodes/walk_anim/node = SubResource("AnimationNodeAnimation_l8b5l")
+nodes/walk_anim/position = Vector2(-450, 310)
+nodes/walk_anim_time_scale/node = SubResource("AnimationNodeTimeScale_1qpsb")
+nodes/walk_anim_time_scale/position = Vector2(-10, 300)
+node_connections = [&"Transition", 0, &"idle_anim_time_scale", &"Transition", 1, &"walk_anim_time_scale", &"Transition", 2, &"on_air_anim_time_scale", &"Transition", 3, &"crouch_idle_time_scale", &"Transition", 4, &"crouch_walk_time_scale", &"crouch_idle_time_scale", 0, &"crouch_idle_anim", &"crouch_walk_time_scale", 0, &"criuch_walk_anim", &"idle_anim_time_scale", 0, &"idle_anim", &"on_air_anim_time_scale", 0, &"on_air_anim", &"output", 0, &"Transition", &"walk_anim_time_scale", 0, &"walk_anim"]
+
+[node name="character-side-retro" type="CharacterBody3D" groups=["Player"]]
+script = ExtResource("1_ldmdx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_e2hjs")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_wpnvj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.65)
+mesh = SubResource("BoxMesh_avppn")
+
+[node name="y-bot" parent="Model" instance=ExtResource("2_8ek0h")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model/y-bot")
+libraries = {
+"AnimationLibrary_Godot_Standard": ExtResource("3_hw27s"),
+"mixamo-basic-locomotion": ExtResource("3_jqbit")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model/y-bot")
+tree_root = SubResource("AnimationNodeBlendTree_oewrj")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Transition/current_state = "state_idle"
+parameters/Transition/transition_request = ""
+parameters/Transition/current_index = 0
+parameters/crouch_idle_time_scale/scale = 1.0
+parameters/crouch_walk_time_scale/scale = 1.2
+parameters/idle_anim_time_scale/scale = 1.0
+parameters/on_air_anim_time_scale/scale = 1.0
+parameters/walk_anim_time_scale/scale = 1.2

@@ -55,6 +55,8 @@ size = Vector3(3, 1, 10)
 [node name="Tps-scene-test" type="Node3D"]
 
 [node name="Character" parent="." instance=ExtResource("1_pronh")]
+walk_speed = 1.5
+mouse_sensitivity = 1.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -70,9 +72,9 @@ transform = Transform3D(100, 0, 0, 0, 0.5, 0, 0, 0, 100, 2.08165e-12, -0.25, 2.0
 mesh = SubResource("BoxMesh_uq1lt")
 surface_material_override/0 = ExtResource("2_2moem")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Floor"]
+[node name="StaticBody3D - Floor" type="StaticBody3D" parent="Environment/Floor"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Floor/StaticBody3D - Floor"]
 shape = SubResource("BoxShape3D_g21by")
 
 [node name="Obstacle" type="MeshInstance3D" parent="Environment"]
@@ -160,9 +162,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.5, 2.08165e-12)
 mesh = SubResource("PrismMesh_qtyjg")
 surface_material_override/0 = ExtResource("3_c2b8d")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ramp"]
+[node name="StaticBody3D - Ramp" type="StaticBody3D" parent="Environment/Ramp"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ramp/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ramp/StaticBody3D - Ramp"]
+transform = Transform3D(0.946649, 0.322266, 3.48787e-16, -0.322266, 0.946649, -3.48787e-16, -4.42581e-16, 2.17777e-16, 1, 2.08165e-12, -0.5, 2.08165e-12)
+shape = SubResource("BoxShape3D_8vtcx")
+
+[node name="Ramp3" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(0.592041, 0, -0.805908, 0, 1, 0, 0.805908, 0, 0.592041, -5, 0.5, -13.1975)
+mesh = SubResource("PrismMesh_qtyjg")
+surface_material_override/0 = ExtResource("3_c2b8d")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ramp3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ramp3/StaticBody3D"]
 transform = Transform3D(0.946649, 0.322266, 3.48787e-16, -0.322266, 0.946649, -3.48787e-16, -4.42581e-16, 2.17777e-16, 1, 2.08165e-12, -0.5, 2.08165e-12)
 shape = SubResource("BoxShape3D_8vtcx")
 

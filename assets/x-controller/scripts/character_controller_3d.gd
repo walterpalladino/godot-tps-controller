@@ -1,3 +1,5 @@
+@icon("res://assets/x-controller/CharacterBody3D-X.svg")
+
 extends CharacterBody3D
 
 class_name CharacterController3D
@@ -38,12 +40,11 @@ enum WALL_COLLISION_RESULT { COLLISION_NONE = 0, COLLISION_TOP = 1, COLLISION_MI
 var wall_collision_result : WALL_COLLISION_RESULT = WALL_COLLISION_RESULT.COLLISION_NONE
 
 
-func is_grounded():
-	#	Check distance to floor
-	var distance_to_floor : float  = check_distance_to_floor()
-	#print_debug(distance_to_floor)
-	return is_on_floor() || is_step || distance_to_floor <= max_step_height
 		
+
+####################################
+##	Complex Movement including Steps
+####################################
 		
 func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
@@ -52,6 +53,10 @@ func check_step_move_and_slide():
 	move_and_slide()
 	
 	
+####################################
+##	Steps Movement
+####################################
+
 func check_step(main_velocity:Vector3):
 	
 	is_step = false
@@ -139,7 +144,7 @@ func check_step(main_velocity:Vector3):
 			#	check step casting down 
 			transform3d.origin += motion 
 			motion = Vector3.DOWN * (max_step_height + step_margin)
-	
+						
 			test_motion_params.from = transform3d
 			test_motion_params.motion = motion
 			test_motion_params.recovery_as_collision = true
@@ -148,12 +153,12 @@ func check_step(main_velocity:Vector3):
 	
 			if not is_character_collided:
 				return false
-	
-			var collision_angle = rad_to_deg(test_motion_result.get_collision_normal().angle_to(Vector3.UP))
+			
+			#var collision_angle = rad_to_deg(test_motion_result.get_collision_normal().angle_to(Vector3.UP))
 			#print_debug(collision_angle)
-			if collision_angle >= step_max_slope_degree:
+			#if collision_angle >= step_max_slope_degree:
 				#print_debug("no step, may be a slope")
-				return false
+			#	return false
 				
 			if is_character_collided and test_motion_result.get_travel().y < max_step_height + step_margin :#and collision_angle <= step_max_slope_degree:
 		
@@ -168,6 +173,33 @@ func check_step(main_velocity:Vector3):
 				
 	return false
 
+
+####################################
+##	Ground Movement
+####################################
+
+
+func check_collission(origin : Vector3, motion : Vector3):
+
+	var space_state = get_world_3d().direct_space_state
+	
+	var query = PhysicsRayQueryParameters3D.create(origin, origin + motion + Vector3.DOWN)
+	#query.collide_with_areas = true
+	query.collide_with_bodies = true
+
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		print(result.collider.name)
+
+	return result
+	
+
+func is_grounded():
+	#	Check distance to floor
+	var distance_to_floor : float  = check_distance_to_floor()
+	#print_debug(distance_to_floor)
+	return is_on_floor() || is_step || distance_to_floor <= max_step_height
 
 func check_distance_to_floor():
 	var space_state = get_world_3d().direct_space_state
@@ -184,9 +216,17 @@ func check_distance_to_floor():
 		return clamp(transform.origin.y - result.position.y, 0.0, 100.0)
 			
 
+####################################
+##	Jump
+####################################
+
 func calculate_jump_vertical_speed():
 	return sqrt(2.0 * gravity * jump_height)
 
+
+####################################
+##	General Configuration
+####################################
 
 func add_action_key(action, key_code):
 	
@@ -203,6 +243,9 @@ func add_action_key(action, key_code):
 	
 
 
+####################################
+##	Wall Movement
+####################################
 
 #	check ray at head, middle and bottom if they hit a wall
 func check_can_climb_wall(direction : Vector3):

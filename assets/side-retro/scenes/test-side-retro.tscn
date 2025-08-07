@@ -1,0 +1,113 @@
+[gd_scene load_steps=19 format=3 uid="uid://2irff1wppemj"]
+
+[ext_resource type="Script" path="res://assets/side-platformer/scripts/level-manager.gd" id="1_laj1w"]
+[ext_resource type="Material" uid="uid://cjubymfim1qbc" path="res://assets/side-retro/materials/grey.tres" id="2_wo0kr"]
+[ext_resource type="Material" uid="uid://dmh4vbcckinbp" path="res://assets/side-retro/materials/light-grey.tres" id="3_83yog"]
+[ext_resource type="Material" uid="uid://bubc5mjlnr5od" path="res://assets/side-retro/materials/brck-red.tres" id="3_jqa4q"]
+[ext_resource type="Texture2D" uid="uid://dm8p3v3wbmwl2" path="res://icon.svg" id="5_r0eul"]
+[ext_resource type="Script" path="res://assets/side-platformer/scripts/camera-follow-platformer.gd" id="5_sd2y4"]
+[ext_resource type="PackedScene" uid="uid://b2k2guq33l84g" path="res://assets/side-retro/prefabs/character-side-retro.tscn" id="6_cwm8m"]
+[ext_resource type="PackedScene" uid="uid://d1a1vk3dxqjjo" path="res://assets/side-platformer/scenes/pickable.tscn" id="7_yoqy7"]
+
+[sub_resource type="Gradient" id="Gradient_ubhan"]
+offsets = PackedFloat32Array(0.257525, 0.391304, 1)
+colors = PackedColorArray(0.343774, 0.0969294, 0.474688, 1, 0.514584, 0.178243, 0.694661, 1, 0.498333, 0.870828, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_gyqqy"]
+gradient = SubResource("Gradient_ubhan")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5qv62"]
+panorama = SubResource("GradientTexture2D_gyqqy")
+
+[sub_resource type="Sky" id="Sky_j6xjt"]
+sky_material = SubResource("PanoramaSkyMaterial_5qv62")
+
+[sub_resource type="Environment" id="Environment_hlqmp"]
+background_mode = 2
+sky = SubResource("Sky_j6xjt")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_gkart"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lvp0n"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_f2syl"]
+size = Vector3(8, 10, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_q0vxu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1djag"]
+albedo_texture = ExtResource("5_r0eul")
+
+[node name="Test-side-platformer" type="Node3D"]
+script = ExtResource("1_laj1w")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hlqmp")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(100, 0, 0, 0, 0.5, 0, 0, 0, 10, 2.08165e-12, -0.25, 2.08165e-12)
+mesh = SubResource("BoxMesh_gkart")
+surface_material_override/0 = ExtResource("2_wo0kr")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Floor/StaticBody3D"]
+shape = SubResource("BoxShape3D_lvp0n")
+
+[node name="Floor2" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(100, 0, 0, 0, 0.5, 0, 0, 0, 10, 2.08165e-12, -0.237916, -10.9857)
+mesh = SubResource("BoxMesh_gkart")
+surface_material_override/0 = ExtResource("3_83yog")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Floor2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Floor2/StaticBody3D"]
+shape = SubResource("BoxShape3D_lvp0n")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.36858, -8)
+mesh = SubResource("BoxMesh_f2syl")
+surface_material_override/0 = ExtResource("3_jqa4q")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.807, 4.36858, -8)
+mesh = SubResource("BoxMesh_f2syl")
+surface_material_override/0 = ExtResource("3_jqa4q")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.079, 4.36858, -8)
+mesh = SubResource("BoxMesh_f2syl")
+surface_material_override/0 = ExtResource("3_jqa4q")
+
+[node name="Background" type="MeshInstance3D" parent="Environment"]
+transform = Transform3D(16, 0, 0, 0, 9, 0, 0, 0, 1, 0, 4, -16)
+visible = false
+mesh = SubResource("QuadMesh_q0vxu")
+surface_material_override/0 = SubResource("StandardMaterial3D_1djag")
+
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 0.995562, 0.0941083, 0, -0.0941083, 0.995562, 0, 3, 20)
+projection = 1
+size = 6.0
+script = ExtResource("5_sd2y4")
+target = NodePath("../character-side-retro")
+camera_offset = Vector3(0, 3, 20)
+camera_follow_speed = 5.0
+
+[node name="Pickable" parent="." instance=ExtResource("7_yoqy7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 0, 0)
+visible = false
+
+[node name="character-side-retro" parent="." instance=ExtResource("6_cwm8m")]
+max_character_speed_ground = 1.5
+jump_height = 1.5
+max_character_speed_on_air = 2.0

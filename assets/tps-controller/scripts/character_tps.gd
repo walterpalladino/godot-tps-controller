@@ -46,7 +46,7 @@ var on_floor : bool = false
 var is_jumping: bool = false
 var is_in_air: bool = false
 
-var last_face_direction : float = 1
+var face_direction : float = 0
 
 
 
@@ -62,6 +62,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		#	rotate the player
 		rotate_y( -event.relative.x / 1000 * mouse_sensitivity )
+		#face_direction = rotation.y - event.relative.x / 1000 * mouse_sensitivity
 
 		#	rotate the camera around its pivot
 		#	clamp the value
@@ -139,6 +140,8 @@ func _physics_process(delta):
 	velocity = new_velocity
 	move_and_slide()
 	
+	#update_model_facing()
+	
 	update_animations(delta, input_dir)
 
 	if is_jumping :
@@ -146,6 +149,13 @@ func _physics_process(delta):
 		is_in_air = true
 
 
+
+#-----------------------------------------------------
+func update_model_facing():
+	print(face_direction)	
+	print(rotation.y)
+	rotation.y = lerp_angle( rotation.y, (face_direction), get_physics_process_delta_time() * 10.0)
+#	if velocity.x != 0.0:
 
 
 # Update animations
@@ -166,6 +176,7 @@ func update_animations(delta, input_dir):
 	
 	#	Check distance to floor
 	var distance_to_floor : float  = check_distance_to_floor()
+	print(distance_to_floor)
 	if is_on_floor() || is_step:
 		distance_to_floor = 0.0
 	#print_debug(distance_to_floor)
@@ -193,7 +204,7 @@ func update_animations(delta, input_dir):
 			elif is_walking:
 				animation_tree.set("parameters/State/transition_request", "walking_state")
 				animation_tree.set("parameters/walk_blend/blend_position", movement)
-				print_debug(movement)
+				#print_debug(movement)
 		
 	#animation_tree.set("parameters/State/transition_request", "on_air_state")
 

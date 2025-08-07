@@ -1,0 +1,290 @@
+[gd_scene load_steps=46 format=3 uid="uid://br65sbb0i1ei3"]
+
+[ext_resource type="Script" path="res://assets/side-sword-controller/scripts/character_side_sword_controller.gd" id="1_wexyh"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_1u0u4"]
+[ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_ohppr"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_35spf"]
+[ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="5_1b24b"]
+[ext_resource type="AnimationLibrary" uid="uid://1022qhp06sn5" path="res://assets/mixamo-animations/animations/mixamo-pro-rifle-pack.fbx" id="6_s1bf7"]
+[ext_resource type="AnimationLibrary" uid="uid://d1hae7lg1qmsc" path="res://assets/mixamo-animations/animations/mixamo-rifle-hip.fbx" id="7_3alkk"]
+[ext_resource type="AnimationLibrary" uid="uid://cvd5q5ueqnrht" path="res://assets/mixamo-animations/animations/mixamo-simple-sword.fbx" id="8_ceoy4"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2eef0"]
+radius = 0.3
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_odjsx"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_g21m1"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Jump Running - In Place - Loop"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_cqai1"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_odjsx")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_g21m1")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ga2jm"]
+xfade_time = 0.2
+input_0/name = "unarmed_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "weapon1_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_037iw"]
+fadein_time = 0.2
+fadeout_time = 0.01
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ir1vy"]
+animation = &"mixamo-climb-hang/Climb-Hang|Climbing Down Wall - In Place"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_npfs7"]
+animation = &"mixamo-climb-hang/Climb-Hang|Climbing Up Wall - In Place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_iyii2"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_ir1vy")
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_npfs7")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_qdahb"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2jrpa"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Crouched Walk Forward"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_m1fca"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_qdahb")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_2jrpa")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7soau"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 2"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_o16jn"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Forward"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_i3op0"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_7soau")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_o16jn")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_d1ahv"]
+xfade_time = 0.2
+input_0/name = "armed_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "climbing_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ggdg0"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_2f7w5"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_t7lbh"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_wrxym"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_i63ms"]
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_6jbmv"]
+xfade_time = 0.2
+input_0/name = "locomotion_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "on_air_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "crouch_state"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2kpnd"]
+animation = &"mixamo-simple-sword/Simple Sword|Crouch Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ek415"]
+animation = &"mixamo-simple-sword/Simple Sword|Crouch Walking Forward - In Place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_0re4g"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_2kpnd")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_ek415")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pmev3"]
+animation = &"mixamo-simple-sword/Simple Sword|Idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_stkgu"]
+animation = &"mixamo-simple-sword/Simple Sword|Running Forward - In Place"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_0wosj"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_pmev3")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_stkgu")
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_62olr"]
+xfade_time = 0.2
+input_0/name = "locomotion_state"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "on_air_state"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "crouch_state"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sbnwc"]
+animation = &"mixamo-climb-hang/Climb-Hang|Braced Hang To Crouch"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_17kx8"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling To landing From Foot"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_ebjok"]
+fadein_time = 0.05
+fadeout_time = 0.3
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_i3s47"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Slide - In Place"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_klwso"]
+animation = &"mixamo-simple-sword/Simple Sword|Standing Jump - Loop"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_du7ea"]
+animation = &"mixamo-pro-rifle-pack/Pro Rifle|Jump End - From Foot"
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_bpf2n"]
+fadein_time = 0.05
+fadeout_time = 0.3
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
+graph_offset = Vector2(-1811.7, 968.071)
+nodes/Air/node = SubResource("AnimationNodeBlendSpace1D_cqai1")
+nodes/Air/position = Vector2(-1710, 370)
+nodes/Armed/node = SubResource("AnimationNodeTransition_ga2jm")
+nodes/Armed/position = Vector2(-680, 390)
+nodes/BraceHangUp/node = SubResource("AnimationNodeOneShot_037iw")
+nodes/BraceHangUp/position = Vector2(1890, 870)
+nodes/Climbing/node = SubResource("AnimationNodeBlendSpace1D_iyii2")
+nodes/Climbing/position = Vector2(-960, 890)
+nodes/Crouch/node = SubResource("AnimationNodeBlendSpace1D_m1fca")
+nodes/Crouch/position = Vector2(-1550, 460)
+nodes/Locomotion/node = SubResource("AnimationNodeBlendSpace1D_i3op0")
+nodes/Locomotion/position = Vector2(-1450, 200)
+nodes/OverrideAction/node = SubResource("AnimationNodeTransition_d1ahv")
+nodes/OverrideAction/position = Vector2(-110, 450)
+nodes/Slide/node = SubResource("AnimationNodeOneShot_ggdg0")
+nodes/Slide/position = Vector2(1600, 690)
+"nodes/TimeScale Brace Hang Up/node" = SubResource("AnimationNodeTimeScale_2f7w5")
+"nodes/TimeScale Brace Hang Up/position" = Vector2(1620, 1200)
+"nodes/TimeScale Climbing/node" = SubResource("AnimationNodeTimeScale_t7lbh")
+"nodes/TimeScale Climbing/position" = Vector2(-780, 860)
+"nodes/TimeScale Land/node" = SubResource("AnimationNodeTimeScale_wrxym")
+"nodes/TimeScale Land/position" = Vector2(160, 700)
+"nodes/TimeScale Weapon1Locomotion/node" = SubResource("AnimationNodeTimeScale_i63ms")
+"nodes/TimeScale Weapon1Locomotion/position" = Vector2(-1460, 700)
+nodes/Unarmed/node = SubResource("AnimationNodeTransition_6jbmv")
+nodes/Unarmed/position = Vector2(-970, 260)
+nodes/Weapon1Crouch/node = SubResource("AnimationNodeBlendSpace1D_0re4g")
+nodes/Weapon1Crouch/position = Vector2(-1530, 1030)
+nodes/Weapon1Locomotion/node = SubResource("AnimationNodeBlendSpace1D_0wosj")
+nodes/Weapon1Locomotion/position = Vector2(-1670, 710)
+nodes/Weapon1State/node = SubResource("AnimationNodeTransition_62olr")
+nodes/Weapon1State/position = Vector2(-990, 600)
+nodes/braced_hang_up_anim/node = SubResource("AnimationNodeAnimation_sbnwc")
+nodes/braced_hang_up_anim/position = Vector2(1200, 1230)
+nodes/land_anim/node = SubResource("AnimationNodeAnimation_17kx8")
+nodes/land_anim/position = Vector2(-400, 740)
+nodes/landed/node = SubResource("AnimationNodeOneShot_ebjok")
+nodes/landed/position = Vector2(390, 540)
+nodes/output/position = Vector2(2160, 910)
+nodes/slide_anim/node = SubResource("AnimationNodeAnimation_i3s47")
+nodes/slide_anim/position = Vector2(1090, 840)
+nodes/weapon1_jump_anim/node = SubResource("AnimationNodeAnimation_klwso")
+nodes/weapon1_jump_anim/position = Vector2(-1660, 880)
+nodes/weapon1_land_anim/node = SubResource("AnimationNodeAnimation_du7ea")
+nodes/weapon1_land_anim/position = Vector2(-260, 920)
+nodes/weapon1_landed/node = SubResource("AnimationNodeOneShot_bpf2n")
+nodes/weapon1_landed/position = Vector2(640, 650)
+node_connections = [&"Armed", 0, &"Unarmed", &"Armed", 1, &"Weapon1State", &"BraceHangUp", 0, &"Slide", &"BraceHangUp", 1, &"TimeScale Brace Hang Up", &"OverrideAction", 0, &"Armed", &"OverrideAction", 1, &"TimeScale Climbing", &"Slide", 0, &"weapon1_landed", &"Slide", 1, &"slide_anim", &"TimeScale Brace Hang Up", 0, &"braced_hang_up_anim", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Land", 0, &"land_anim", &"TimeScale Weapon1Locomotion", 0, &"Weapon1Locomotion", &"Unarmed", 0, &"Locomotion", &"Unarmed", 1, &"Air", &"Unarmed", 2, &"Crouch", &"Weapon1State", 0, &"TimeScale Weapon1Locomotion", &"Weapon1State", 1, &"weapon1_jump_anim", &"Weapon1State", 2, &"Weapon1Crouch", &"landed", 0, &"OverrideAction", &"landed", 1, &"TimeScale Land", &"output", 0, &"BraceHangUp", &"weapon1_landed", 0, &"landed", &"weapon1_landed", 1, &"weapon1_land_anim"]
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_wexyh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+shape = SubResource("CylinderShape3D_2eef0")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="y-bot" parent="Model" instance=ExtResource("2_1u0u4")]
+
+[node name="x-bot" parent="Model" instance=ExtResource("3_ohppr")]
+visible = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model/y-bot")
+libraries = {
+"mixamo-basic-locomotion": ExtResource("4_35spf"),
+"mixamo-climb-hang": ExtResource("5_1b24b"),
+"mixamo-pro-rifle-pack": ExtResource("6_s1bf7"),
+"mixamo-rifle-hip": ExtResource("7_3alkk"),
+"mixamo-simple-sword": ExtResource("8_ceoy4")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Model/y-bot")
+tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
+anim_player = NodePath("../AnimationPlayer")
+parameters/Air/blend_position = 0
+parameters/Armed/current_state = "unarmed_state"
+parameters/Armed/transition_request = ""
+parameters/Armed/current_index = 0
+parameters/BraceHangUp/active = false
+parameters/BraceHangUp/internal_active = false
+parameters/BraceHangUp/request = 0
+parameters/Climbing/blend_position = 0.0
+parameters/Crouch/blend_position = 0
+parameters/Locomotion/blend_position = 0
+parameters/OverrideAction/current_state = "armed_state"
+parameters/OverrideAction/transition_request = ""
+parameters/OverrideAction/current_index = 0
+parameters/Slide/active = false
+parameters/Slide/internal_active = false
+parameters/Slide/request = 0
+"parameters/TimeScale Brace Hang Up/scale" = 1.0
+"parameters/TimeScale Climbing/scale" = 1.0
+"parameters/TimeScale Land/scale" = 1.0
+"parameters/TimeScale Weapon1Locomotion/scale" = 1.0
+parameters/Unarmed/current_state = "locomotion_state"
+parameters/Unarmed/transition_request = ""
+parameters/Unarmed/current_index = 0
+parameters/Weapon1Crouch/blend_position = 0
+parameters/Weapon1Locomotion/blend_position = 0.0
+parameters/Weapon1State/current_state = "locomotion_state"
+parameters/Weapon1State/transition_request = ""
+parameters/Weapon1State/current_index = 0
+parameters/landed/active = false
+parameters/landed/internal_active = false
+parameters/landed/request = 0
+parameters/weapon1_landed/active = false
+parameters/weapon1_landed/internal_active = false
+parameters/weapon1_landed/request = 0

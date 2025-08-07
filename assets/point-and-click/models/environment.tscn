@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=3 uid="uid://da0l1yi2s82w4"]
+
+[ext_resource type="PackedScene" uid="uid://bp4n4ujpoel3s" path="res://assets/point-and-click/models/Environment.fbx" id="1_aw653"]
+[ext_resource type="Material" uid="uid://ge8ljqkcpx7x" path="res://assets/point-and-click/models/env.tres" id="2_maap3"]
+
+[node name="Environment" instance=ExtResource("1_aw653")]
+
+[node name="SM_Buildings_Floor_5x5_01P" parent="Environment/Ground" index="0"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__3_" parent="Environment/Ground" index="1"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__6_" parent="Environment/Ground" index="2"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__1_" parent="Environment/Ground" index="3"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__4_" parent="Environment/Ground" index="4"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__7_" parent="Environment/Ground" index="5"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__2_" parent="Environment/Ground" index="6"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__5_" parent="Environment/Ground" index="7"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Floor_5x5_01P__8_" parent="Environment/Ground" index="8"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Ramp_20_1x1_01P" parent="Environment/Obstacles" index="0"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Ramp_30_1x1_01P" parent="Environment/Obstacles" index="1"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Ramp_45_1x1_01P" parent="Environment/Obstacles" index="2"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Ramp_60_1x1_01P" parent="Environment/Obstacles" index="3"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Stairs_1x2_02P" parent="Environment/Obstacles" index="4"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_WallDoor_2x3_01P" parent="Environment/Obstacles" index="5"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_WallWindowDouble_5x3_01P" parent="Environment/Obstacles" index="6"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Primitive_Cube_01" parent="Environment/Obstacles" index="7"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Wall_2x3_01" parent="Environment/Obstacles" index="8"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Wall_2x3_01__1_" parent="Environment/Obstacles" index="9"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_WallArch_2x3_01" parent="Environment/Obstacles" index="10"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Stairs_1x3_01" parent="Environment/Obstacles" index="11"]
+surface_material_override/0 = ExtResource("2_maap3")
+
+[node name="SM_Buildings_Block_1x1_01" parent="Environment/Obstacles" index="12"]
+surface_material_override/0 = ExtResource("2_maap3")

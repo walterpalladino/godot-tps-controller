@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://bbj23t1qrulfh"]
+
+[ext_resource type="PackedScene" uid="uid://bgrf5x75c3lwu" path="res://assets/mixamo-animations/sources/mixamo-ybot.fbx" id="1_7p8re"]
+[ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="2_g5b5w"]
+
+[node name="Root Scene" instance=ExtResource("1_7p8re")]
+
+[node name="GeneralSkeleton" parent="RootNode/Armature" index="0"]
+bones/0/position = Vector3(0.00231429, 0.945723, -0.0959591)
+bones/0/rotation = Quaternion(-0.0340605, -0.115946, -0.00397838, 0.992663)
+bones/2/rotation = Quaternion(0.04769, 0.000109341, 0.000129691, 0.998862)
+bones/3/rotation = Quaternion(0.142663, 0.000327084, 0.000387906, 0.989771)
+bones/4/rotation = Quaternion(-0.0952894, -0.00021846, -0.000259071, 0.99545)
+bones/5/rotation = Quaternion(0.0437865, 0.0954562, 0.0106693, 0.994413)
+bones/8/rotation = Quaternion(0.503004, 0.521193, 0.531132, -0.439595)
+bones/9/rotation = Quaternion(-0.012206, 0.825805, -0.563741, 0.00965586)
+bones/10/rotation = Quaternion(0.160008, -0.688509, 0.171289, 0.686304)
+bones/11/rotation = Quaternion(0.0991302, 0.706866, 0.0629004, 0.697536)
+bones/13/rotation = Quaternion(-0.123819, 0.719523, 0.201835, 0.652853)
+bones/14/rotation = Quaternion(0.181807, 0.110124, 0.0600633, 0.975301)
+bones/15/rotation = Quaternion(0.59943, 0.273966, 0.194632, 0.726461)
+bones/18/rotation = Quaternion(0.629597, 1.15484e-07, -4.58956e-06, 0.776922)
+bones/19/rotation = Quaternion(0.623342, 2.90573e-07, -4.32134e-06, 0.78195)
+bones/20/rotation = Quaternion(0.623342, 3.72529e-08, -4.35114e-06, 0.78195)
+bones/23/rotation = Quaternion(0.628894, -0.0297347, -4.38094e-06, 0.776922)
+bones/24/rotation = Quaternion(0.622733, -0.0275544, -4.26173e-06, 0.781949)
+bones/25/rotation = Quaternion(0.622668, -0.0289614, -4.44055e-06, 0.78195)
+bones/28/rotation = Quaternion(0.629198, -0.0224139, -4.23193e-06, 0.776922)
+bones/29/rotation = Quaternion(0.622947, -0.0221762, -4.38094e-06, 0.781949)
+bones/30/rotation = Quaternion(0.622898, -0.0235053, -4.52995e-06, 0.78195)
+bones/33/rotation = Quaternion(0.663001, -0.0445296, 0.0736943, 0.743651)
+bones/34/rotation = Quaternion(0.620366, -0.0622938, 0.0155732, 0.781679)
+bones/35/rotation = Quaternion(0.621921, -0.0420516, -4.38094e-06, 0.78195)
+bones/37/rotation = Quaternion(0.55495, -0.470942, -0.477638, -0.492043)
+bones/38/rotation = Quaternion(0.0606893, 0.819933, -0.56915, -0.00974844)
+bones/39/rotation = Quaternion(0.287255, 0.559444, -0.211537, 0.74817)
+bones/40/rotation = Quaternion(0.12025, -0.699031, -0.0568902, 0.702609)
+bones/42/rotation = Quaternion(-0.123819, -0.719523, -0.201836, 0.652853)
+bones/43/rotation = Quaternion(0.181807, -0.110124, -0.0600632, 0.975301)
+bones/44/rotation = Quaternion(0.59943, -0.273965, -0.194632, 0.726461)
+bones/47/rotation = Quaternion(0.629597, -1.30385e-07, 4.17233e-06, 0.776922)
+bones/48/rotation = Quaternion(0.623341, 2.23517e-08, 4.41074e-06, 0.78195)
+bones/49/rotation = Quaternion(0.623342, -7.45058e-09, 4.11272e-06, 0.78195)
+bones/52/rotation = Quaternion(0.628895, 0.0297346, 4.32134e-06, 0.776922)
+bones/53/rotation = Quaternion(0.622732, 0.0275544, 4.26173e-06, 0.78195)
+bones/54/rotation = Quaternion(0.622669, 0.0289614, 4.26173e-06, 0.781949)
+bones/57/rotation = Quaternion(0.629198, 0.0224136, 4.11272e-06, 0.776922)
+bones/58/rotation = Quaternion(0.622947, 0.0221761, 4.52995e-06, 0.78195)
+bones/59/rotation = Quaternion(0.622899, 0.0235051, 4.23193e-06, 0.781949)
+bones/62/rotation = Quaternion(0.663001, 0.0445298, -0.073694, 0.743651)
+bones/63/rotation = Quaternion(0.620366, 0.0622935, -0.0155729, 0.78168)
+bones/64/rotation = Quaternion(0.621922, 0.0420513, 4.55976e-06, 0.781949)
+bones/66/rotation = Quaternion(-0.000837111, 0.160493, 0.979754, -0.119681)
+bones/67/rotation = Quaternion(0.021512, 0.97389, -0.197581, 0.109713)
+bones/68/rotation = Quaternion(-0.0962477, 0.713954, -0.693513, 0.00677978)
+bones/69/rotation = Quaternion(4.65817e-08, 1, 2.98023e-08, 2.73193e-08)
+bones/72/rotation = Quaternion(0.000978396, -0.0699104, 0.987697, 0.139883)
+bones/73/rotation = Quaternion(-0.0547745, 0.922215, -0.150205, -0.352078)
+bones/74/rotation = Quaternion(0.170679, 0.618702, -0.766856, 0.00292092)
+bones/75/rotation = Quaternion(-8.19631e-08, 1, 0, -1.06448e-08)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+"AnimationLibrary_Godot_Standard": ExtResource("2_g5b5w")
+}

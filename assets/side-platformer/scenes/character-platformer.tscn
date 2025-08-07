@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dx7oyq1x0cdav"]
+
+[ext_resource type="Script" path="res://assets/side-platformer/scripts/player-platformer.gd" id="1_l42ng"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_r1amn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e2hjs"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wpnvj"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_avppn"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="character-platformer" type="CharacterBody3D" groups=["Player"]]
+script = ExtResource("1_l42ng")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_e2hjs")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_wpnvj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.65)
+mesh = SubResource("BoxMesh_avppn")
+
+[node name="y-bot" parent="Model" instance=ExtResource("2_r1amn")]

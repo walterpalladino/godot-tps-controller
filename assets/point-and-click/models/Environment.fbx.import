@@ -1,0 +1,106 @@
+[remap]
+
+importer="scene"
+importer_version=1
+type="PackedScene"
+uid="uid://bp4n4ujpoel3s"
+path="res://.godot/imported/Environment.fbx-2d96160b204070341216769c953da444.scn"
+
+[deps]
+
+source_file="res://assets/point-and-click/models/Environment.fbx"
+dest_files=["res://.godot/imported/Environment.fbx-2d96160b204070341216769c953da444.scn"]
+
+[params]
+
+nodes/root_type=""
+nodes/root_name=""
+nodes/apply_root_scale=true
+nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
+meshes/ensure_tangents=true
+meshes/generate_lods=true
+meshes/create_shadow_meshes=true
+meshes/light_baking=1
+meshes/lightmap_texel_size=0.2
+meshes/force_disable_compression=false
+skins/use_named_skins=true
+animation/import=true
+animation/fps=30
+animation/trimming=true
+animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
+import_script/path=""
+_subresources={
+"nodes": {
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__1_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__2_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__3_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__4_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__5_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__6_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__7_": {
+"generate/physics": true
+},
+"PATH:Environment/Ground/SM_Buildings_Floor_5x5_01P__8_": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Block_1x1_01": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Ramp_20_1x1_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Ramp_30_1x1_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Ramp_45_1x1_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Ramp_60_1x1_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Stairs_1x2_02P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Stairs_1x3_01": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_WallArch_2x3_01": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_WallDoor_2x3_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_WallWindowDouble_5x3_01P": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Wall_2x3_01": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Buildings_Wall_2x3_01__1_": {
+"generate/physics": true
+},
+"PATH:Environment/Obstacles/SM_Primitive_Cube_01": {
+"generate/physics": true
+}
+}
+}
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1

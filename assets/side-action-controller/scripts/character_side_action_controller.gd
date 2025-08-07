@@ -1,5 +1,3 @@
-@icon("res://assets/x-controller/CharacterBody3D-X.svg")
-
 extends CharacterController3D
 
 #	character_side_action_controller
