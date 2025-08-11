@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bnu8s7s7lagmo"]
+[gd_scene load_steps=47 format=3 uid="uid://bnu8s7s7lagmo"]
 
 [ext_resource type="Script" path="res://assets/tps-controller-2/scripts/character_tps2.gd" id="1_clcai"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_u2pcl"]
@@ -8,7 +8,18 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ev71b"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_34ei5"]
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Door Opening - Start"
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_2swil"]
+fadein_time = 0.2
+fadeout_time = 0.3
+
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_jlw5x"]
+filter_enabled = true
+filters = ["%GeneralSkeleton:Chest", "%GeneralSkeleton:Head", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:LeftUpperArm", "%GeneralSkeleton:Neck", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Spine", "%GeneralSkeleton:UpperChest", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1"]
+fadein_time = 0.2
+fadeout_time = 0.2
 
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_t1qpm"]
 xfade_time = 0.2
@@ -40,6 +51,8 @@ input_4/reset = true
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_63khx"]
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_lgwli"]
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_4yhe2"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dicir"]
 animation = &"AnimationLibrary_Godot_Standard/Crouch_Idle"
@@ -75,13 +88,13 @@ animation = &"mixamo-basic-locomotion/Basic Locomotion|Hard Landing"
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lbadu"]
-animation = &"AnimationLibrary_Godot_Standard/Idle"
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d3pxj"]
-animation = &"AnimationLibrary_Godot_Standard/Idle"
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Catwalk Idle Twist R"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_36lu1"]
-animation = &"AnimationLibrary_Godot_Standard/Idle"
+animation = &"mixamo-basic-locomotion/Basic Locomotion|Catwalk Idle Twist L"
 
 [sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_ftpw8"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_lbadu")
@@ -141,54 +154,6 @@ blend_point_7/pos = Vector2(-1, 1)
 blend_point_8/node = SubResource("AnimationNodeAnimation_pqkcu")
 blend_point_8/pos = Vector2(0, 0)
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dddkx"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_grrd3"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Falling Idle"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vbvs8"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yoahk"]
-advance_mode = 2
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ih3y1"]
-xfade_time = 0.2
-advance_mode = 2
-advance_condition = &"on_air"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_u8wir"]
-xfade_time = 0.2
-advance_mode = 2
-advance_condition = &"grounded"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_seslx"]
-xfade_time = 0.2
-advance_mode = 2
-advance_condition = &"walking"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2pter"]
-xfade_time = 0.2
-advance_mode = 2
-advance_condition = &"idle"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_6soog"]
-xfade_time = 0.2
-advance_mode = 2
-advance_condition = &"on_air"
-
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_x14bm"]
-states/Idle/node = SubResource("AnimationNodeAnimation_dddkx")
-states/Idle/position = Vector2(420.5, 61)
-"states/On Air/node" = SubResource("AnimationNodeAnimation_grrd3")
-"states/On Air/position" = Vector2(566.5, 85)
-states/Start/position = Vector2(200, 99.75)
-states/Walk/node = SubResource("AnimationNodeAnimation_vbvs8")
-states/Walk/position = Vector2(420.25, 184)
-transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_yoahk"), "Idle", "On Air", SubResource("AnimationNodeStateMachineTransition_ih3y1"), "On Air", "Idle", SubResource("AnimationNodeStateMachineTransition_u8wir"), "Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_seslx"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_2pter"), "Walk", "On Air", SubResource("AnimationNodeStateMachineTransition_6soog")]
-graph_offset = Vector2(70, 12)
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1tmok"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
 
@@ -217,9 +182,13 @@ blend_point_4/node = SubResource("AnimationNodeAnimation_pxxee")
 blend_point_4/pos = Vector2(0, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-568.353, -35.8388)
-nodes/OneShot/node = SubResource("AnimationNodeOneShot_2swil")
-nodes/OneShot/position = Vector2(90, 110)
+graph_offset = Vector2(-1168.57, -205.008)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_34ei5")
+nodes/Animation/position = Vector2(-350, -250)
+nodes/HardLand/node = SubResource("AnimationNodeOneShot_2swil")
+nodes/HardLand/position = Vector2(90, 110)
+nodes/OpenDoor/node = SubResource("AnimationNodeOneShot_jlw5x")
+nodes/OpenDoor/position = Vector2(310, -290)
 nodes/State/node = SubResource("AnimationNodeTransition_t1qpm")
 nodes/State/position = Vector2(-380, -40)
 "nodes/TimeScale Crouch/node" = SubResource("AnimationNodeTimeScale_iy0an")
@@ -230,6 +199,8 @@ nodes/State/position = Vector2(-380, -40)
 "nodes/TimeScale Run/position" = Vector2(-700, 200)
 "nodes/TimeScale Walk/node" = SubResource("AnimationNodeTimeScale_lgwli")
 "nodes/TimeScale Walk/position" = Vector2(-700, 20)
+nodes/TimeScaleOpenDoor/node = SubResource("AnimationNodeTimeScale_4yhe2")
+nodes/TimeScaleOpenDoor/position = Vector2(130, -300)
 nodes/crouch_blend/node = SubResource("AnimationNodeBlendSpace2D_fmab0")
 nodes/crouch_blend/position = Vector2(-890, 540)
 nodes/hard_land_anim/node = SubResource("AnimationNodeAnimation_dpkmr")
@@ -240,14 +211,12 @@ nodes/in_place_blend/node = SubResource("AnimationNodeBlendSpace1D_ftpw8")
 nodes/in_place_blend/position = Vector2(-890, -140)
 nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_ikmx2")
 nodes/on_air_anim/position = Vector2(-920, 380)
-nodes/output/position = Vector2(250, -30)
+nodes/output/position = Vector2(680, -110)
 nodes/run_blend/node = SubResource("AnimationNodeBlendSpace2D_o3oay")
 nodes/run_blend/position = Vector2(-890, 200)
-nodes/side_scroller_sm/node = SubResource("AnimationNodeStateMachine_x14bm")
-nodes/side_scroller_sm/position = Vector2(390, 220)
 nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
 nodes/walk_blend/position = Vector2(-890, 20)
-node_connections = [&"OneShot", 0, &"State", &"OneShot", 1, &"hard_land_anim", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"output", 0, &"OneShot"]
+node_connections = [&"HardLand", 0, &"State", &"HardLand", 1, &"hard_land_anim", &"OpenDoor", 0, &"HardLand", &"OpenDoor", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"output", 0, &"OpenDoor"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p52ah"]
 
@@ -278,9 +247,12 @@ libraries = {
 root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
-parameters/OneShot/active = false
-parameters/OneShot/internal_active = false
-parameters/OneShot/request = 0
+parameters/HardLand/active = false
+parameters/HardLand/internal_active = false
+parameters/HardLand/request = 0
+parameters/OpenDoor/active = false
+parameters/OpenDoor/internal_active = false
+parameters/OpenDoor/request = 0
 parameters/State/current_state = "idle_state"
 parameters/State/transition_request = ""
 parameters/State/current_index = 0
@@ -288,13 +260,10 @@ parameters/State/current_index = 0
 "parameters/TimeScale In Place/scale" = 1.0
 "parameters/TimeScale Run/scale" = 1.0
 "parameters/TimeScale Walk/scale" = 1.0
-parameters/crouch_blend/blend_position = Vector2(-0.000673413, 0.00211418)
+parameters/TimeScaleOpenDoor/scale = 1.3
+parameters/crouch_blend/blend_position = Vector2(0, 0)
 parameters/in_place_blend/blend_position = 0.0
 parameters/run_blend/blend_position = Vector2(0, 0)
-parameters/side_scroller_sm/conditions/grounded = false
-parameters/side_scroller_sm/conditions/idle = false
-parameters/side_scroller_sm/conditions/on_air = false
-parameters/side_scroller_sm/conditions/walking = false
 parameters/walk_blend/blend_position = Vector2(-0.00417244, 0.00755668)
 
 [node name="LookAt" type="Node3D" parent="."]

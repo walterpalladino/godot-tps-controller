@@ -1,7 +1,8 @@
-extends Node3D
+extends Interactable
 
 
 @export var animation_player : AnimationPlayer
+
 
 var door_open : bool = false
 

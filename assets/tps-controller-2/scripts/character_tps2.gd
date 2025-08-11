@@ -1,5 +1,8 @@
 extends CharacterController3D
 
+
+
+
 #	character_side_action_controller
 
 enum CONTROLLER_STATE {LOCOMOTION, ON_AIR }
@@ -67,6 +70,7 @@ var is_crouching : bool = false
 
 var new_velocity : Vector3 = Vector3.ZERO
 
+var turning : float = 0.0
 
 #-----------------------------------------------------
 func _ready() -> void:
@@ -175,6 +179,7 @@ func check_interactions():
 			interact_label.visible = true
 
 			if Input.is_action_just_pressed("action_interact") :
+				animate_interactable(result.collider.interactable_type, result.collider.is_open)
 				result.collider.interact()
 				
 
@@ -299,7 +304,7 @@ func update_character_locomotion(delta):
 	var target_speed = 0.0	# depends on if the target is stand or crouched 
 	
 	if direction.length() > 0:
-		
+		turning = sign(model.rotation.y - camera_mount.rotation.y)
 		model.rotation.y = lerp_angle(model.rotation.y, camera_mount.rotation.y, rotation_speed * delta)
 		
 		if is_crouched:
@@ -419,7 +424,7 @@ func animate_locomotion():
 	else:
 		if movement == Vector2.ZERO:
 			animation_tree.set("parameters/State/transition_request", "idle_state")
-			#animation_tree.set("parameters/in_place_blend/blend_position", turning)
+			animation_tree.set("parameters/in_place_blend/blend_position", turning)
 		elif is_running:
 		#	print("running_state")
 			animation_tree.set("parameters/State/transition_request", "running_state")
@@ -431,6 +436,13 @@ func animate_locomotion():
 			animation_tree.set("parameters/State/transition_request", "walking_state")
 			animation_tree.set("parameters/walk_blend/blend_position", movement)
 
+
+
+func animate_interactable(interactable_type : Interactable.INTERACTABLE_TYPE, status):
+
+	if interactable_type == Interactable.INTERACTABLE_TYPE.DOOR:
+		animation_tree.set("parameters/OpenDoor/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+	
 	
 #-----------------------------------------------------
 func animate_on_air():
@@ -456,6 +468,8 @@ func is_blocking_animation_running():
 	if animation_tree.get("parameters/BraceHangUp/active"):
 		return true
 
+	if animation_tree.get("parameters/OpenDoor/active"):
+		return true
 
 	return false
 
