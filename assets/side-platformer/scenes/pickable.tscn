@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d1a1vk3dxqjjo"]
 
-[ext_resource type="Script" path="res://assets/side-platformer/scripts/pickable-platform.gd" id="1_2vum8"]
+[ext_resource type="Script" uid="uid://co0qweu0ovapu" path="res://assets/side-platformer/scripts/pickable-platform.gd" id="1_2vum8"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_414vy"]
 top_radius = 0.25

@@ -1,6 +1,6 @@
 [gd_scene load_steps=46 format=3 uid="uid://br65sbb0i1ei3"]
 
-[ext_resource type="Script" path="res://assets/side-sword-controller/scripts/character_side_sword_controller.gd" id="1_wexyh"]
+[ext_resource type="Script" uid="uid://cixefgeiau2e7" path="res://assets/side-sword-controller/scripts/character_side_sword_controller.gd" id="1_wexyh"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_1u0u4"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_ohppr"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_35spf"]

@@ -15,6 +15,7 @@ enum CONTROLLER_STATE {LOCOMOTION, ON_AIR }
 #@onready var interact_label = get_node("InteractLabel")
 @onready var interact_label : Label = get_node("InteractLabel")
 
+@onready var look_at_modifier : LookAtModifier3D = find_child("LookAtModifier3D")
 
 @export_category("Ground Movement")
 
@@ -44,7 +45,7 @@ var last_y_in_floor : float = 0.0
 var was_on_air : bool = false
 
 
-var last_face_direction : float = 1
+var last_face_direction : Vector3 = Vector3.ZERO
 
 
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
@@ -113,40 +114,6 @@ func _physics_process(delta):
 	update_character(delta)
 
 
-#func check_interactions_bk():
-	
-#	var space_state = get_world_3d().direct_space_state
-
-#	var mouse_pos = get_viewport().get_mouse_position()
-
-#	var origin = camera.project_ray_origin(mouse_pos)
-#	origin += camera.project_ray_normal(mouse_pos) * interaction_min_distance 
-#	var end = origin + camera.project_ray_normal(mouse_pos) * interaction_max_distance
-
-#	var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(origin, end)
-#	query.collide_with_areas = false
-#	query.collide_with_bodies = true
-#	query.exclude = [self]
-
-#	var result = space_state.intersect_ray(query)
-		
-#	if result:
-#		print(result)
-#		if result.collider.has_method("interact"):
-
-#			var distance : float = (position - result.position).length()
-#			interact_label.visible = true
-#			interact_label.position = Vector3(result.position.x, result.position.y, -.5)
-
-#			if Input.is_action_just_pressed("action_interact") :
-#					result.collider.interact()
-
-#		else:
-#			interact_label.visible = false
-#	else:
-#		interact_label.visible = false
-
-
 
 func check_interactions():
 
@@ -171,6 +138,17 @@ func check_interactions():
 		
 		if result.collider.has_method("interact"):
 
+			if look_at_modifier:
+				if result.collider.interaction_object:
+					#print(result.collider.interaction_object.get_path())
+					look_at_modifier.active = true
+					#look_at_modifier.influence = 1.0
+					look_at_modifier.target_node = result.collider.interaction_object.get_path()
+					get_tree().create_tween().tween_property(look_at_modifier, "influence", 1, 1)
+				else:
+					if look_at_modifier.active:
+						get_tree().create_tween().tween_property(look_at_modifier, "influence", 0, 1).finished.connect(end_look_at_target)
+
 			if result.collider.is_open():
 				interact_label.text = "Close"
 			else:
@@ -182,32 +160,20 @@ func check_interactions():
 				animate_interactable(result.collider.interactable_type, result.collider.is_open)
 				result.collider.interact()
 				
-
-
-func check_interactions_bk():
+		else:
+			if look_at_modifier.active:
+				get_tree().create_tween().tween_property(look_at_modifier, "influence", 0, 1).finished.connect(end_look_at_target)
 	
-	if Input.is_action_just_pressed("action_interact") :
-		
-		var space_state = get_world_3d().direct_space_state
+	else:
+		if look_at_modifier.active:
+			get_tree().create_tween().tween_property(look_at_modifier, "influence", 0, 1).finished.connect(end_look_at_target)
 
-		var mouse_pos = get_viewport().get_mouse_position()
-	
-		var origin = camera.project_ray_origin(mouse_pos)
-		origin += camera.project_ray_normal(mouse_pos) * interaction_min_distance 
-		var end = origin + camera.project_ray_normal(mouse_pos) * interaction_max_distance
 
-		var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(origin, end)
-		query.collide_with_areas = false
-		query.collide_with_bodies = true
-		query.exclude = [self]
+func end_look_at_target():
 
-		var result = space_state.intersect_ray(query)
-		
-		if result:
-			if result.collider.has_method("interact"):
-				result.collider.interact()
-		
-		
+	look_at_modifier.target_node = ""
+	look_at_modifier.active = false
+
 		
 						
 #-----------------------------------------------------
@@ -220,52 +186,6 @@ func update_character(delta):
 			update_character_on_air(delta)
 		
 
-
-#-----------------------------------------------------
-func update_character_on_air(delta):
-	
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-
-	#	hit ground?
-	if is_on_floor():
-		was_on_air = true
-		controller_state = CONTROLLER_STATE.LOCOMOTION
-		return
-
-
-	new_velocity = Vector3.ZERO
-	
-	#	If enabled the Free Air Movement option
-	#	the character can change direction on air
-	if free_air_movement and input_dir != 0.0:
-		var direction = Vector3.RIGHT * sign(input_dir.x) 
-		new_velocity.x = max_character_speed_on_air * direction.x
-	else:
-		new_velocity.x = velocity.x
-		new_velocity.z = velocity.z
-		
-		#	If being on air and no horizontal move
-		#	the character tries to move, will only be able to do that
-		#	on the actual facing direction at a very #	small speed
-		#	but enough to climb high steps 
-		if new_velocity.x == 0:
-			if sign(input_dir.x) == last_face_direction:
-				new_velocity.x = sign(input_dir.x) * reaction_character_speed_on_air
-		
-	
-	#	add the gravity.
-	new_velocity.y = velocity.y - gravity * delta
-		
-	if transform.origin.y > last_y_in_floor:
-		last_y_in_floor = transform.origin.y
-	
-	velocity = new_velocity
-
-	move_and_slide()
-	
-	update_model_facing()
-	update_animations()
 
 
 	
@@ -285,6 +205,8 @@ func update_character_locomotion(delta):
 	# Get the input direction and handle the movement/deceleration.
 	#var direction : Vector3 = Vector3.RIGHT * sign(input_dir.x) 
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
+
+	last_face_direction = direction
 
 #	if (velocity.x < max_character_speed * 0.5) && (Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward")):
 	if Vector2(velocity.x, velocity.z).length() <= max_character_speed_crouched :
@@ -346,6 +268,61 @@ func update_character_locomotion(delta):
 	check_step_move_and_slide()
 	
 	#update_model_facing()
+	update_animations()
+
+
+
+#-----------------------------------------------------
+func update_character_on_air(delta):
+	
+	# Get the input direction and handle the movement/deceleration.
+#	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+
+	#	hit ground?
+	if is_on_floor():
+		was_on_air = true
+		controller_state = CONTROLLER_STATE.LOCOMOTION
+		return
+
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir : Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	movement = Vector2(input_dir.x, -input_dir.y)
+
+	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
+
+	new_velocity = Vector3.ZERO
+	
+	#	If enabled the Free Air Movement option
+	#	the character can change direction on air
+	if free_air_movement and input_dir != Vector2.ZERO:
+		new_velocity.x = max_character_speed_on_air * direction.x
+		new_velocity.z = max_character_speed_on_air * direction.z
+	else:
+		new_velocity.x = velocity.x
+		new_velocity.z = velocity.z
+		
+		#	If being on air and no horizontal move
+		#	the character tries to move, will only be able to do that
+		#	on the actual facing direction at a very #	small speed
+		#	but enough to climb high steps 
+		if new_velocity == Vector3.ZERO:
+			#	TODO : Check update
+			#if sign(input_dir.x) == last_face_direction:
+			new_velocity.x = reaction_character_speed_on_air * direction.x
+			new_velocity.z = reaction_character_speed_on_air * direction.z
+		
+	
+	#	add the gravity.
+	new_velocity.y = velocity.y - gravity * delta
+		
+	if transform.origin.y > last_y_in_floor:
+		last_y_in_floor = transform.origin.y
+	
+	velocity = new_velocity
+
+	move_and_slide()
+	
+	update_model_facing()
 	update_animations()
 
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cgt70bmjrqo6o"]
 
-[ext_resource type="Script" path="res://assets/tps-controller-2/scripts/interact_label.gd" id="1_vfb5l"]
+[ext_resource type="Script" uid="uid://ggx3s020bsqj" path="res://assets/tps-controller-2/scripts/interact_label.gd" id="1_vfb5l"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_ptvad"]
 viewport_path = NodePath("SubViewport")

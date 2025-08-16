@@ -1,11 +1,11 @@
 [gd_scene load_steps=19 format=3 uid="uid://2irff1wppemj"]
 
-[ext_resource type="Script" path="res://assets/side-platformer/scripts/level-manager.gd" id="1_laj1w"]
+[ext_resource type="Script" uid="uid://bjrarhbs1tj8g" path="res://assets/side-platformer/scripts/level-manager.gd" id="1_laj1w"]
 [ext_resource type="Material" uid="uid://cjubymfim1qbc" path="res://assets/side-retro/materials/grey.tres" id="2_wo0kr"]
 [ext_resource type="Material" uid="uid://dmh4vbcckinbp" path="res://assets/side-retro/materials/light-grey.tres" id="3_83yog"]
 [ext_resource type="Material" uid="uid://bubc5mjlnr5od" path="res://assets/side-retro/materials/brck-red.tres" id="3_jqa4q"]
 [ext_resource type="Texture2D" uid="uid://dm8p3v3wbmwl2" path="res://icon.svg" id="5_r0eul"]
-[ext_resource type="Script" path="res://assets/side-platformer/scripts/camera-follow-platformer.gd" id="5_sd2y4"]
+[ext_resource type="Script" uid="uid://dpt1huabky7wn" path="res://assets/side-platformer/scripts/camera-follow-platformer.gd" id="5_sd2y4"]
 [ext_resource type="PackedScene" uid="uid://b2k2guq33l84g" path="res://assets/side-retro/prefabs/character-side-retro.tscn" id="6_cwm8m"]
 [ext_resource type="PackedScene" uid="uid://d1a1vk3dxqjjo" path="res://assets/side-platformer/scenes/pickable.tscn" id="7_yoqy7"]
 

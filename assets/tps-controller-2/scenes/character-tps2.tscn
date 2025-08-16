@@ -1,6 +1,6 @@
 [gd_scene load_steps=47 format=3 uid="uid://bnu8s7s7lagmo"]
 
-[ext_resource type="Script" path="res://assets/tps-controller-2/scripts/character_tps2.gd" id="1_clcai"]
+[ext_resource type="Script" uid="uid://dy5woguyh31km" path="res://assets/tps-controller-2/scripts/character_tps2.gd" id="1_clcai"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_u2pcl"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_k2wi5"]
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_jm663"]
@@ -239,8 +239,8 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Model/y-bot")
 libraries = {
-"AnimationLibrary_Godot_Standard": ExtResource("4_jm663"),
-"mixamo-basic-locomotion": ExtResource("5_5d1gb")
+&"AnimationLibrary_Godot_Standard": ExtResource("4_jm663"),
+&"mixamo-basic-locomotion": ExtResource("5_5d1gb")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

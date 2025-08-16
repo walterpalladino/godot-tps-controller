@@ -1,6 +1,6 @@
 [gd_scene load_steps=52 format=3 uid="uid://de8bjxjwwtt2u"]
 
-[ext_resource type="Script" path="res://assets/point-and-click/scripts/character-pac.gd" id="1_6gsui"]
+[ext_resource type="Script" uid="uid://co7stxvd0rxt3" path="res://assets/point-and-click/scripts/character-pac.gd" id="1_6gsui"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_dllxq"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_4pqtr"]
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_n6y4j"]

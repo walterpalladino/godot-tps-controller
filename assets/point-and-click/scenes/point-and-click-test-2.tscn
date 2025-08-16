@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://wr8bq5v2375s"]
 
-[ext_resource type="Script" path="res://assets/point-and-click/scripts/point_and_click_test.gd" id="1_ogq4f"]
+[ext_resource type="Script" uid="uid://cnjbpwpkbthv7" path="res://assets/point-and-click/scripts/point_and_click_test.gd" id="1_ogq4f"]
 [ext_resource type="PackedScene" uid="uid://de8bjxjwwtt2u" path="res://assets/point-and-click/scenes/character-pac.tscn" id="2_pnekq"]
 [ext_resource type="PackedScene" uid="uid://da0l1yi2s82w4" path="res://assets/point-and-click/models/environment.tscn" id="5_04ffu"]
-[ext_resource type="Script" path="res://assets/point-and-click/scripts/camera_orbit.gd" id="6_kow03"]
+[ext_resource type="Script" uid="uid://2re3fnl2upvp" path="res://assets/point-and-click/scripts/camera_orbit.gd" id="6_kow03"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ifwe"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)

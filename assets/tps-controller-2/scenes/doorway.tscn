@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://cv88tvrvrgjpl"]
 
-[ext_resource type="Script" path="res://assets/tps-controller-2/scripts/doorway.gd" id="1_hxtru"]
+[ext_resource type="Script" uid="uid://dgpwvgjta72jt" path="res://assets/tps-controller-2/scripts/doorway.gd" id="1_hxtru"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmcfm"]
 size = Vector3(0.1, 2, 0.05)
@@ -67,9 +67,9 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_823m4"]
 _data = {
-"RESET": SubResource("Animation_7mhen"),
-"close": SubResource("Animation_rwgpk"),
-"open": SubResource("Animation_na46y")
+&"RESET": SubResource("Animation_7mhen"),
+&"close": SubResource("Animation_rwgpk"),
+&"open": SubResource("Animation_na46y")
 }
 
 [node name="Doorway" type="Node3D"]
@@ -94,13 +94,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1, 0)
 mesh = SubResource("BoxMesh_vv1lh")
 skeleton = NodePath("../..")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Door"]
+[node name="Door Handle" type="MeshInstance3D" parent="Door"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.8, 1, 0)
 mesh = SubResource("CylinderMesh_22afu")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Door" node_paths=PackedStringArray("animation_player")]
+[node name="StaticBody3D" type="StaticBody3D" parent="Door" node_paths=PackedStringArray("animation_player", "interaction_object")]
 script = ExtResource("1_hxtru")
 animation_player = NodePath("../../AnimationPlayer")
+interaction_object = NodePath("../Door Handle")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Door/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1, 0)
@@ -108,5 +109,5 @@ shape = SubResource("BoxShape3D_1fftf")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_823m4")
+&"": SubResource("AnimationLibrary_823m4")
 }

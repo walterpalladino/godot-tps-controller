@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://b2k2guq33l84g"]
 
-[ext_resource type="Script" path="res://assets/side-retro/scripts/player-side-retro.gd" id="1_ldmdx"]
+[ext_resource type="Script" uid="uid://cg1vel03qmlb" path="res://assets/side-retro/scripts/player-side-retro.gd" id="1_ldmdx"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_8ek0h"]
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="3_hw27s"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="3_jqbit"]

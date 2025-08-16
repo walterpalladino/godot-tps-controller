@@ -1,6 +1,6 @@
 [gd_scene load_steps=45 format=3 uid="uid://befcn8vh0dsoy"]
 
-[ext_resource type="Script" path="res://assets/side-action-controller/scripts/character_side_action_controller.gd" id="1_artrr"]
+[ext_resource type="Script" uid="uid://bpn78cylext5s" path="res://assets/side-action-controller/scripts/character_side_action_controller.gd" id="1_artrr"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_0gkuu"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_08adu"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_l0kho"]

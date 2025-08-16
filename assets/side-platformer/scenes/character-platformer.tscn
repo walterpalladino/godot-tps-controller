@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dx7oyq1x0cdav"]
 
-[ext_resource type="Script" path="res://assets/side-platformer/scripts/player-platformer.gd" id="1_l42ng"]
+[ext_resource type="Script" uid="uid://cwt3i3n8hoyo1" path="res://assets/side-platformer/scripts/player-platformer.gd" id="1_l42ng"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_r1amn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e2hjs"]

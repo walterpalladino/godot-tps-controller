@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://br65sbb0i1ei3" path="res://assets/side-sword-controller/scenes/character-side-sword.tscn" id="1_iprbr"]
 [ext_resource type="Material" uid="uid://ccsk0p3g8edai" path="res://assets/side-action-controller/materials/ground_material.tres" id="2_6c4j6"]
 [ext_resource type="Material" uid="uid://crb7yl6ebhwlu" path="res://assets/side-action-controller/materials/obstacle_material.tres" id="3_3ktl7"]
-[ext_resource type="Script" path="res://assets/side-action-controller/scripts/camera_follow_side.gd" id="4_otk0c"]
+[ext_resource type="Script" uid="uid://bmrnaxn6ew3mn" path="res://assets/side-action-controller/scripts/camera_follow_side.gd" id="4_otk0c"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lt4k2"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)

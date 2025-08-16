@@ -1,6 +1,6 @@
 [gd_scene load_steps=53 format=3 uid="uid://jkhenibiwgyh"]
 
-[ext_resource type="Script" path="res://assets/tps-controller/scripts/character_tps.gd" id="1_cy2va"]
+[ext_resource type="Script" uid="uid://bps1y74sti6vx" path="res://assets/tps-controller/scripts/character_tps.gd" id="1_cy2va"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_ycyyq"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_ue2wr"]
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_5hjmo"]

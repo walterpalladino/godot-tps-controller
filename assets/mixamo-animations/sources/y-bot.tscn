@@ -3,3 +3,16 @@
 [ext_resource type="PackedScene" uid="uid://bgrf5x75c3lwu" path="res://assets/mixamo-animations/sources/mixamo-ybot.fbx" id="1_d21ak"]
 
 [node name="y-bot" instance=ExtResource("1_d21ak")]
+
+[node name="LookAtModifier3D" type="LookAtModifier3D" parent="RootNode/Armature/GeneralSkeleton" index="2"]
+influence = 0.666
+bone_name = "Neck"
+bone = 4
+duration = 0.5
+ease_type = 2
+use_angle_limitation = true
+symmetry_limitation = true
+primary_limit_angle = 2.18166
+primary_damp_threshold = 1.0
+secondary_limit_angle = 1.39626
+secondary_damp_threshold = 1.0
