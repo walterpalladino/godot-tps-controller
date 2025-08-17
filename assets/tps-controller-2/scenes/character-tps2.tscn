@@ -6,7 +6,8 @@
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_jm663"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="5_5d1gb"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_ev71b"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ynppx"]
+radius = 0.3
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_34ei5"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Door Opening - Start"
@@ -225,7 +226,7 @@ script = ExtResource("1_clcai")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-shape = SubResource("CylinderShape3D_ev71b")
+shape = SubResource("CylinderShape3D_ynppx")
 
 [node name="Model" type="Node3D" parent="."]
 

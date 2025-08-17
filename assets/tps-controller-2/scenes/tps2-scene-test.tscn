@@ -82,6 +82,8 @@ environment = SubResource("Environment_j0rvk")
 
 [node name="Character" parent="." instance=ExtResource("1_xxqa8")]
 rotation_speed = 6.0
+max_character_speed_on_air = 1.0
+free_air_movement = true
 mouse_sensitivity = 1.0
 interaction_max_distance = 1.5
 

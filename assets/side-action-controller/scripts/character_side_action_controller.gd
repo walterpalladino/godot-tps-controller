@@ -1,3 +1,5 @@
+# File : character_side_action_controller.gd
+
 extends CharacterController3D
 
 #	character_side_action_controller
@@ -235,7 +237,8 @@ func update_character_climbing(delta):
 #-----------------------------------------------------
 func update_character_locomotion(delta):
 	
-	if !is_grounded() :
+	#if !is_grounded() :
+	if !is_on_floor():
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 

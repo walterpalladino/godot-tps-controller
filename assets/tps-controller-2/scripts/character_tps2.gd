@@ -1,3 +1,4 @@
+#	File : character_tps2.gd
 extends CharacterController3D
 
 

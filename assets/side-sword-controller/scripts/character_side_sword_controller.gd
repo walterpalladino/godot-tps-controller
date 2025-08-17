@@ -1,3 +1,4 @@
+# File : character-side_sword_controller.gd
 @icon("res://assets/x-controller/CharacterBody3D-X.svg")
 
 extends CharacterController3D
@@ -64,8 +65,8 @@ func _ready() -> void:
 
 
 #-----------------------------------------------------
-func _input(event: InputEvent) -> void:
-		
+func _unhandled_input(event: InputEvent) -> void:
+	
 	if event is InputEventMouseButton:
 		if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -237,7 +238,8 @@ func update_character_climbing(delta):
 #-----------------------------------------------------
 func update_character_locomotion(delta):
 	
-	if !is_grounded() :
+	#if !is_grounded() :
+	if !is_on_floor() :
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 
@@ -295,13 +297,14 @@ func update_character_locomotion(delta):
 		
 		return
 
-	elif (new_velocity.y < 0.0):
+	#elif (new_velocity.y == 0.0):
 		#	add a bit to keep the character grounded
-		new_velocity.y = -0.1
+	#	new_velocity.y = -0.1
 
 	
 	velocity = new_velocity
 	check_step_move_and_slide()
+	apply_floor_snap() 
 	
 	update_model_facing()
 	update_animations()

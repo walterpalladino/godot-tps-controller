@@ -9,7 +9,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://d1hae7lg1qmsc" path="res://assets/mixamo-animations/animations/mixamo-rifle-hip.fbx" id="7_3alkk"]
 [ext_resource type="AnimationLibrary" uid="uid://cvd5q5ueqnrht" path="res://assets/mixamo-animations/animations/mixamo-simple-sword.fbx" id="8_ceoy4"]
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_2eef0"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2dr00"]
 radius = 0.3
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_odjsx"]
@@ -231,7 +231,7 @@ script = ExtResource("1_wexyh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-shape = SubResource("CylinderShape3D_2eef0")
+shape = SubResource("CylinderShape3D_2dr00")
 
 [node name="Model" type="Node3D" parent="."]
 
@@ -243,11 +243,11 @@ visible = false
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Model/y-bot")
 libraries = {
-"mixamo-basic-locomotion": ExtResource("4_35spf"),
-"mixamo-climb-hang": ExtResource("5_1b24b"),
-"mixamo-pro-rifle-pack": ExtResource("6_s1bf7"),
-"mixamo-rifle-hip": ExtResource("7_3alkk"),
-"mixamo-simple-sword": ExtResource("8_ceoy4")
+&"mixamo-basic-locomotion": ExtResource("4_35spf"),
+&"mixamo-climb-hang": ExtResource("5_1b24b"),
+&"mixamo-pro-rifle-pack": ExtResource("6_s1bf7"),
+&"mixamo-rifle-hip": ExtResource("7_3alkk"),
+&"mixamo-simple-sword": ExtResource("8_ceoy4")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
