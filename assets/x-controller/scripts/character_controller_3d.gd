@@ -24,7 +24,7 @@ var is_step : bool = false
 var is_step_up : bool = false	# true: step up false : step down
 var step_diff_position : Vector3 = Vector3.ZERO
 
-var step_margin : float = 0.05
+var step_margin : float = 0.01
 
 
 @export_category("Walls")
@@ -43,7 +43,6 @@ var wall_collision_result : WALL_COLLISION_RESULT = WALL_COLLISION_RESULT.COLLIS
 
 
 
-
 ####################################
 ##	Complex Movement including Steps
 ####################################
@@ -52,7 +51,8 @@ func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
 	check_velocity.y = 0.0
 	if !check_step(check_velocity):
-		move_and_slide()	
+		move_and_slide()
+		apply_floor_snap()
 	
 	
 ####################################
@@ -109,17 +109,18 @@ func check_step(check_velocity:Vector3):
 			return false
 
 		#	if collided with something check if could be a valid step
-		if is_character_collided and -test_motion_result.get_travel().y < max_step_height and -test_motion_result.get_travel().y > min_step_height :
-	
+		if -test_motion_result.get_travel().y < max_step_height and -test_motion_result.get_travel().y > min_step_height :
+
 			var collision_angle = rad_to_deg(test_motion_result.get_collision_normal().angle_to(Vector3.UP))
 			if collision_angle <= step_max_slope_degree:
 		
 				#print_debug("step down")
-				#print_debug(-test_motion_result.get_travel().y )
+
 				is_step = true
 				is_step_up = false
-				step_diff_position = test_motion_result.get_travel()
 
+				step_diff_position = test_motion_result.get_travel()
+				
 				#	adjust the character position
 				global_transform.origin += step_diff_position + min_step_height * Vector3.UP
 				
@@ -127,7 +128,7 @@ func check_step(check_velocity:Vector3):
 				apply_floor_snap()
 				
 				return true
-				
+
 		return false
 		
 	else:
@@ -140,7 +141,6 @@ func check_step(check_velocity:Vector3):
 		if collision_angle <= floor_max_angle:
 			#	here is a valid movemnet on a slope
 			#	so will leave the engine to handle this
-			#print("collision_angle <= floor_max_angle")
 			return false
 		
 		#	now try to move the controller up to the step height
@@ -154,6 +154,7 @@ func check_step(check_velocity:Vector3):
 		is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
 
 		if is_character_collided:
+			#	cant walk there. higher than step
 			#print_debug("cant walk there. higher than step")
 			return false
 
@@ -177,12 +178,13 @@ func check_step(check_velocity:Vector3):
 			print("this should never happened")
 			return false
 		
-		if is_character_collided and test_motion_result.get_travel().y < (max_step_height + step_margin) :#and collision_angle <= step_max_slope_degree:
+		if test_motion_result.get_travel().y < (max_step_height + step_margin) :#and collision_angle <= step_max_slope_degree:
 	
 			#print("step up")
 			
 			is_step = true
 			is_step_up = true
+			
 			step_diff_position = -test_motion_result.get_remainder()
 			
 			#	adjust the character position

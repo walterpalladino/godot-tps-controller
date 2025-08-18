@@ -241,6 +241,7 @@ func update_character_locomotion(delta):
 	if !is_grounded() :
 		print("from grounded to air")
 		print(check_distance_to_floor())
+		print(global_position.y)
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 

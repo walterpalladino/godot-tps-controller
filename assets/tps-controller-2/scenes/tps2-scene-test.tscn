@@ -239,7 +239,7 @@ script = ExtResource("5_wmsam")
 target = NodePath("../Character")
 offset = Vector3(0.3, 1.8, 1)
 target_offset = Vector3(0, 1.6, 0)
-update_speed = 5.0
+update_speed = 4.0
 marker = NodePath("../Marker")
 
 [node name="Camera3D" type="Camera3D" parent="CameraMount"]

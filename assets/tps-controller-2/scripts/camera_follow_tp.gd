@@ -22,7 +22,6 @@ func _process(delta: float) -> void:
 	#position = target.position + offset.rotated(Vector3.UP, rotation.y)
 	var new_position : Vector3 = position.move_toward(target.position + offset.rotated(Vector3.UP, rotation.y), delta * update_speed)
 
-
 	var space_state = get_world_3d().direct_space_state
 
 	var ray_origin = target.position + target_offset
@@ -40,11 +39,8 @@ func _process(delta: float) -> void:
 	var result = space_state.intersect_ray(query)
 	#	If something was hit, adjust the new position to the collision position
 	if result:
-		#print(result)
 		if marker:
 			marker.position = result.position
-		#print(result.collider.name)
-		#print(result.position)
 		new_position = position.move_toward(result.position, delta * update_speed)
 
 	position = new_position
