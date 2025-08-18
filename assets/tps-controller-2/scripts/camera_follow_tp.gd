@@ -9,6 +9,8 @@ extends Node3D
 
 @export var marker : Node3D
 
+@export var fix_step_jumps = false
+
 
 			
 # Called when the node enters the scene tree for the first time.
@@ -44,3 +46,7 @@ func _process(delta: float) -> void:
 		new_position = position.move_toward(result.position, delta * update_speed)
 
 	position = new_position
+	
+	#	patch to fix problems with steps jumps
+	if fix_step_jumps:
+		position.y = target.position.y + offset.rotated(Vector3.UP, rotation.y).y
