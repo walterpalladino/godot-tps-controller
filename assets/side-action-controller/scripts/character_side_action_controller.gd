@@ -51,7 +51,7 @@ var last_face_direction : float = 1
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 
-var rifle_enabled : bool = false
+var weapon1_enabled : bool = false
 
 
 #-----------------------------------------------------
@@ -64,7 +64,7 @@ func _ready() -> void:
 
 
 #-----------------------------------------------------
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 		
 	if event is InputEventMouseButton:
 		if not Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -103,11 +103,11 @@ func update_character(delta):
 
 func update_weapons():
 	
-	if Input.is_action_just_pressed("rifle_enabled") :
+	if Input.is_action_just_pressed("weapon1_enabled") :
 		
-		rifle_enabled = !rifle_enabled
+		weapon1_enabled = !weapon1_enabled
 		
-		if rifle_enabled:
+		if weapon1_enabled:
 			animation_tree.set("parameters/Armed/transition_request", "rifle_state")
 		else:
 			animation_tree.set("parameters/Armed/transition_request", "unarmed_state")
@@ -121,7 +121,7 @@ func update_character_on_air(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 
 	#	hit ground?
-	if is_on_floor():
+	if is_grounded():
 		was_on_air = true
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
@@ -237,8 +237,9 @@ func update_character_climbing(delta):
 #-----------------------------------------------------
 func update_character_locomotion(delta):
 	
-	#if !is_grounded() :
-	if !is_on_floor():
+	if !is_grounded() :
+		print("from grounded to air")
+		print(check_distance_to_floor())
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 
@@ -255,7 +256,6 @@ func update_character_locomotion(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
-
 	
 #	if (velocity.x < max_character_speed * 0.5) && (Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward")):
 	if velocity.x <= max_character_speed_crouched :
@@ -277,14 +277,14 @@ func update_character_locomotion(delta):
 	
 	new_velocity.x = target_speed * sign(direction.x) #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
 	new_velocity.z = 0 # No lateral movement - to and from screen
-	
+	new_velocity.y = -0.1
 		
 	# Handle Jump.
 	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 
 		is_crouched = false
 		
-		new_velocity.x = max_character_speed_on_air * sign(direction.x)
+		new_velocity.x = max_character_speed_on_air * direction.x
 		new_velocity.y = calculate_jump_vertical_speed()
 
 		last_jump_time = Time.get_ticks_msec()
@@ -295,10 +295,6 @@ func update_character_locomotion(delta):
 		controller_state = CONTROLLER_STATE.ON_AIR
 		
 		return
-
-	elif (new_velocity.y < 0.0):
-		#	add a bit to keep the character grounded
-		new_velocity.y = -0.1
 
 	
 	velocity = new_velocity
@@ -342,7 +338,7 @@ func animate_locomotion():
 	if was_on_air:
 
 		#	Set to be sure the transsition after the one shot is locomotion
-		if rifle_enabled:
+		if weapon1_enabled:
 			animation_tree.set("parameters/RifleLocomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
 			animation_tree.set("parameters/RifleState/transition_request", "locomotion_state")
 		else:
@@ -350,7 +346,7 @@ func animate_locomotion():
 			animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
 
 		
-		if rifle_enabled:
+		if weapon1_enabled:
 			animation_tree.set("parameters/rifle_landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		else:
 			animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
@@ -361,7 +357,7 @@ func animate_locomotion():
 	
 	elif is_crouched:
 		
-		if rifle_enabled:
+		if weapon1_enabled:
 			animation_tree.set("parameters/RifleCrouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
 			animation_tree.set("parameters/RifleState/transition_request", "crouch_state")
 		else:
@@ -370,7 +366,7 @@ func animate_locomotion():
 	
 	else:
 
-		if rifle_enabled:
+		if weapon1_enabled:
 			animation_tree.set("parameters/RifleLocomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
 			animation_tree.set("parameters/RifleState/transition_request", "locomotion_state")
 		else:
@@ -383,7 +379,7 @@ func animate_on_air():
 
 	animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
 
-	if rifle_enabled:
+	if weapon1_enabled:
 		animation_tree.set("parameters/RifleAir/blend_position", abs(velocity.x) / max_character_speed_on_air)
 		animation_tree.set("parameters/RifleState/transition_request", "on_air_state")
 	else:
@@ -414,8 +410,7 @@ func animate_climbing():
 
 		animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
 
-	
-	
+		
 	
 #-----------------------------------------------------
 #	add here any animation that should be tested to block
@@ -448,4 +443,4 @@ func setup_input():
 
 	add_action_key("move_run", KEY_SHIFT)
 
-	add_action_key("rifle_enabled", KEY_1)
+	add_action_key("weapon1_enabled", KEY_1)

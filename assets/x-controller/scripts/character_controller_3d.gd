@@ -51,8 +51,8 @@ var wall_collision_result : WALL_COLLISION_RESULT = WALL_COLLISION_RESULT.COLLIS
 func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
 	check_velocity.y = 0.0
-	check_step(check_velocity)
-	move_and_slide()	
+	if !check_step(check_velocity):
+		move_and_slide()	
 	
 	
 ####################################
@@ -119,8 +119,13 @@ func check_step(check_velocity:Vector3):
 				is_step = true
 				is_step_up = false
 				step_diff_position = test_motion_result.get_travel()
+
 				#	adjust the character position
 				global_transform.origin += step_diff_position + min_step_height * Vector3.UP
+				
+				move_and_slide()
+				apply_floor_snap()
+				
 				return true
 				
 		return false
@@ -135,6 +140,7 @@ func check_step(check_velocity:Vector3):
 		if collision_angle <= floor_max_angle:
 			#	here is a valid movemnet on a slope
 			#	so will leave the engine to handle this
+			#print("collision_angle <= floor_max_angle")
 			return false
 		
 		#	now try to move the controller up to the step height
@@ -173,15 +179,25 @@ func check_step(check_velocity:Vector3):
 		
 		if is_character_collided and test_motion_result.get_travel().y < (max_step_height + step_margin) :#and collision_angle <= step_max_slope_degree:
 	
-			#print_debug("step up")
+			#print("step up")
+			
 			is_step = true
 			is_step_up = true
 			step_diff_position = -test_motion_result.get_remainder()
+			
 			#	adjust the character position
 			global_transform.origin += step_diff_position + min_step_height * Vector3.UP
+			
+			move_and_slide()
+			apply_floor_snap()
+			
 			return true
-				
+		
 	return false
+
+
+func is_on_step() -> bool:
+	return is_step
 
 
 ####################################
@@ -206,23 +222,21 @@ func check_collission(origin : Vector3, motion : Vector3):
 	
 
 func is_grounded():
-	#	Check distance to floor
-	var distance_to_floor : float  = check_distance_to_floor()
-	#print_debug(distance_to_floor)
-	return is_on_floor() || is_step || distance_to_floor <= max_step_height
+	return is_on_floor() || is_on_step()
 
 
 func check_distance_to_floor():
 	var space_state = get_world_3d().direct_space_state
 	
 	var origin : Vector3 = global_transform.origin + Vector3.UP * 0.05
-	var end = origin + Vector3.DOWN * 100.0
+	var end = origin + Vector3.DOWN * 1000.0
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = true
+	query.exclude = [self.get_rid()]
 
 	var result = space_state.intersect_ray(query)
 	if !result:
-		return 100.0
+		return 1000.0
 	else:
 		return clamp(transform.origin.y - result.position.y, 0.0, 100.0)
 			

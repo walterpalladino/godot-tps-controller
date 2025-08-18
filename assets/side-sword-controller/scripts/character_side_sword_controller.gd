@@ -122,7 +122,7 @@ func update_character_on_air(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 
 	#	hit ground?
-	if is_on_floor():
+	if is_grounded():
 		was_on_air = true
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
@@ -238,8 +238,9 @@ func update_character_climbing(delta):
 #-----------------------------------------------------
 func update_character_locomotion(delta):
 	
-	#if !is_grounded() :
-	if !is_on_floor() :
+	if !is_grounded() :
+		print("from grounded to air")
+		print(check_distance_to_floor())
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 
@@ -256,7 +257,6 @@ func update_character_locomotion(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector3.RIGHT * sign(input_dir.x) 
-
 	
 #	if (velocity.x < max_character_speed * 0.5) && (Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward")):
 	if velocity.x <= max_character_speed_crouched :
@@ -276,16 +276,16 @@ func update_character_locomotion(delta):
 		else:
 			target_speed = max_character_speed_ground
 	
-	new_velocity.x = target_speed * sign(direction.x) #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
+	new_velocity.x = target_speed * direction.x #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
 	new_velocity.z = 0 # No lateral movement - to and from screen
-	
+	new_velocity.y = -0.1
 		
 	# Handle Jump.
 	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 
 		is_crouched = false
 		
-		new_velocity.x = max_character_speed_on_air * sign(direction.x)
+		new_velocity.x = max_character_speed_on_air * direction.x
 		new_velocity.y = calculate_jump_vertical_speed()
 
 		last_jump_time = Time.get_ticks_msec()
@@ -297,14 +297,9 @@ func update_character_locomotion(delta):
 		
 		return
 
-	#elif (new_velocity.y == 0.0):
-		#	add a bit to keep the character grounded
-	#	new_velocity.y = -0.1
-
 	
 	velocity = new_velocity
 	check_step_move_and_slide()
-	apply_floor_snap() 
 	
 	update_model_facing()
 	update_animations()
