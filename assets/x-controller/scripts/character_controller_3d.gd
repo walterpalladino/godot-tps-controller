@@ -16,11 +16,11 @@ class_name CharacterController3D
 
 @export_category("Steps")
 @export var max_step_height : float = 0.40		# max height for steps
-@export var min_step_height : float = 0.001	#	min distance for steps
+@export var min_step_height : float = 0.001	# min distance for steps
 
 @export var step_max_slope_degree : float = 15.0
 
-var is_step : bool = false
+var is_step : bool = false	# on step
 var is_step_up : bool = false	# true: step up false : step down
 var step_diff_position : Vector3 = Vector3.ZERO
 
@@ -46,7 +46,9 @@ var wall_collision_result : WALL_COLLISION_RESULT = WALL_COLLISION_RESULT.COLLIS
 ####################################
 ##	Complex Movement including Steps
 ####################################
-		
+
+#	Problem found:	Vertical teletransportation creates hard jumps in movement
+#					Depending on the camera can be very ugly
 func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
 	check_velocity.y = 0.0
@@ -227,16 +229,16 @@ func is_grounded():
 	return is_on_floor() || is_on_step()
 
 
-func check_distance_to_floor():
+func check_distance_to_floor() -> float:
 	var space_state = get_world_3d().direct_space_state
 	
 	var origin : Vector3 = global_transform.origin + Vector3.UP * 0.05
-	var end = origin + Vector3.DOWN * 1000.0
-	var query = PhysicsRayQueryParameters3D.create(origin, end)
+	var end : Vector3 = origin + Vector3.DOWN * 1000.0
+	var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = true
 	query.exclude = [self.get_rid()]
-
-	var result = space_state.intersect_ray(query)
+	
+	var result : Dictionary = space_state.intersect_ray(query)
 	if !result:
 		return 1000.0
 	else:
@@ -251,23 +253,6 @@ func calculate_jump_vertical_speed():
 	return sqrt(2.0 * gravity * jump_height)
 
 
-####################################
-##	General Configuration
-####################################
-
-func add_action_key(action, key_code):
-	
-	if InputMap.has_action(action):
-		InputMap.erase_action(action)
-
-	InputMap.add_action(action)
-	var event
-	event = InputEventKey.new()
-	event.keycode = key_code
-	InputMap.action_add_event(action, event)
-	
-	#print_debug(InputMap.get_actions())
-	
 
 
 ####################################
@@ -328,3 +313,24 @@ func check_can_climb_wall(direction : Vector3):
 		wall_collision_result |= WALL_COLLISION_RESULT.COLLISION_BOTTOM
 	
 	return wall_collision_result == (WALL_COLLISION_RESULT.COLLISION_TOP | WALL_COLLISION_RESULT.COLLISION_MID | WALL_COLLISION_RESULT.COLLISION_BOTTOM)
+
+
+
+
+####################################
+##	General Configuration
+####################################
+
+func add_action_key(action, key_code):
+	
+	if InputMap.has_action(action):
+		InputMap.erase_action(action)
+
+	InputMap.add_action(action)
+	var event
+	event = InputEventKey.new()
+	event.keycode = key_code
+	InputMap.action_add_event(action, event)
+	
+	#print_debug(InputMap.get_actions())
+	
