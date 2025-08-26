@@ -6,7 +6,7 @@ extends CharacterController3D
 
 #	character_side_action_controller
 
-enum CONTROLLER_STATE {LOCOMOTION, ON_AIR }
+enum CONTROLLER_STATE {LOCOMOTION, ON_AIR, CLIMBING }
 
 
 @onready var collision_shape = get_node("CollisionShape3D")
@@ -33,6 +33,8 @@ var is_crouched : bool = false
 
 @export_category("On AIr")
 ## Lapse in mili seconds
+@export var gravity_jumping = 9.8
+@export var gravity_falling = 16.0
 @export var max_character_speed_on_air = 4.0
 @export var reaction_character_speed_on_air = 1.0
 
@@ -60,6 +62,16 @@ var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 @export var interaction_max_distance : float = 1.20
 
 
+@export_category("Wall Movement")
+@export var climbing_speed : float = 1
+
+var was_climbing : bool = false
+var climbing_leaving_from_top : bool = false
+var wall_normal_climbing : Vector3 = Vector3.ZERO
+#	offset used to adjust end of climbing to top animation
+@export var climbing_leaving_from_top_offset : Vector3 = Vector3(-0.50, 1.35, 0.0)
+
+
 
 
 @onready var camera_mount : Node3D = get_parent().get_node("CameraMount")
@@ -70,7 +82,7 @@ var movement : Vector2 = Vector2.ZERO
 var is_running : bool = false
 var is_crouching : bool = false
 
-var new_velocity : Vector3 = Vector3.ZERO
+#var new_velocity : Vector3 = Vector3.ZERO
 
 var turning : float = 0.0
 
@@ -185,6 +197,8 @@ func update_character(delta):
 			update_character_locomotion(delta)
 		CONTROLLER_STATE.ON_AIR:
 			update_character_on_air(delta)
+		CONTROLLER_STATE.CLIMBING:
+			update_character_climbing(delta)
 		
 
 
@@ -202,6 +216,22 @@ func update_character_locomotion(delta):
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir : Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
 	movement = Vector2(input_dir.x, -input_dir.y)
+	
+	
+	if is_on_wall() and input_dir.y < 0.0:
+		print("check wall first")
+		if check_can_climb_wall(get_facing_direction()):
+			print("can climb")
+			var inv_normal = Vector2(get_wall_normal().z, get_wall_normal().x).normalized() 
+			var inv_normal_wall_angle = rad_to_deg(inv_normal.angle())
+			#	Force character face the wall while climbing
+			model.rotation.y = deg_to_rad(inv_normal_wall_angle)
+			was_climbing = false
+			wall_normal_climbing = get_wall_normal()
+			controller_state = CONTROLLER_STATE.CLIMBING
+			return
+
+	
 	
 	# Get the input direction and handle the movement/deceleration.
 	#var direction : Vector3 = Vector3.RIGHT * sign(input_dir.x) 
@@ -223,7 +253,7 @@ func update_character_locomotion(delta):
 		is_running = false
 
 	#	evaluate movement velocity
-	new_velocity = Vector3.ZERO
+	var new_velocity = Vector3.ZERO
 	var target_speed = 0.0	# depends on if the target is stand or crouched 
 	
 	if direction.length() > 0:
@@ -238,8 +268,6 @@ func update_character_locomotion(delta):
 			else:
 				target_speed = max_character_speed_walking
 	
-	#new_velocity.x = target_speed * sign(direction.x) #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
-	#new_velocity.z = 0 # No lateral movement - to and from screen
 	new_velocity = target_speed * direction;
 		
 	# Handle Jump.
@@ -247,9 +275,7 @@ func update_character_locomotion(delta):
 
 		is_crouched = false
 		new_velocity = max_character_speed_on_air * direction;
-		#new_velocity.x = max_character_speed_on_air * sign(direction.x)
 		new_velocity.y = calculate_jump_vertical_speed()
-		#new_velocity.z = max_character_speed_on_air * sign(direction.z)
 
 		last_jump_time = Time.get_ticks_msec()
 		
@@ -257,7 +283,6 @@ func update_character_locomotion(delta):
 		move_and_slide()
 
 		controller_state = CONTROLLER_STATE.ON_AIR
-		
 		return
 
 	elif (new_velocity.y < 0.0):
@@ -277,21 +302,27 @@ func update_character_locomotion(delta):
 func update_character_on_air(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
-#	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	var input_dir : Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	movement = Vector2(input_dir.x, -input_dir.y)
 
 	#	hit ground?
-	if is_on_floor():
+	if is_grounded():
 		was_on_air = true
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
 
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir : Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-	movement = Vector2(input_dir.x, -input_dir.y)
+	if is_on_wall() and input_dir.y < 0.0:
+		
+		if check_can_climb_wall(get_facing_direction()):
+			#print_debug("Now is climbing a wall")
+			was_climbing = false
+			controller_state = CONTROLLER_STATE.CLIMBING
+			return
+
 
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
 
-	new_velocity = Vector3.ZERO
+	var new_velocity = Vector3.ZERO
 	
 	#	If enabled the Free Air Movement option
 	#	the character can change direction on air
@@ -314,21 +345,90 @@ func update_character_on_air(delta):
 		
 	
 	#	add the gravity.
-	new_velocity.y = velocity.y - gravity * delta
+	if velocity.y >= 0.0 :
+		new_velocity.y = velocity.y - gravity_jumping * delta
+	else:
+		new_velocity.y = velocity.y - gravity_falling * delta
 		
 	if transform.origin.y > last_y_in_floor:
 		last_y_in_floor = transform.origin.y
 	
 	velocity = new_velocity
-
+	
 	move_and_slide()
 	
 	update_model_facing()
 	update_animations()
 
 
-#func get_facing_direction():
-#	return 	Vector3(sign(last_face_direction), 0.0, 0.0)
+#-----------------------------------------------------	
+func update_character_climbing(delta):
+	
+	if climbing_leaving_from_top:
+
+		print("climbing_leaving_from_top")
+		climbing_leaving_from_top = false
+		is_crouched = true
+		
+		var offset : Vector3 = get_facing_direction() * climbing_leaving_from_top_offset.x #last_face_direction
+		offset.y += climbing_leaving_from_top_offset.y
+		global_transform.origin += offset
+		controller_state = CONTROLLER_STATE.LOCOMOTION
+		
+		velocity = Vector3.ZERO
+		move_and_slide()
+		
+		return
+	
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	
+	#	leaving from the ground
+	if is_on_floor() and input_dir.y > 0.0:
+		print_debug("Was climbing")
+		was_climbing = true
+		controller_state = CONTROLLER_STATE.LOCOMOTION
+		return
+
+	#	jumps away the wall
+	if input_dir.x != 0:
+		print("jumps away the wall")
+		velocity = transform.basis.x * 6.0 * sign(input_dir.x)
+		velocity.y = 2.0
+		move_and_slide()
+		was_climbing = true
+		controller_state = CONTROLLER_STATE.ON_AIR
+		return
+
+	if !check_can_climb_wall(get_facing_direction()):
+		
+		if wall_collision_result == (WALL_COLLISION_RESULT.COLLISION_MID | WALL_COLLISION_RESULT.COLLISION_BOTTOM):
+			#	climbing to the top
+			climbing_leaving_from_top = true
+			update_animations()
+			return
+		else:
+			# nothing to hold on to...
+			print("nothing to hold on to...")
+			move_and_slide()
+			was_climbing = true
+			controller_state = CONTROLLER_STATE.ON_AIR
+			return
+
+	var new_velocity : Vector3 = Vector3.ZERO
+	new_velocity = get_facing_direction() * 0.1
+	new_velocity += Vector3.UP * climbing_speed * -input_dir.y
+
+	velocity = new_velocity
+	move_and_slide()
+
+	update_animations()
+	
+
+#	Returns character facing direction	
+func get_facing_direction() -> Vector3:
+	return Vector3.FORWARD.rotated(Vector3.UP, model.rotation.y)
+
 
 		
 #-----------------------------------------------------
@@ -347,19 +447,21 @@ func update_animations():
 			animate_locomotion()
 		CONTROLLER_STATE.ON_AIR:
 			animate_on_air()
-
+		CONTROLLER_STATE.CLIMBING:
+			animate_climbing()
 
 
 
 #-----------------------------------------------------
-func animate_locomotion_bk():
-
+func animate_locomotion():
+	
 	if was_on_air:
-
-		#	Set to be sure the transsition after the one shot is locomotion
-		animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.y) / max_character_speed_walking)
-		animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
-		
+		animate_locomotion_ground()
+		# TODO : Fix not working
+		#print(animation_tree.get_property_list())
+		#animation_tree.set("parameters/landed/fadeout_time", 0.05)
+		var one_shot_node : AnimationNodeOneShot = animation_tree.tree_root.get_node("landed") 
+		#one_shot_node.fadeout_time = 0.05
 		animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		
 		was_on_air = false
@@ -367,53 +469,54 @@ func animate_locomotion_bk():
 		is_crouched = false
 	
 	elif is_crouched:
-		
-		animation_tree.set("parameters/Crouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
-		animation_tree.set("parameters/Unarmed/transition_request", "crouch_state")
-	
-	else:
-
-		#animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.length()) / max_character_speed_ground)
-		#animation_tree.set("parameters/Locomotion/blend_position", 1.0)
-		#animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
-		if movement.length() == 0:
-			animation_tree.set("parameters/State/transition_request", "idle_state")
-			#animation_tree.set("parameters/in_place_blend/blend_position", turning)
-		elif is_running:
-		#	print("running_state")
-			animation_tree.set("parameters/State/transition_request", "running_state")
-			animation_tree.set("parameters/run_blend/blend_position", movement)
-			#print_debug(movement)
-		else:
-			print("walking_state")
-			print(movement)
-			animation_tree.set("parameters/State/transition_request", "walking_state")
-			animation_tree.set("parameters/walk_blend/blend_position", movement)
-
-
-
-func animate_locomotion():
-	
-	if is_crouched:
 
 		animation_tree.set("parameters/State/transition_request", "crouch_state")
 		animation_tree.set("parameters/crouch_blend/blend_position", movement)
 		
 	else:
-		if movement == Vector2.ZERO:
-			animation_tree.set("parameters/State/transition_request", "idle_state")
-			animation_tree.set("parameters/in_place_blend/blend_position", turning)
-		elif is_running:
-		#	print("running_state")
-			animation_tree.set("parameters/State/transition_request", "running_state")
-			animation_tree.set("parameters/run_blend/blend_position", movement)
-			#print_debug(movement)
-		else:
-			#print("walking_state")
-			#print(movement)
-			animation_tree.set("parameters/State/transition_request", "walking_state")
-			animation_tree.set("parameters/walk_blend/blend_position", movement)
+		animate_locomotion_ground()
 
+
+func animate_locomotion_ground():
+	
+	var speed = Vector2(velocity.x, velocity.z).length()
+	if speed == 0.0:
+		animation_tree.set("parameters/State/transition_request", "idle_state")
+		animation_tree.set("parameters/in_place_blend/blend_position", turning)
+	elif is_running:
+	#	print("running_state")
+		animation_tree.set("parameters/State/transition_request", "running_state")
+		animation_tree.set("parameters/run_blend/blend_position", movement)
+		#print_debug(movement)
+	else:
+		#print("walking_state")
+		#print(movement)
+		animation_tree.set("parameters/State/transition_request", "walking_state")
+		animation_tree.set("parameters/walk_blend/blend_position", movement)
+	
+
+#-----------------------------------------------------
+func animate_climbing():
+	
+	if climbing_leaving_from_top:
+
+		animation_tree.set("parameters/Crouch/blend_position", 0.0)
+		animation_tree.set("parameters/State/transition_request", "crouch_state")
+		animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
+
+		animation_tree.set("parameters/BraceHangUp/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		
+	else:
+
+		var climbingTimeScale = 1.5
+		if (velocity.y == 0):
+			climbingTimeScale = 0.0
+		else:
+
+			animation_tree.set("parameters/Climbing/blend_position", velocity.y / climbing_speed)
+			animation_tree.set("parameters/State/transition_request", "climbing_state")
+
+		animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
 
 
 func animate_interactable(interactable_type : Interactable.INTERACTABLE_TYPE, status):

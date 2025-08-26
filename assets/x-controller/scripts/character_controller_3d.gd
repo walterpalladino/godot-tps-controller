@@ -33,6 +33,9 @@ var step_margin : float = 0.01
 @export var wall_ray_mid_offset : float = 1.00
 @export var wall_ray_bottom_offset : float = 0.30
 
+@export_flags_3d_physics var wall_collision_mask : int = (1 << 24)
+
+
 var wall_ray_top_result : Dictionary
 var wall_ray_mid_result : Dictionary
 var wall_ray_bottom_result : Dictionary
@@ -272,11 +275,14 @@ func check_can_climb_wall(direction : Vector3):
 	#	first ray : top	
 	var origin : Vector3 = transform.origin + Vector3.UP * wall_ray_top_offset
 	var end = origin + direction.normalized() * wall_max_cast_dist
+
 	var query_params : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.new()
 
 	query_params.from = origin
 	query_params.to = end
 	query_params.collide_with_areas = true
+	query_params.collide_with_bodies = true
+	query_params.collision_mask = wall_collision_mask
 	query_params.exclude = [self.get_rid()]
 
 	var result = space_state.intersect_ray(query_params)
@@ -291,6 +297,8 @@ func check_can_climb_wall(direction : Vector3):
 	query_params.from = origin
 	query_params.to = end
 	query_params.collide_with_areas = true
+	query_params.collide_with_bodies = true
+	query_params.collision_mask = wall_collision_mask
 	query_params.exclude = [self.get_rid()]
 
 	result = space_state.intersect_ray(query_params)
@@ -305,6 +313,8 @@ func check_can_climb_wall(direction : Vector3):
 	query_params.from = origin
 	query_params.to = end
 	query_params.collide_with_areas = true
+	query_params.collide_with_bodies = true
+	query_params.collision_mask = wall_collision_mask
 	query_params.exclude = [self.get_rid()]
 
 	result = space_state.intersect_ray(query_params)

@@ -175,7 +175,7 @@ fadeout_time = 0.3
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Slide - In Place"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-1323.53, 194.564)
+graph_offset = Vector2(-1147.09, 100.733)
 nodes/Air/node = SubResource("AnimationNodeBlendSpace1D_cqai1")
 nodes/Air/position = Vector2(-1710, 370)
 nodes/Armed/node = SubResource("AnimationNodeTransition_ga2jm")
@@ -259,7 +259,7 @@ parameters/Armed/current_index = 0
 parameters/BraceHangUp/active = false
 parameters/BraceHangUp/internal_active = false
 parameters/BraceHangUp/request = 0
-parameters/Climbing/blend_position = 0.0
+parameters/Climbing/blend_position = 0.994978
 parameters/Crouch/blend_position = 0
 parameters/Locomotion/blend_position = 0
 parameters/OverrideAction/current_state = "armed_state"

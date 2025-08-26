@@ -82,10 +82,10 @@ environment = SubResource("Environment_j0rvk")
 
 [node name="Character" parent="." instance=ExtResource("1_xxqa8")]
 rotation_speed = 6.0
-max_character_speed_on_air = 1.0
-free_air_movement = true
 mouse_sensitivity = 1.0
 interaction_max_distance = 1.5
+climbing_leaving_from_top_offset = Vector3(0.5, 1.35, 0)
+wall_collision_mask = 25165824
 
 [node name="Environment" type="Node3D" parent="."]
 
@@ -217,13 +217,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.706, 2, -5.407)
 mesh = SubResource("BoxMesh_3qq0s")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/MeshInstance3D"]
+collision_layer = 8388609
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/MeshInstance3D/StaticBody3D"]
 shape = SubResource("BoxShape3D_pdrkq")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Environment"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 2.75, -5.5)
-visible = false
 mesh = SubResource("BoxMesh_cr5q2")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/MeshInstance3D2"]
