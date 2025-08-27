@@ -109,5 +109,6 @@ visible = false
 
 [node name="character-side-retro" parent="." instance=ExtResource("6_cwm8m")]
 max_character_speed_ground = 1.5
-jump_height = 1.5
 max_character_speed_on_air = 2.0
+free_air_movement = true
+jump_height = 1.5

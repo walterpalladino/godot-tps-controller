@@ -19,7 +19,7 @@ var is_crouched : bool = false
 @export_category("On AIr")
 @export var gravity = 9.81
 @export var falling_gravity_multiplier = 1.0
-#@export var jump_height : float = 2.0
+@export var jump_height : float = 2.0
 
 ## Lapse in mili seconds
 @export var max_character_speed_on_air = 4.0
@@ -31,17 +31,6 @@ var is_crouched : bool = false
 var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
 
-@export_category("Jump")
-@export var jump_peak_time : float = .5
-@export var jump_fall_time : float = .5
-@export var jump_height : float = 2.0
-@export var jump_distance : float = 4.0
-
-var jump_horizontal_speed : float
-var jump_vertical_speed : float
-var jump_gravity : float
-var fall_gravity : float
-
 
 var was_on_air : bool = false
 var last_face_direction : float = 1
@@ -51,7 +40,7 @@ var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 #-----------------------------------------------------
 func _ready() -> void:
-	calculate_movement_parameters()
+	pass
 	
 
 #-----------------------------------------------------
@@ -127,70 +116,6 @@ func update_character(delta):
 
 
 #-----------------------------------------------------
-func update_character_locomotion(delta):
-	
-	if !is_grounded() :
-		controller_state = CONTROLLER_STATE.ON_AIR
-		return
-
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-
-	# Get the input direction and handle the movement/deceleration.
-	var direction = Vector3.RIGHT * sign(input_dir.x) 
-
-	var jump : bool = (input_dir.y < 0.0) and !is_crouched 
-
-	if velocity.x <= max_character_speed_crouched :
-		if Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward"):
-			is_crouched = !is_crouched 
-		#elif is_crouched and (input_dir.y < 0.0) :
-		#	is_crouched = false; 
-		#	last_jump_time = Time.get_ticks_msec()
-
-	#	evaluate movement velocity
-	var new_velocity = Vector3.ZERO
-	var target_speed = 0.0	# depends on if the target is stand or crouched 
-	
-	if direction.x != 0.0:
-		if is_crouched:
-			target_speed = max_character_speed_crouched
-		else:
-			target_speed = max_character_speed_ground
-	
-	new_velocity.x = target_speed * sign(direction.x) #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
-	new_velocity.z = 0 # No lateral movement - to and from screen
-	
-		
-	# Handle Jump.
-	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
-
-		new_velocity.x = jump_horizontal_speed * sign(direction.x)
-		new_velocity.y = jump_vertical_speed #calculate_jump_vertical_speed()
-
-		last_jump_time = Time.get_ticks_msec()
-		
-		velocity = new_velocity
-		move_and_slide()
-
-		controller_state = CONTROLLER_STATE.ON_AIR
-		
-		return
-
-	elif (new_velocity.y < 0.0):
-		#	add a bit to keep the character grounded
-		new_velocity.y = -0.1
-
-	
-	velocity = new_velocity
-	move_and_slide()
-	
-	update_model_facing()
-	update_animations()
-	
-	
-	
-#-----------------------------------------------------
 func update_character_on_air(delta):
 	
 	# Get the input direction and handle the movement/deceleration.
@@ -241,6 +166,67 @@ func update_character_on_air(delta):
 	
 
 
+#-----------------------------------------------------
+func update_character_locomotion(delta):
+	
+	if !is_grounded() :
+		controller_state = CONTROLLER_STATE.ON_AIR
+		return
+
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+
+	# Get the input direction and handle the movement/deceleration.
+	var direction = Vector3.RIGHT * sign(input_dir.x) 
+
+	var jump : bool = (input_dir.y < 0.0) and !is_crouched 
+
+	if velocity.x <= max_character_speed_crouched :
+		if Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward"):
+			is_crouched = !is_crouched 
+		#elif is_crouched and (input_dir.y < 0.0) :
+		#	is_crouched = false; 
+		#	last_jump_time = Time.get_ticks_msec()
+
+	#	evaluate movement velocity
+	var new_velocity = Vector3.ZERO
+	var target_speed = 0.0	# depends on if the target is stand or crouched 
+	
+	if direction.x != 0.0:
+		if is_crouched:
+			target_speed = max_character_speed_crouched
+		else:
+			target_speed = max_character_speed_ground
+	
+	new_velocity.x = target_speed * sign(direction.x) #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
+	new_velocity.z = 0 # No lateral movement - to and from screen
+	
+		
+	# Handle Jump.
+	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
+
+		new_velocity.x = max_character_speed_on_air * sign(direction.x)
+		new_velocity.y = calculate_jump_vertical_speed()
+
+		last_jump_time = Time.get_ticks_msec()
+		
+		velocity = new_velocity
+		move_and_slide()
+
+		controller_state = CONTROLLER_STATE.ON_AIR
+		
+		return
+
+	elif (new_velocity.y < 0.0):
+		#	add a bit to keep the character grounded
+		new_velocity.y = -0.1
+
+	
+	velocity = new_velocity
+	move_and_slide()
+	
+	update_model_facing()
+	update_animations()
 
 
 func get_facing_direction():
@@ -378,13 +364,3 @@ func is_blocking_animation_running():
 
 
 	return false
-
-
-#	Initialize some values used on jumps based on parameters
-func calculate_movement_parameters() -> void :
-
-	jump_gravity = (2 * jump_height) / pow( jump_peak_time, 2)
-	fall_gravity = (2 * jump_height) / pow( jump_fall_time, 2)
-	jump_vertical_speed = jump_gravity * jump_peak_time
-	jump_horizontal_speed = jump_distance / (jump_peak_time + jump_fall_time)
-	

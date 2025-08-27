@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://2irff1wppemj" path="res://assets/side-retro/scenes/test-side-retro.tscn" id="1_pak77"]
 [ext_resource type="Texture2D" uid="uid://dm8p3v3wbmwl2" path="res://icon.svg" id="1_tmp8h"]
-[ext_resource type="Script" uid="uid://cjtwdfbkjnkdo" path="res://assets/side-retro/scenes/subviewport_update.gd" id="2_dsodl"]
+[ext_resource type="Script" uid="uid://cjtwdfbkjnkdo" path="res://assets/side-retro/scripts/subviewport_update.gd" id="2_dsodl"]
 
 [node name="Test-viewport" type="Node2D"]
 

@@ -110,8 +110,8 @@ mesh = SubResource("BoxMesh_avppn")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Model/y-bot")
 libraries = {
-"AnimationLibrary_Godot_Standard": ExtResource("3_hw27s"),
-"mixamo-basic-locomotion": ExtResource("3_jqbit")
+&"AnimationLibrary_Godot_Standard": ExtResource("3_hw27s"),
+&"mixamo-basic-locomotion": ExtResource("3_jqbit")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
