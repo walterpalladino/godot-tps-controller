@@ -86,6 +86,9 @@ var is_crouching : bool = false
 
 var turning : float = 0.0
 
+#@export var camera_mount_update_speed : float = 0.5
+#var camera_mount_update_speed_original : float
+
 #-----------------------------------------------------
 func _ready() -> void:
 
@@ -274,7 +277,7 @@ func update_character_locomotion(delta):
 	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 
 		is_crouched = false
-		new_velocity = max_character_speed_on_air * direction;
+		#new_velocity = max_character_speed_on_air * direction;
 		new_velocity.y = calculate_jump_vertical_speed()
 
 		last_jump_time = Time.get_ticks_msec()
@@ -377,6 +380,8 @@ func update_character_climbing(delta):
 		
 		velocity = Vector3.ZERO
 		move_and_slide()
+		#camera_mount_update_speed_original = camera_mount.update_speed
+		#camera_mount.update_speed = camera_mount_update_speed
 		
 		return
 	
@@ -504,7 +509,7 @@ func animate_climbing():
 		animation_tree.set("parameters/State/transition_request", "crouch_state")
 		animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
 
-		animation_tree.set("parameters/BraceHangUp/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		animation_tree.set("parameters/rise_on_top/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 		
 	else:
 
@@ -546,7 +551,7 @@ func is_blocking_animation_running():
 	if animation_tree.get("parameters/landed/active"):
 		return true
 	
-	if animation_tree.get("parameters/BraceHangUp/active"):
+	if animation_tree.get("parameters/rise_on_top/active"):
 		return true
 
 	if animation_tree.get("parameters/OpenDoor/active"):

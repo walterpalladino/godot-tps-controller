@@ -175,7 +175,7 @@ fadeout_time = 0.3
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Running Slide - In Place"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-1147.09, 100.733)
+graph_offset = Vector2(767.984, 795.178)
 nodes/Air/node = SubResource("AnimationNodeBlendSpace1D_cqai1")
 nodes/Air/position = Vector2(-1710, 370)
 nodes/Armed/node = SubResource("AnimationNodeTransition_ga2jm")

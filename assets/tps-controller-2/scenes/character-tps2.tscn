@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bnu8s7s7lagmo"]
+[gd_scene load_steps=57 format=3 uid="uid://bnu8s7s7lagmo"]
 
 [ext_resource type="Script" uid="uid://dy5woguyh31km" path="res://assets/tps-controller-2/scripts/character_tps2.gd" id="1_clcai"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_u2pcl"]
@@ -134,6 +134,15 @@ fadeout_time = 0.3
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ikmx2"]
 animation = &"AnimationLibrary_Godot_Standard/Jump"
 
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_7qmds"]
+fadein_time = 0.2
+fadeout_time = 0.01
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ly6k1"]
+animation = &"mixamo-climb-hang/Climb-Hang|Braced Hang To Crouch"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hagjg"]
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a2we3"]
 animation = &"AnimationLibrary_Godot_Standard/Sprint"
 
@@ -209,7 +218,7 @@ blend_point_4/node = SubResource("AnimationNodeAnimation_pxxee")
 blend_point_4/pos = Vector2(0, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-322.652, 277.34)
+graph_offset = Vector2(400.505, 214.192)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_34ei5")
 nodes/Animation/position = Vector2(-350, -250)
 nodes/Climbing/node = SubResource("AnimationNodeBlendSpace1D_105eb")
@@ -246,12 +255,18 @@ nodes/landed_hard/node = SubResource("AnimationNodeOneShot_2swil")
 nodes/landed_hard/position = Vector2(700, 400)
 nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_ikmx2")
 nodes/on_air_anim/position = Vector2(-890, 490)
-nodes/output/position = Vector2(1370, -50)
+nodes/output/position = Vector2(1720, -70)
+nodes/rise_on_top/node = SubResource("AnimationNodeOneShot_7qmds")
+nodes/rise_on_top/position = Vector2(1510, -80)
+nodes/rise_on_top_anim/node = SubResource("AnimationNodeAnimation_ly6k1")
+nodes/rise_on_top_anim/position = Vector2(880, 470)
+nodes/rise_on_top_anim_scale/node = SubResource("AnimationNodeTimeScale_hagjg")
+nodes/rise_on_top_anim_scale/position = Vector2(1290, 380)
 nodes/run_blend/node = SubResource("AnimationNodeBlendSpace2D_o3oay")
 nodes/run_blend/position = Vector2(-890, 200)
 nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
 nodes/walk_blend/position = Vector2(-890, 20)
-node_connections = [&"OpenDoor", 0, &"landed_hard", &"OpenDoor", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"State", 5, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"landed", 0, &"State", &"landed", 1, &"land_anim", &"landed_hard", 0, &"landed", &"landed_hard", 1, &"hard_land_anim", &"output", 0, &"OpenDoor"]
+node_connections = [&"OpenDoor", 0, &"landed_hard", &"OpenDoor", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"State", 5, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"landed", 0, &"State", &"landed", 1, &"land_anim", &"landed_hard", 0, &"landed", &"landed_hard", 1, &"hard_land_anim", &"output", 0, &"rise_on_top", &"rise_on_top", 0, &"OpenDoor", &"rise_on_top", 1, &"rise_on_top_anim_scale", &"rise_on_top_anim_scale", 0, &"rise_on_top_anim"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p52ah"]
 
@@ -287,10 +302,10 @@ parameters/Climbing/blend_position = 0
 parameters/OpenDoor/active = false
 parameters/OpenDoor/internal_active = ""
 parameters/OpenDoor/request = 0
-parameters/State/current_state = false
+parameters/State/current_state = "idle_state"
 parameters/State/transition_request = ""
 parameters/State/current_index = 0
-"parameters/TimeScale Climbing/scale" = 0.0166667
+"parameters/TimeScale Climbing/scale" = 1.0
 "parameters/TimeScale Crouch/scale" = 1.0
 "parameters/TimeScale In Place/scale" = 1.0
 "parameters/TimeScale Run/scale" = 1.0
@@ -304,7 +319,11 @@ parameters/landed/request = 0
 parameters/landed_hard/active = false
 parameters/landed_hard/internal_active = false
 parameters/landed_hard/request = 0
-parameters/run_blend/blend_position = 0.0
+parameters/rise_on_top/active = false
+parameters/rise_on_top/internal_active = false
+parameters/rise_on_top/request = 0
+parameters/rise_on_top_anim_scale/scale = 1.0
+parameters/run_blend/blend_position = false
 parameters/walk_blend/blend_position = Vector2(-0.00417244, 0.00755668)
 
 [node name="LookAt" type="Node3D" parent="."]
