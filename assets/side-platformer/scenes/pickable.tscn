@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1a1vk3dxqjjo"]
+[gd_scene load_steps=8 format=3 uid="uid://d1a1vk3dxqjjo"]
 
 [ext_resource type="Script" uid="uid://co0qweu0ovapu" path="res://assets/side-platformer/scripts/pickable-platform.gd" id="1_2vum8"]
 
@@ -7,7 +7,50 @@ top_radius = 0.25
 bottom_radius = 0.25
 height = 0.1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8gu2f"]
+albedo_color = Color(1, 0.854902, 0.490196, 1)
+metallic = 1.0
+metallic_specular = 1.0
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_01sch"]
+size = Vector3(0.75, 0.75, 0.5)
+
+[sub_resource type="Animation" id="Animation_8gu2f"]
+resource_name = "coin_floating"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/MeshInstance3D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.5, 0), Vector3(0, 0.75, 0), Vector3(0, 0.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7gkkd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.5, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pasa0"]
+_data = {
+&"RESET": SubResource("Animation_7gkkd"),
+&"coin_floating": SubResource("Animation_8gu2f")
+}
 
 [node name="Pickable" type="Area3D"]
 script = ExtResource("1_2vum8")
@@ -17,9 +60,16 @@ script = ExtResource("1_2vum8")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.5, 0)
 mesh = SubResource("CylinderMesh_414vy")
+surface_material_override/0 = SubResource("StandardMaterial3D_8gu2f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_01sch")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pasa0")
+}
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

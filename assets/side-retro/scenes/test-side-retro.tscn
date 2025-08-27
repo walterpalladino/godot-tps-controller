@@ -45,7 +45,7 @@ albedo_texture = ExtResource("5_r0eul")
 script = ExtResource("1_laj1w")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(-0.866025, -0.430371, -0.254521, 0, -0.509041, 0.860743, -0.5, 0.745424, 0.440843, 0, 0, 0)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -104,8 +104,7 @@ camera_offset = Vector3(0, 3, 20)
 camera_follow_speed = 5.0
 
 [node name="Pickable" parent="." instance=ExtResource("7_yoqy7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 0, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 
 [node name="character-side-retro" parent="." instance=ExtResource("6_cwm8m")]
 max_character_speed_ground = 1.5
