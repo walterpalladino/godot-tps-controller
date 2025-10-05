@@ -56,12 +56,12 @@ animation = &"AnimationLibrary_Godot_Standard/Jump"
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_p00g2"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l8b5l"]
-animation = &"AnimationLibrary_Godot_Standard/Walk"
+animation = &"AnimationLibrary_Godot_Standard/Sprint"
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1qpsb"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_oewrj"]
-graph_offset = Vector2(-211.149, 1023.1)
+graph_offset = Vector2(-490.56, 251.52)
 nodes/Transition/node = SubResource("AnimationNodeTransition_p4xik")
 nodes/Transition/position = Vector2(430, 220)
 nodes/criuch_walk_anim/node = SubResource("AnimationNodeAnimation_m42kd")
