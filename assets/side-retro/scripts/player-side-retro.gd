@@ -1,66 +1,35 @@
 extends CharacterBody3D
 
 
-enum CONTROLLER_STATE {LOCOMOTION, ON_AIR}
-
-
-@onready var collision_shape = get_node("CollisionShape3D")
 @onready var animation_tree : AnimationTree = get_node("AnimationTree")
 @onready var model = get_node("Model")
 
-
-@export_category("Ground Movement")
-
-@export var max_character_speed_ground = 6.0
-@export var max_character_speed_crouched = 1.0
-var is_crouched : bool = false
+@onready var _animator_controller : AnimatorControllerSideRetro = $AnimatorControllerSideRetro
+@onready var _character_motor : CharacterMotorSideRetro = $CharacterMotorSideRetro
 
 
-@export_category("On AIr")
-@export var gravity = 9.81
-@export var falling_gravity_multiplier = 1.0
-#@export var jump_height : float = 2.0
+enum CONTROLLER_STATE {LOCOMOTION, ON_AIR}
 
-## Lapse in mili seconds
-@export var max_character_speed_on_air = 4.0
-@export var reaction_character_speed_on_air = 1.0
-
-@export var free_air_movement : bool = false
-
-@export var min_time_between_jumps : float = 1.0 # in seconds
-var last_jump_time : float = 0.0
-var last_y_in_floor : float = 0.0
-
-@export_category("Jump")
-@export var jump_peak_time : float = .5
-@export var jump_fall_time : float = .5
-@export var jump_height : float = 2.0
-@export var jump_distance : float = 4.0
-
-var jump_horizontal_speed : float
-var jump_vertical_speed : float
-var jump_gravity : float
-var fall_gravity : float
-
-
-var was_on_air : bool = false
-var last_face_direction : float = 1
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
+
+var last_face_direction : float = 1
 
 
 
 #-----------------------------------------------------
 func _ready() -> void:
-	calculate_movement_parameters()
-	
+	pass	
+
 
 #-----------------------------------------------------
 func _physics_process(delta):
 
-	if is_blocking_animation_running():
+	if _animator_controller.is_blocking_animation_running():
 		return
 
 	update_character(delta)
+	update_model_facing()
+	update_animations()
 
 
 #-----------------------------------------------------
@@ -77,170 +46,26 @@ func _input(event: InputEvent) -> void:
 				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-####################################
-##	Ground Movement
-####################################
-
-func is_grounded():
-	#	Check distance to floor
-	var distance_to_floor : float  = check_distance_to_floor()
-	#print_debug(distance_to_floor)
-	return is_on_floor()
-
-
-func check_distance_to_floor():
-	var space_state = get_world_3d().direct_space_state
-	
-	var origin : Vector3 = global_transform.origin + Vector3.UP * 0.05
-	var end = origin + Vector3.DOWN * 100.0
-	var query = PhysicsRayQueryParameters3D.create(origin, end)
-	query.collide_with_areas = true
-
-	var result = space_state.intersect_ray(query)
-	if !result:
-		return 100.0
-	else:
-		return clamp(transform.origin.y - result.position.y, 0.0, 100.0)
-
-
-####################################
-##	Jump
-####################################
-
-func calculate_jump_vertical_speed():
-	return sqrt(2.0 * gravity * jump_height)
-
-
-
-
 
 #-----------------------------------------------------
 func update_character(delta):
-	
+		
+	#	First check if character is on ground or not
+	if is_on_floor() :
+		controller_state = CONTROLLER_STATE.LOCOMOTION
+	else:		
+		controller_state = CONTROLLER_STATE.ON_AIR
+
+	var new_velocity : Vector3 = Vector3.ZERO
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
-			update_character_locomotion(delta)
+			new_velocity = _character_motor.update_character_locomotion(delta, velocity)
 		CONTROLLER_STATE.ON_AIR:
-			update_character_on_air(delta)
-		
+			new_velocity = _character_motor.update_character_on_air(delta, transform.origin, velocity, last_face_direction, is_on_wall())
 
-
-
-#-----------------------------------------------------
-func update_character_locomotion(delta):
-	
-	if !is_grounded() :
-		controller_state = CONTROLLER_STATE.ON_AIR
-		return
-
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-
-	# Get the input direction and handle the movement/deceleration.
-	var direction = Vector3.RIGHT * sign(input_dir.x) 
-
-	var jump : bool = (input_dir.y < 0.0) and !is_crouched 
-
-	if velocity.x <= max_character_speed_crouched :
-		if Input.is_action_just_pressed("move_crouch_stand") || Input.is_action_just_pressed("move_backward"):
-			is_crouched = !is_crouched 
-		#elif is_crouched and (input_dir.y < 0.0) :
-		#	is_crouched = false; 
-		#	last_jump_time = Time.get_ticks_msec()
-
-	#	evaluate movement velocity
-	var new_velocity = Vector3.ZERO
-	var target_speed = 0.0	# depends on if the target is stand or crouched 
-	
-	if direction.x != 0.0:
-		if is_crouched:
-			target_speed = max_character_speed_crouched
-		else:
-			target_speed = max_character_speed_ground
-	
-	new_velocity.x = target_speed * sign(direction.x) #lerp(abs(velocity.x), target_speed, speed_change * delta) * sign(direction.x)
-	new_velocity.z = 0 # No lateral movement - to and from screen
-	
-		
-	# Handle Jump.
-	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
-
-		new_velocity.x = jump_horizontal_speed * sign(direction.x)
-		new_velocity.y = jump_vertical_speed #calculate_jump_vertical_speed()
-
-		last_jump_time = Time.get_ticks_msec()
-		
-		velocity = new_velocity
-		move_and_slide()
-
-		controller_state = CONTROLLER_STATE.ON_AIR
-		
-		return
-
-	elif (new_velocity.y < 0.0):
-		#	add a bit to keep the character grounded
-		new_velocity.y = -0.1
-
-	
 	velocity = new_velocity
-	move_and_slide()
+	move_and_slide()	#	Applies delta automatically
 	
-	update_model_facing()
-	update_animations()
-	
-	
-	
-#-----------------------------------------------------
-func update_character_on_air(delta):
-	
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-
-	#	hit ground?
-	if is_on_floor():
-		was_on_air = true
-		controller_state = CONTROLLER_STATE.LOCOMOTION
-		return
-
-	var new_velocity = Vector3.ZERO
-	
-	#	If enabled the Free Air Movement option
-	#	the character can change direction on air
-	if free_air_movement and input_dir.x != 0.0:
-		var direction = Vector3.RIGHT * sign(input_dir.x) 
-		new_velocity.x = max_character_speed_on_air * direction.x
-	else:
-		new_velocity.x = velocity.x
-		
-		#	If being on air and no horizontal move
-		#	the character tries to move, will only be able to do that
-		#	on the actual facing direction at a very #	small speed
-		#	but enough to climb high steps 
-		if new_velocity.x == 0:
-			if sign(input_dir.x) == last_face_direction:
-				new_velocity.x = sign(input_dir.x) * reaction_character_speed_on_air
-		
-	
-	#	add the gravity.
-	var gravity_multiplier : float = 1.0
-	if (velocity.y < 0.0):
-		gravity_multiplier = falling_gravity_multiplier
-	new_velocity.y = velocity.y - gravity_multiplier * gravity * delta
-		
-	if transform.origin.y > last_y_in_floor:
-		last_y_in_floor = transform.origin.y
-	
-	velocity = new_velocity
-
-	move_and_slide()
-	
-	update_model_facing()
-	update_animations()
-
-
-	
-
-
 
 
 func get_facing_direction():
@@ -262,129 +87,6 @@ func update_animations():
 
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
-			animate_locomotion()
+			_animator_controller.animate_locomotion(velocity.x, _character_motor.is_crouched)
 		CONTROLLER_STATE.ON_AIR:
-			animate_on_air()
-
-
-
-
-#-----------------------------------------------------
-func animate_locomotion():
-
-	#if was_on_air:
-#
-		##	Set to be sure the transsition after the one shot is locomotion
-		#if rifle_enabled:
-			#animation_tree.set("parameters/RifleLocomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
-			#animation_tree.set("parameters/RifleState/transition_request", "locomotion_state")
-		#else:
-			#animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
-			#animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
-#
-		#
-		#if rifle_enabled:
-			#animation_tree.set("parameters/rifle_landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		#else:
-			#animation_tree.set("parameters/landed/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		#
-		#was_on_air = false
-		#last_y_in_floor = transform.origin.y
-		#is_crouched = false
-	#
-	#elif is_crouched:
-		#
-		#if rifle_enabled:
-			#animation_tree.set("parameters/RifleCrouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
-			#animation_tree.set("parameters/RifleState/transition_request", "crouch_state")
-		#else:
-			#animation_tree.set("parameters/Crouch/blend_position", abs(velocity.x) / max_character_speed_crouched)
-			#animation_tree.set("parameters/Unarmed/transition_request", "crouch_state")
-	#
-	#else:
-#
-		#if rifle_enabled:
-			#animation_tree.set("parameters/RifleLocomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
-			#animation_tree.set("parameters/RifleState/transition_request", "locomotion_state")
-		#else:
-			#animation_tree.set("parameters/Locomotion/blend_position", abs(velocity.x) / max_character_speed_ground)
-			#animation_tree.set("parameters/Unarmed/transition_request", "locomotion_state")
-
-	if !is_crouched:
-
-		if abs(velocity.x) > 0.0 :
-			animation_tree.set("parameters/Transition/transition_request", "state_walk")
-		else:
-			animation_tree.set("parameters/Transition/transition_request", "state_idle")
-
-	else:		
-
-		if abs(velocity.x) > 0.0 :
-			animation_tree.set("parameters/Transition/transition_request", "state_crouch_walk")
-		else:
-			animation_tree.set("parameters/Transition/transition_request", "state_crouch_idle")
-	
-#-----------------------------------------------------
-func animate_on_air():
-
-	#animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
-#
-	#if rifle_enabled:
-		#animation_tree.set("parameters/RifleAir/blend_position", abs(velocity.x) / max_character_speed_on_air)
-		#animation_tree.set("parameters/RifleState/transition_request", "on_air_state")
-	#else:
-		#animation_tree.set("parameters/Air/blend_position", abs(velocity.x) / max_character_speed_on_air)
-		#animation_tree.set("parameters/Unarmed/transition_request", "on_air_state")
-
-	animation_tree.set("parameters/Transition/transition_request", "state_on_air")
-	
-	
-#-----------------------------------------------------
-func animate_climbing():
-	
-	#if climbing_leaving_from_top:
-#
-		#animation_tree.set("parameters/Crouch/blend_position", 0.0)
-		#animation_tree.set("parameters/Unarmed/transition_request", "crouch_state")
-		#animation_tree.set("parameters/OverrideAction/transition_request", "armed_state")
-#
-		#animation_tree.set("parameters/BraceHangUp/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
-		#
-	#else:
-#
-		#var climbingTimeScale = 1.5
-		#if (velocity.y == 0):
-			#climbingTimeScale = 0.0
-		#else:
-#
-			#animation_tree.set("parameters/Climbing/blend_position", velocity.y / climbing_speed)
-			#animation_tree.set("parameters/OverrideAction/transition_request", "climbing_state")
-#
-		#animation_tree.set("parameters/TimeScale Climbing/scale", climbingTimeScale)
-	pass
-	
-	
-	
-#-----------------------------------------------------
-#	add here any animation that should be tested to block
-#	the cahracter interaction
-func is_blocking_animation_running():
-	
-#	if animation_tree.get("parameters/landed/active"):
-#		return true
-	
-#	if animation_tree.get("parameters/BraceHangUp/active"):
-#		return true
-
-
-	return false
-
-
-#	Initialize some values used on jumps based on parameters
-func calculate_movement_parameters() -> void :
-
-	jump_gravity = (2 * jump_height) / pow( jump_peak_time, 2)
-	fall_gravity = (2 * jump_height) / pow( jump_fall_time, 2)
-	jump_vertical_speed = jump_gravity * jump_peak_time
-	jump_horizontal_speed = jump_distance / (jump_peak_time + jump_fall_time)
-	
+			_animator_controller.animate_on_air()

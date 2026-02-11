@@ -227,4 +227,5 @@ shape = SubResource("BoxShape3D_lplyk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 4)
 script = ExtResource("4_uqtqw")
 target = NodePath("../Character")
+camera_offset = Vector3(0, 1.5, 4)
 camera_follow_speed = 5.0

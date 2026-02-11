@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://lhreui3eoiho"]
+
+[ext_resource type="Texture2D" uid="uid://1dnv1tbxv4vq" path="res://assets/grid-movement/textures/Prototype_Grid_Gray_08-128x128.png" id="1_qrqup"]
+
+[resource]
+albedo_texture = ExtResource("1_qrqup")
+uv1_scale = Vector3(10, 10, 10)

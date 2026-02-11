@@ -4,8 +4,9 @@ extends CharacterBody3D
 enum CONTROLLER_STATE {LOCOMOTION, ON_AIR}
 
 
-@onready var collision_shape = get_node("CollisionShape3D")
-@onready var animation_tree : AnimationTree = get_node("AnimationTree")
+@onready var _animator_controller : AnimatorController = $AnimatorController
+#@onready var collision_shape = get_node("CollisionShape3D")
+#@onready var animation_tree : AnimationTree = get_node("AnimationTree")
 @onready var model = get_node("Model")
 
 
@@ -34,6 +35,7 @@ var was_on_air : bool = false
 var last_face_direction : float = 1
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
+var movement : float = 0.0
 
 
 #-----------------------------------------------------
@@ -173,9 +175,10 @@ func update_character_locomotion(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
-
+	movement = input_dir.x
+	
 	# Get the input direction and handle the movement/deceleration.
-	var direction = Vector3.RIGHT * sign(input_dir.x) 
+	var direction : Vector3 = Vector3.RIGHT * sign(input_dir.x) 
 
 	var jump : bool = (input_dir.y < 0.0) #and !is_crouched 
 
@@ -237,9 +240,11 @@ func update_animations():
 
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
-			animate_locomotion()
+			#animate_locomotion()
+			_animator_controller.animate_locomotion_ground(false, movement)
 		CONTROLLER_STATE.ON_AIR:
-			animate_on_air()
+			#animate_on_air()
+			_animator_controller.animate_on_air()
 
 
 

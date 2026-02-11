@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dwqqd4n1ygu5t"]
+
+[ext_resource type="Material" uid="uid://lhreui3eoiho" path="res://assets/grid-movement/materials/ground.tres" id="1_y1dvo"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_kwo3d"]
+size = Vector2(20, 20)
+subdivide_width = 20
+subdivide_depth = 20
+orientation = 1
+
+[node name="TestGridMovement" type="Node3D" unique_id=1618081332]
+
+[node name="Env" type="Node3D" parent="." unique_id=1604950246]
+
+[node name="Ground" type="MeshInstance3D" parent="Env" unique_id=981016711]
+mesh = SubResource("QuadMesh_kwo3d")
+surface_material_override/0 = ExtResource("1_y1dvo")

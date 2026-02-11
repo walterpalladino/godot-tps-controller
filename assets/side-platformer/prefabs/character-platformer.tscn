@@ -1,12 +1,10 @@
-[gd_scene format=3 uid="uid://b2k2guq33l84g"]
+[gd_scene format=3 uid="uid://dx7oyq1x0cdav"]
 
-[ext_resource type="Script" uid="uid://cg1vel03qmlb" path="res://assets/side-retro/scripts/player-side-retro.gd" id="1_ldmdx"]
-[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_8ek0h"]
-[ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="3_hw27s"]
-[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="3_jqbit"]
-[ext_resource type="Script" uid="uid://d2i2yi83mt2aa" path="res://assets/side-retro/scripts/animator-controller-side-retro.gd" id="5_5hq3f"]
-[ext_resource type="Script" uid="uid://b6wtoohrkfebv" path="res://assets/side-retro/scripts/character-motor-side-retro.gd" id="6_pnnx6"]
-[ext_resource type="Script" uid="uid://dnx2bbpjm3ou5" path="res://assets/side-retro/scripts/input-controller-side-retro.gd" id="7_pooru"]
+[ext_resource type="Script" uid="uid://cwt3i3n8hoyo1" path="res://assets/side-platformer/scripts/player-platformer.gd" id="1_l42ng"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_r1amn"]
+[ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="3_kv56x"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_mk3pl"]
+[ext_resource type="Script" uid="uid://wunotuygstg" path="res://assets/side-platformer/scripts/animator-controller.gd" id="5_mk3pl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e2hjs"]
 
@@ -59,12 +57,12 @@ animation = &"AnimationLibrary_Godot_Standard/Jump"
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_p00g2"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l8b5l"]
-animation = &"AnimationLibrary_Godot_Standard/Jog_Fwd"
+animation = &"AnimationLibrary_Godot_Standard/Sprint"
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1qpsb"]
 
-[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_oewrj"]
-graph_offset = Vector2(-592.3202, 311.0395)
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_ap2s3"]
+graph_offset = Vector2(-62.400036, 218.88022)
 nodes/output/position = Vector2(740, 230)
 nodes/Transition/node = SubResource("AnimationNodeTransition_p4xik")
 nodes/Transition/position = Vector2(430, 220)
@@ -90,34 +88,34 @@ nodes/walk_anim_time_scale/node = SubResource("AnimationNodeTimeScale_1qpsb")
 nodes/walk_anim_time_scale/position = Vector2(-10, 300)
 node_connections = [&"output", 0, &"Transition", &"Transition", 0, &"idle_anim_time_scale", &"Transition", 1, &"walk_anim_time_scale", &"Transition", 2, &"on_air_anim_time_scale", &"Transition", 3, &"crouch_idle_time_scale", &"Transition", 4, &"crouch_walk_time_scale", &"crouch_idle_time_scale", 0, &"crouch_idle_anim", &"crouch_walk_time_scale", 0, &"criuch_walk_anim", &"idle_anim_time_scale", 0, &"idle_anim", &"on_air_anim_time_scale", 0, &"on_air_anim", &"walk_anim_time_scale", 0, &"walk_anim"]
 
-[node name="character-side-retro" type="CharacterBody3D" unique_id=1371021329 groups=["Player"]]
-script = ExtResource("1_ldmdx")
+[node name="character-platformer" type="CharacterBody3D" unique_id=575058652 groups=["Player"]]
+script = ExtResource("1_l42ng")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1473004165]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1374883088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_e2hjs")
 
-[node name="Model" type="Node3D" parent="." unique_id=990220780]
+[node name="Model" type="Node3D" parent="." unique_id=1551951833]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Model" unique_id=132311815]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model" unique_id=123081184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 visible = false
 mesh = SubResource("CapsuleMesh_wpnvj")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Model/MeshInstance3D" unique_id=400208324]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model/MeshInstance3D" unique_id=731298635]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.65)
 mesh = SubResource("BoxMesh_avppn")
 
-[node name="y-bot" parent="Model" unique_id=314840937 instance=ExtResource("2_8ek0h")]
+[node name="y-bot" parent="Model" unique_id=547609536 instance=ExtResource("2_r1amn")]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1361776985]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1092488346]
 root_node = NodePath("../Model/y-bot")
-libraries/AnimationLibrary_Godot_Standard = ExtResource("3_hw27s")
-libraries/mixamo-basic-locomotion = ExtResource("3_jqbit")
+libraries/AnimationLibrary_Godot_Standard = ExtResource("3_kv56x")
+libraries/mixamo-basic-locomotion = ExtResource("4_mk3pl")
 
-[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1975903372]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1977916506]
 root_node = NodePath("../Model/y-bot")
-tree_root = SubResource("AnimationNodeBlendTree_oewrj")
+tree_root = SubResource("AnimationNodeBlendTree_ap2s3")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Transition/current_state = "state_idle"
 parameters/Transition/transition_request = ""
@@ -126,17 +124,8 @@ parameters/crouch_idle_time_scale/scale = 1.0
 parameters/crouch_walk_time_scale/scale = 1.2
 parameters/idle_anim_time_scale/scale = 1.0
 parameters/on_air_anim_time_scale/scale = 1.0
-parameters/walk_anim_time_scale/scale = 1.0
+parameters/walk_anim_time_scale/scale = 1.2
 
-[node name="AnimatorControllerSideRetro" type="Node" parent="." unique_id=2067181330]
-script = ExtResource("5_5hq3f")
-metadata/_custom_type_script = "uid://d2i2yi83mt2aa"
-
-[node name="CharacterMotorSideRetro" type="Node" parent="." unique_id=1302471840]
-script = ExtResource("6_pnnx6")
-max_character_speed_ground = 3.5
-metadata/_custom_type_script = "uid://b6wtoohrkfebv"
-
-[node name="InputControllerSideRetro" type="Node" parent="." unique_id=1567754707]
-script = ExtResource("7_pooru")
-metadata/_custom_type_script = "uid://dnx2bbpjm3ou5"
+[node name="AnimatorController" type="Node" parent="." unique_id=282206861]
+script = ExtResource("5_mk3pl")
+metadata/_custom_type_script = "uid://wunotuygstg"

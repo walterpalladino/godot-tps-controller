@@ -1,14 +1,11 @@
-[gd_scene format=3 uid="uid://bnu8s7s7lagmo"]
+[gd_scene load_steps=45 format=3 uid="uid://cbosdcg4j33qg"]
 
-[ext_resource type="Script" uid="uid://dy5woguyh31km" path="res://assets/tps-controller-2/scripts/character_tps2.gd" id="1_clcai"]
-[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_u2pcl"]
-[ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_k2wi5"]
-[ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_jm663"]
-[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="5_5d1gb"]
-[ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="6_yplme"]
-[ext_resource type="Script" uid="uid://bxtnmfrpxico2" path="res://assets/tps-controller-2/scripts/input_controller.gd" id="7_7qmds"]
-[ext_resource type="Script" uid="uid://ctv0l0gv7vnlp" path="res://assets/tps-controller-2/scripts/animation_controller.gd" id="9_105eb"]
-[ext_resource type="Script" uid="uid://rqvc6j00cq04" path="res://assets/tps-controller-2/scripts/interaction_controller.gd" id="9_ly6k1"]
+[ext_resource type="Script" uid="uid://dbbfwiqsnra1u" path="res://assets/top-down/scripts/top-down-character-controller.gd" id="1_haet2"]
+[ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_y3o2y"]
+[ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_lpcc4"]
+[ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_4wkk5"]
+[ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="5_b5hp5"]
+[ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="6_fu222"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ynppx"]
 radius = 0.3
@@ -103,9 +100,6 @@ blend_point_4/pos = Vector2(-1, 0)
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dpkmr"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Hard Landing"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cwcuf"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
-
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lbadu"]
 animation = &"mixamo-basic-locomotion/Basic Locomotion|Idle 1"
 
@@ -146,82 +140,32 @@ animation = &"mixamo-climb-hang/Climb-Hang|Braced Hang To Crouch"
 
 [sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_hagjg"]
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_a2we3"]
-animation = &"AnimationLibrary_Godot_Standard/Sprint"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_51wg0"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Right Forward"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_mt58l"]
-animation = &"AnimationLibrary_Godot_Standard/Sprint"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7qoi7"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Right Backward"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6m5u0"]
-animation = &"AnimationLibrary_Godot_Standard/Sprint"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4vihu"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Left Backward"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_rlxjl"]
-animation = &"AnimationLibrary_Godot_Standard/Sprint"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3swhb"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Jogging Left Forward"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pqkcu"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lpcc4"]
 animation = &"AnimationLibrary_Godot_Standard/Idle"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_o3oay"]
-blend_point_0/node = SubResource("AnimationNodeAnimation_a2we3")
-blend_point_0/pos = Vector2(0, 1)
-blend_point_1/node = SubResource("AnimationNodeAnimation_51wg0")
-blend_point_1/pos = Vector2(1, 1)
-blend_point_2/node = SubResource("AnimationNodeAnimation_mt58l")
-blend_point_2/pos = Vector2(1, 0)
-blend_point_3/node = SubResource("AnimationNodeAnimation_7qoi7")
-blend_point_3/pos = Vector2(1, -1)
-blend_point_4/node = SubResource("AnimationNodeAnimation_6m5u0")
-blend_point_4/pos = Vector2(0, -1)
-blend_point_5/node = SubResource("AnimationNodeAnimation_4vihu")
-blend_point_5/pos = Vector2(-1, -1)
-blend_point_6/node = SubResource("AnimationNodeAnimation_rlxjl")
-blend_point_6/pos = Vector2(-1, 0)
-blend_point_7/node = SubResource("AnimationNodeAnimation_3swhb")
-blend_point_7/pos = Vector2(-1, 1)
-blend_point_8/node = SubResource("AnimationNodeAnimation_pqkcu")
-blend_point_8/pos = Vector2(0, 0)
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_4wkk5"]
+animation = &"AnimationLibrary_Godot_Standard/Sprint"
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1tmok"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Forward"
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_y3o2y"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_lpcc4")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_4wkk5")
+blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_uqegx"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Walking Backwards"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_krlnp"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Right Strafe Walking"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gd55j"]
-animation = &"mixamo-basic-locomotion/Basic Locomotion|Left Strafe Walking"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pxxee"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_haet2"]
 animation = &"AnimationLibrary_Godot_Standard/Idle"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_d5vtv"]
-blend_point_0/node = SubResource("AnimationNodeAnimation_1tmok")
-blend_point_0/pos = Vector2(0, 1)
-blend_point_1/node = SubResource("AnimationNodeAnimation_uqegx")
-blend_point_1/pos = Vector2(0, -1)
-blend_point_2/node = SubResource("AnimationNodeAnimation_krlnp")
-blend_point_2/pos = Vector2(1, 0)
-blend_point_3/node = SubResource("AnimationNodeAnimation_gd55j")
-blend_point_3/pos = Vector2(-1, 0)
-blend_point_4/node = SubResource("AnimationNodeAnimation_pxxee")
-blend_point_4/pos = Vector2(0, 0)
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_y3o2y"]
+animation = &"AnimationLibrary_Godot_Standard/Walk"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_haet2"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_haet2")
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource("AnimationNodeAnimation_y3o2y")
+blend_point_1/pos = 1.0
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-621.45197, -47.384266)
+graph_offset = Vector2(-703.2591, -178.50233)
 nodes/output/position = Vector2(1720, -70)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_34ei5")
 nodes/Animation/position = Vector2(-350, -250)
@@ -236,7 +180,7 @@ nodes/State/position = Vector2(-380, -40)
 "nodes/TimeScale Crouch/node" = SubResource("AnimationNodeTimeScale_iy0an")
 "nodes/TimeScale Crouch/position" = Vector2(-630, 770)
 "nodes/TimeScale In Place/node" = SubResource("AnimationNodeTimeScale_u5c7k")
-"nodes/TimeScale In Place/position" = Vector2(-700, -140)
+"nodes/TimeScale In Place/position" = Vector2(-710, -170)
 "nodes/TimeScale Run/node" = SubResource("AnimationNodeTimeScale_63khx")
 "nodes/TimeScale Run/position" = Vector2(-700, 200)
 "nodes/TimeScale Walk/node" = SubResource("AnimationNodeTimeScale_lgwli")
@@ -247,10 +191,10 @@ nodes/crouch_blend/node = SubResource("AnimationNodeBlendSpace2D_fmab0")
 nodes/crouch_blend/position = Vector2(-860, 770)
 nodes/hard_land_anim/node = SubResource("AnimationNodeAnimation_dpkmr")
 nodes/hard_land_anim/position = Vector2(240, 770)
-nodes/idle_anim/node = SubResource("AnimationNodeAnimation_cwcuf")
-nodes/idle_anim/position = Vector2(-1510, -170)
+nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace1D_haet2")
+nodes/walk_blend/position = Vector2(-1120, 50)
 nodes/in_place_blend/node = SubResource("AnimationNodeBlendSpace1D_ftpw8")
-nodes/in_place_blend/position = Vector2(-890, -140)
+nodes/in_place_blend/position = Vector2(-940, -140)
 nodes/land_anim/node = SubResource("AnimationNodeAnimation_105eb")
 nodes/land_anim/position = Vector2(-290, 480)
 nodes/landed/node = SubResource("AnimationNodeOneShot_yplme")
@@ -265,37 +209,35 @@ nodes/rise_on_top_anim/node = SubResource("AnimationNodeAnimation_ly6k1")
 nodes/rise_on_top_anim/position = Vector2(880, 470)
 nodes/rise_on_top_anim_scale/node = SubResource("AnimationNodeTimeScale_hagjg")
 nodes/rise_on_top_anim_scale/position = Vector2(1290, 380)
-nodes/run_blend/node = SubResource("AnimationNodeBlendSpace2D_o3oay")
-nodes/run_blend/position = Vector2(-890, 200)
-nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
-nodes/walk_blend/position = Vector2(-890, 20)
+nodes/run_blend/node = SubResource("AnimationNodeBlendSpace1D_y3o2y")
+nodes/run_blend/position = Vector2(-960, 230)
 node_connections = [&"output", 0, &"rise_on_top", &"OpenDoor", 0, &"landed_hard", &"OpenDoor", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"State", 5, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"landed", 0, &"State", &"landed", 1, &"land_anim", &"landed_hard", 0, &"landed", &"landed_hard", 1, &"hard_land_anim", &"rise_on_top", 0, &"OpenDoor", &"rise_on_top", 1, &"rise_on_top_anim_scale", &"rise_on_top_anim_scale", 0, &"rise_on_top_anim"]
 
-[sub_resource type="CanvasTexture" id="CanvasTexture_p52ah"]
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_haet2")
 
-[node name="Character" type="CharacterBody3D" unique_id=2065701138]
-script = ExtResource("1_clcai")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=81864921]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
 shape = SubResource("CylinderShape3D_ynppx")
 
-[node name="Model" type="Node3D" parent="." unique_id=796774375]
+[node name="Model" type="Node3D" parent="."]
 
-[node name="y-bot" parent="Model" unique_id=729647811 instance=ExtResource("2_u2pcl")]
+[node name="y-bot" parent="Model" instance=ExtResource("2_y3o2y")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="x-bot" parent="Model" unique_id=1618537469 instance=ExtResource("3_k2wi5")]
+[node name="x-bot" parent="Model" instance=ExtResource("3_lpcc4")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1399005790]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Model/y-bot")
-libraries/AnimationLibrary_Godot_Standard = ExtResource("4_jm663")
-libraries/mixamo-basic-locomotion = ExtResource("5_5d1gb")
-libraries/mixamo-climb-hang = ExtResource("6_yplme")
+libraries = {
+&"AnimationLibrary_Godot_Standard": ExtResource("4_4wkk5"),
+&"mixamo-basic-locomotion": ExtResource("5_b5hp5"),
+&"mixamo-climb-hang": ExtResource("6_fu222")
+}
 
-[node name="AnimationTree" type="AnimationTree" parent="." unique_id=2134790388]
+[node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
@@ -313,6 +255,7 @@ parameters/State/current_index = 0
 "parameters/TimeScale Walk/scale" = 1.0
 parameters/TimeScaleOpenDoor/scale = 1.0
 parameters/crouch_blend/blend_position = Vector2(0, 0)
+parameters/walk_blend/blend_position = 0.0025156736
 parameters/in_place_blend/blend_position = 0.0
 parameters/landed/active = false
 parameters/landed/internal_active = false
@@ -324,29 +267,9 @@ parameters/rise_on_top/active = false
 parameters/rise_on_top/internal_active = false
 parameters/rise_on_top/request = 0
 parameters/rise_on_top_anim_scale/scale = 1.0
-parameters/run_blend/blend_position = Vector2(0, 0)
-parameters/walk_blend/blend_position = Vector2(-0.00417244, 0.00755668)
+parameters/run_blend/blend_position = 0.0
 
-[node name="LookAt" type="Node3D" parent="." unique_id=2017451923]
-transform = Transform3D(1, -1.21652e-31, 0, -1.21652e-31, 1, 0, 0, 0, 1, 2.08165e-12, 1.4, 2.08165e-12)
-
-[node name="Cursor" type="TextureRect" parent="." unique_id=1707886213]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -0.469971
-offset_top = -0.5
-offset_right = 2.53003
-offset_bottom = 2.5
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = SubResource("CanvasTexture_p52ah")
-
-[node name="InteractLabel" type="Label" parent="." unique_id=1765303135]
+[node name="InteractLabel" type="Label" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -361,14 +284,3 @@ grow_vertical = 2
 text = "Open"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="InputControlller" type="Node" parent="." unique_id=34153333]
-script = ExtResource("7_7qmds")
-
-[node name="AnimationController" type="Node" parent="." unique_id=1881554786]
-script = ExtResource("9_105eb")
-
-[node name="InteractionController" type="Node" parent="." unique_id=845835537]
-script = ExtResource("9_ly6k1")
-interaction_min_distance = 0.3
-interaction_max_distance = 2.0
