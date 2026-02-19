@@ -2,15 +2,14 @@ class_name TopDownInputController
 extends InputController
 
 
-		
-		
-
 func _ready() -> void:
-	#setup_input()
+	self.setup_input()
 	pass
 	
 
 func _process(delta: float) -> void:
+
+	super._process(delta)
 
 	_interact = Input.is_action_just_pressed("action_interact")
 

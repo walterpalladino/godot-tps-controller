@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bkteth5stoprm"]
 
-[ext_resource type="Script" uid="uid://b4aeeb7t1hxm1" path="res://assets/top-down/scripts/top-down-character-controller.gd" id="1_md32d"]
+[ext_resource type="Script" uid="uid://b4aeeb7t1hxm1" path="res://assets/top-down/scripts/top-down-character-controller.gd" id="1_0cp26"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_61lqt"]
 [ext_resource type="PackedScene" uid="uid://d2xyvxp07r6l6" path="res://assets/mixamo-animations/sources/x-bot.tscn" id="3_2xw3j"]
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="4_qtv00"]
@@ -8,7 +8,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="6_i35f6"]
 [ext_resource type="Script" uid="uid://dbkpemnstw6yw" path="res://assets/top-down/scripts/top-down-input-controller.gd" id="8_56epr"]
 [ext_resource type="Script" uid="uid://bkvfeu81k76ui" path="res://assets/top-down/scripts/top-down-animation-controller.gd" id="9_0cp26"]
-[ext_resource type="Script" uid="uid://cexyexcdm444k" path="res://assets/top-down/scripts/interaction-controller.gd" id="9_hwv1k"]
+[ext_resource type="Script" uid="uid://cexyexcdm444k" path="res://assets/x-controller/scripts/interaction-controller.gd" id="9_hwv1k"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yigcl"]
 
@@ -267,7 +267,7 @@ nodes/walk_blend/position = Vector2(-1210, 50)
 node_connections = [&"output", 0, &"rise_on_top", &"OpenDoor", 0, &"landed_hard", &"OpenDoor", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"State", 5, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"TimeScale Land", 0, &"land_anim", &"landed", 0, &"State", &"landed", 1, &"TimeScale Land", &"landed_hard", 0, &"landed", &"landed_hard", 1, &"hard_land_anim", &"rise_on_top", 0, &"OpenDoor", &"rise_on_top", 1, &"rise_on_top_anim_scale", &"rise_on_top_anim_scale", 0, &"rise_on_top_anim"]
 
 [node name="Character" type="CharacterBody3D" unique_id=168379873]
-script = ExtResource("1_md32d")
+script = ExtResource("1_0cp26")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=563458329]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)

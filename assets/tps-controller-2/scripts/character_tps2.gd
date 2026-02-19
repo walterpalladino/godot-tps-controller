@@ -11,9 +11,9 @@ enum CONTROLLER_STATE {
 	}
 
 
-@onready var _input_controller : InputController = $InputControlller
+@onready var _input_controller : InputController = $InputController
 #@onready var _movement_controller : MovementController = $MovementController
-@onready var _animation_controller : AnimationtController = $AnimationController
+@onready var _animation_controller : AnimationController = $AnimationController
 @onready var _interaction_controller : InteractionController = $InteractionController
 
 
@@ -131,6 +131,7 @@ func update_character_locomotion(delta):
 
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir : Vector2 = _input_controller.input_dir
+	
 	movement = Vector2(input_dir.x, -input_dir.y)
 	
 	if is_on_wall() and input_dir.y < 0.0:

@@ -1,6 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cv88tvrvrgjpl"]
+[gd_scene format=3 uid="uid://cv88tvrvrgjpl"]
 
-[ext_resource type="Script" uid="uid://dgpwvgjta72jt" path="res://assets/tps-controller-2/scripts/doorway.gd" id="1_hxtru"]
+[ext_resource type="Script" uid="uid://dgpwvgjta72jt" path="res://assets/x-controller/scripts/doorway.gd" id="1_hxtru"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmcfm"]
 size = Vector3(0.1, 2, 0.05)

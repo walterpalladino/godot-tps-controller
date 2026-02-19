@@ -1,5 +1,5 @@
-class_name AnimationtController
-extends Node
+class_name TPSAnimationController
+extends AnimationController
 
 
 @onready var _animation_tree : AnimationTree = $"../AnimationTree"

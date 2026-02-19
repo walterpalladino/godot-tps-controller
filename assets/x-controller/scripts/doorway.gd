@@ -1,6 +1,5 @@
-extends Interactable
-
 class_name Doorway
+extends Interactable
 
 
 @export var animation_player : AnimationPlayer

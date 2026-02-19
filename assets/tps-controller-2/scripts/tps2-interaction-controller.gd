@@ -1,25 +1,5 @@
-class_name InteractionController
-extends Node
-
-
-#@onready var camera : Camera3D
-var _camera : Camera3D
-
-
-@onready var _interact_label : Label = $"../InteractLabel"
-@onready var _input_controller : InputController = $"../InputControlller"
-@onready var _look_at_modifier : LookAtModifier3D = find_child("LookAtModifier3D")
-@onready var _animation_controller : AnimationtController = $"../AnimationController"
-
-
-@export_category("Interactions")
-@export var interaction_min_distance : float = 0.60
-@export var interaction_max_distance : float = 1.20
-
-
-var camera : Camera3D :
-	set(new_value):
-		_camera = new_value
+class_name TPSInteractionController
+extends InteractionController
 
 
 func _ready() -> void:
