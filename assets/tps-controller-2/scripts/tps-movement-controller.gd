@@ -1,5 +1,5 @@
-class_name MovementController
-extends Node
+class_name TPSMovementController
+extends MovementController
 
 #	character_side_action_controller
 

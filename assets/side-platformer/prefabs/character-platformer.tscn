@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_r1amn"]
 [ext_resource type="AnimationLibrary" uid="uid://bb6cd872gipbq" path="res://assets/quaternius-universal-animation-library/sources/AnimationLibrary_Godot_Standard.glb" id="3_kv56x"]
 [ext_resource type="AnimationLibrary" uid="uid://ck0vo05mv388x" path="res://assets/mixamo-animations/animations/mixamo-basic-locomotion.fbx" id="4_mk3pl"]
-[ext_resource type="Script" uid="uid://wunotuygstg" path="res://assets/side-platformer/scripts/animator-controller.gd" id="5_mk3pl"]
+[ext_resource type="Script" uid="uid://wunotuygstg" path="res://assets/side-platformer/scripts/side-platformer-animator-controller.gd" id="5_mk3pl"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e2hjs"]
 
@@ -125,6 +125,6 @@ parameters/idle_anim_time_scale/scale = 1.0
 parameters/on_air_anim_time_scale/scale = 1.0
 parameters/walk_anim_time_scale/scale = 1.2
 
-[node name="AnimatorController" type="Node" parent="." unique_id=282206861]
+[node name="AnimationController" type="Node" parent="." unique_id=282206861]
 script = ExtResource("5_mk3pl")
 metadata/_custom_type_script = "uid://wunotuygstg"

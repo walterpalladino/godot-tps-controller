@@ -8,7 +8,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://biormxvfu2doo" path="res://assets/mixamo-animations/animations/mixamo-climb-hang.fbx" id="6_yplme"]
 [ext_resource type="Script" uid="uid://bxtnmfrpxico2" path="res://assets/tps-controller-2/scripts/tps-input-controller.gd" id="7_7qmds"]
 [ext_resource type="Script" uid="uid://ctv0l0gv7vnlp" path="res://assets/tps-controller-2/scripts/tps-animation-controller.gd" id="9_105eb"]
-[ext_resource type="Script" uid="uid://rqvc6j00cq04" path="res://assets/tps-controller-2/scripts/tps2-interaction-controller.gd" id="9_ly6k1"]
+[ext_resource type="Script" uid="uid://rqvc6j00cq04" path="res://assets/tps-controller-2/scripts/tps-interaction-controller.gd" id="9_ly6k1"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ynppx"]
 radius = 0.3

@@ -1,4 +1,3 @@
-#	File : character_tps2.gd
 extends CharacterController3D
 
 
@@ -47,9 +46,6 @@ var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
 
 
-var last_face_direction : Vector3 = Vector3.ZERO
-
-
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 
@@ -81,6 +77,7 @@ func _ready() -> void:
 	#_interaction_controller.camera = camera
 	pass
 
+
 #-----------------------------------------------------
 func _unhandled_input(event: InputEvent) -> void:
 		
@@ -88,7 +85,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera_mount.rotation.x -= event.relative.y * mouse_sensitivity / 1000.0
 		camera_mount.rotation_degrees.x = clamp(camera_mount.rotation_degrees.x, -90.0, 30.0)
 		camera_mount.rotation.y -= event.relative.x * mouse_sensitivity / 1000.0
-
 
 
 #-----------------------------------------------------
@@ -119,7 +115,6 @@ func update_character(delta):
 			update_character_climbing(delta)
 		CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP:
 			update_character_climbing_leaving_from_top(delta)
-		
 
 
 #-----------------------------------------------------
@@ -145,10 +140,8 @@ func update_character_locomotion(delta):
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
 
-	last_face_direction = direction
 
 	if Vector2(velocity.x, velocity.z).length() <= max_character_speed_crouched :
-#		if Input.is_action_just_pressed("move_crouch_stand") :
 		if _input_controller.crouch :
 			is_crouched = !is_crouched 
 			
@@ -165,8 +158,9 @@ func update_character_locomotion(delta):
 	var target_speed = 0.0	# depends on if the target is stand or crouched 
 	
 	if direction.length() > 0:
-		turning = sign(model.rotation.y - camera_mount.rotation.y)
-		model.rotation.y = lerp_angle(model.rotation.y, camera_mount.rotation.y, rotation_speed * delta)
+		update_model_facing()
+#		turning = sign(model.rotation.y - camera_mount.rotation.y)
+#		model.rotation.y = lerp_angle(model.rotation.y, camera_mount.rotation.y, rotation_speed * delta)
 		
 		if is_crouched:
 			target_speed = max_character_speed_crouched
@@ -182,7 +176,6 @@ func update_character_locomotion(delta):
 	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 
 		is_crouched = false
-		#new_velocity = max_character_speed_on_air * direction;
 		new_velocity.y = calculate_jump_vertical_speed()
 
 		last_jump_time = Time.get_ticks_msec()
@@ -201,7 +194,6 @@ func update_character_locomotion(delta):
 	check_step_move_and_slide()
 	
 	#update_model_facing()
-	#######update_animations()
 
 
 func align_model_to_wall() :
@@ -229,10 +221,8 @@ func update_character_on_air(delta):
 	if is_on_wall() and input_dir.y < 0.0:
 		
 		if check_can_climb_wall(get_facing_direction()):
-			#print_debug("Now is climbing a wall")
 			controller_state = CONTROLLER_STATE.CLIMBING
 			return
-
 
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
 
@@ -243,6 +233,8 @@ func update_character_on_air(delta):
 	if free_air_movement and input_dir != Vector2.ZERO:
 		new_velocity.x = max_character_speed_on_air * direction.x
 		new_velocity.z = max_character_speed_on_air * direction.z
+		
+		update_model_facing()
 	else:
 		new_velocity.x = velocity.x
 		new_velocity.z = velocity.z
@@ -253,10 +245,8 @@ func update_character_on_air(delta):
 		#	but enough to climb high steps 
 		if new_velocity == Vector3.ZERO:
 			#	TODO : Check update
-			#if sign(input_dir.x) == last_face_direction:
 			new_velocity.x = reaction_character_speed_on_air * direction.x
 			new_velocity.z = reaction_character_speed_on_air * direction.z
-		
 	
 	#	add the gravity.
 	if velocity.y >= 0.0 :
@@ -271,43 +261,22 @@ func update_character_on_air(delta):
 	
 	move_and_slide()
 	
-	update_model_facing()
-	########update_animations()
+	#update_model_facing()
 
 
 #-----------------------------------------------------	
 func update_character_climbing(delta):
-	
-	#if climbing_leaving_from_top:
-#
-		#print("climbing_leaving_from_top")
-		#climbing_leaving_from_top = false
-		#is_crouched = true
-		#
-		#var offset : Vector3 = get_facing_direction() * climbing_leaving_from_top_offset.x #last_face_direction
-		#offset.y += climbing_leaving_from_top_offset.y
-		#global_transform.origin += offset
-		#controller_state = CONTROLLER_STATE.LOCOMOTION
-		#
-		#velocity = Vector3.ZERO
-		#move_and_slide()
-		##camera_mount_update_speed_original = camera_mount.update_speed
-		##camera_mount.update_speed = camera_mount_update_speed
-		#
-		#return
-	
+		
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir : Vector2 = _input_controller.input_dir
 	
 	#	leaving from the ground
 	if is_on_floor() and input_dir.y > 0.0:
-		#print_debug("Was climbing")
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
 
 	#	jumps away the wall
 	if input_dir.x != 0:
-		#print("jumps away the wall")
 		velocity = transform.basis.x * 6.0 * sign(input_dir.x)
 		velocity.y = 2.0
 		move_and_slide()
@@ -319,11 +288,9 @@ func update_character_climbing(delta):
 		if wall_collision_result == (WALL_COLLISION_RESULT.COLLISION_MID | WALL_COLLISION_RESULT.COLLISION_BOTTOM):
 			#	climbing to the top
 			controller_state = CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP
-			#######update_animations()
 			return
 		else:
 			# nothing to hold on to...
-			#print("nothing to hold on to...")
 			move_and_slide()
 			controller_state = CONTROLLER_STATE.ON_AIR
 			return
@@ -334,17 +301,13 @@ func update_character_climbing(delta):
 
 	velocity = new_velocity
 	move_and_slide()
-
-	########update_animations()
 	
 
 func update_character_climbing_leaving_from_top (delta):
 	
-	#print("climbing_leaving_from_top")
-
 	is_crouched = true
 	
-	var offset : Vector3 = get_facing_direction() * climbing_leaving_from_top_offset.x #last_face_direction
+	var offset : Vector3 = get_facing_direction() * climbing_leaving_from_top_offset.x 
 	offset.y += climbing_leaving_from_top_offset.y
 	global_transform.origin += offset
 
@@ -355,11 +318,9 @@ func update_character_climbing_leaving_from_top (delta):
 	move_and_slide()
 
 
-
 #	Returns character facing direction	
 func get_facing_direction() -> Vector3:
 	return Vector3.FORWARD.rotated(Vector3.UP, model.rotation.y)
-
 
 
 #-----------------------------------------------------

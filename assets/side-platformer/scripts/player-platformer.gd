@@ -4,9 +4,7 @@ extends CharacterBody3D
 enum CONTROLLER_STATE {LOCOMOTION, ON_AIR}
 
 
-@onready var _animator_controller : AnimatorController = $AnimatorController
-#@onready var collision_shape = get_node("CollisionShape3D")
-#@onready var animation_tree : AnimationTree = get_node("AnimationTree")
+@onready var _animation_controller : AnimationController = $AnimationController
 @onready var model = get_node("Model")
 
 
@@ -50,7 +48,7 @@ func _physics_process(delta):
 		return
 
 	update_character(delta)
-
+	update_animations()
 
 #-----------------------------------------------------
 func _input(event: InputEvent) -> void:
@@ -114,7 +112,6 @@ func update_character(delta):
 		
 
 
-
 #-----------------------------------------------------
 func update_character_on_air(delta):
 	
@@ -160,7 +157,7 @@ func update_character_on_air(delta):
 	move_and_slide()
 	
 	update_model_facing()
-	update_animations()
+	#update_animations()
 
 
 	
@@ -218,7 +215,7 @@ func update_character_locomotion(delta):
 	move_and_slide()
 	
 	update_model_facing()
-	update_animations()
+	#update_animations()
 
 
 func get_facing_direction():
@@ -241,10 +238,10 @@ func update_animations():
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
 			#animate_locomotion()
-			_animator_controller.animate_locomotion_ground(false, movement)
+			_animation_controller.animate_locomotion_ground(false, movement)
 		CONTROLLER_STATE.ON_AIR:
 			#animate_on_air()
-			_animator_controller.animate_on_air()
+			_animation_controller.animate_on_air()
 
 
 

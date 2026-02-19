@@ -1,5 +1,5 @@
-class_name AnimatorController
-extends Node
+class_name SidePlatformerAnimatorController
+extends AnimationController
 
 
 @onready var _animation_tree : AnimationTree = $"../AnimationTree"
