@@ -5,7 +5,9 @@
 [ext_resource type="Material" uid="uid://crb7yl6ebhwlu" path="res://assets/side-action-controller/materials/obstacle_material.tres" id="2_vrfio"]
 [ext_resource type="Script" uid="uid://fuj4xq40d3m2" path="res://assets/side-platformer/scripts/one-way-platform.gd" id="3_jf4c2"]
 [ext_resource type="PackedScene" uid="uid://dx7oyq1x0cdav" path="res://assets/side-platformer/prefabs/character-platformer.tscn" id="4_8ijol"]
+[ext_resource type="PackedScene" uid="uid://lo2yu6ia66ix" path="res://assets/models/stairs-001.fbx" id="5_e5jo8"]
 [ext_resource type="Script" uid="uid://dpt1huabky7wn" path="res://assets/side-platformer/scripts/camera-follow-platformer.gd" id="5_ji162"]
+[ext_resource type="PackedScene" uid="uid://bbfeftwve86hr" path="res://assets/models/stairs-45.fbx" id="6_ygpqh"]
 [ext_resource type="PackedScene" uid="uid://d1a1vk3dxqjjo" path="res://assets/side-platformer/prefabs/pickable.tscn" id="7_pblfy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_du2e7"]
@@ -32,7 +34,7 @@ size = Vector3(3, 0.2, 4)
 size = Vector3(3, 0.2, 10)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_p5754"]
-size = Vector3(3, 0.273438, 1)
+size = Vector3(3.2192383, 0.9618225, 1)
 
 [node name="Test-side-platformer" type="Node3D" unique_id=404204137]
 script = ExtResource("1_13602")
@@ -70,7 +72,24 @@ shape = SubResource("BoxShape3D_0f5wd")
 [node name="Area3D" type="Area3D" parent="Environment/Platform 1" unique_id=705681327]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Platform 1/Area3D" unique_id=184693601]
-transform = Transform3D(0.999992, 0, 0, 0, 0.999992, 0, 0, 0, 1, 0.023, -0.5, 0)
+transform = Transform3D(0.999992, 0, 0, 0, 0.999992, 0, 0, 0, 1, 0.023000717, -0.49297333, 0)
+shape = SubResource("BoxShape3D_p5754")
+
+[node name="Platform 4" type="MeshInstance3D" parent="Environment" unique_id=1914094680]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.164201, 0.8104906, 0)
+mesh = SubResource("BoxMesh_ufnuu")
+surface_material_override/0 = ExtResource("2_vrfio")
+script = ExtResource("3_jf4c2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Platform 4" unique_id=2007514302]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Platform 4/StaticBody3D" unique_id=112060600]
+shape = SubResource("BoxShape3D_0f5wd")
+
+[node name="Area3D" type="Area3D" parent="Environment/Platform 4" unique_id=1901002143]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Platform 4/Area3D" unique_id=1356161553]
+transform = Transform3D(0.999992, 0, 0, 0, 0.999992, 0, 0, 0, 1, -0.08661842, -0.47465897, 0)
 shape = SubResource("BoxShape3D_p5754")
 
 [node name="Platform 2" type="MeshInstance3D" parent="Environment" unique_id=1505712618]
@@ -107,6 +126,12 @@ shape = SubResource("BoxShape3D_0f5wd")
 transform = Transform3D(0.999992, 0, 0, 0, 0.999992, 0, 0, 0, 1, 0.023, -0.5, 0)
 shape = SubResource("BoxShape3D_p5754")
 
+[node name="stairs-001" parent="Environment" unique_id=1582451277 instance=ExtResource("5_e5jo8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4, -9.254, -0.1, 0)
+
+[node name="stairs-45" parent="Environment" unique_id=1357679789 instance=ExtResource("6_ygpqh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 4, -4.489, -0.1, 0)
+
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1905272375 node_paths=PackedStringArray("target")]
 transform = Transform3D(1, 0, 0, 0, 0.995562, 0.0941083, 0, -0.0941083, 0.995562, -20, 5, 20)
 projection = 1
@@ -129,6 +154,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.5, 0, 0)
 
 [connection signal="body_entered" from="Environment/Platform 1/Area3D" to="Environment/Platform 1" method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Environment/Platform 1/Area3D" to="Environment/Platform 1" method="_on_area_3d_body_exited"]
+[connection signal="body_entered" from="Environment/Platform 4/Area3D" to="Environment/Platform 4" method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Environment/Platform 4/Area3D" to="Environment/Platform 4" method="_on_area_3d_body_exited"]
 [connection signal="body_entered" from="Environment/Platform 2/Area3D" to="Environment/Platform 2" method="_on_area_3d_body_entered"]
 [connection signal="body_exited" from="Environment/Platform 2/Area3D" to="Environment/Platform 2" method="_on_area_3d_body_exited"]
 [connection signal="body_entered" from="Environment/Platform 3/Area3D" to="Environment/Platform 3" method="_on_area_3d_body_entered"]

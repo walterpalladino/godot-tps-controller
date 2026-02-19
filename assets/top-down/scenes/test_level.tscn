@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://bu1huhal27rp1"]
+
+[ext_resource type="PackedScene" uid="uid://bkteth5stoprm" path="res://assets/top-down/scenes/top-down-character.tscn" id="2_0ibic"]
+[ext_resource type="Script" uid="uid://ysbh0wmuxmu2" path="res://assets/top-down/scripts/top-down-camera.gd" id="3_4t08s"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gbiby"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_avllf"]
+sky_material = SubResource("ProceduralSkyMaterial_gbiby")
+
+[sub_resource type="Environment" id="Environment_eal42"]
+background_mode = 2
+sky = SubResource("Sky_avllf")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xbusd"]
+size = Vector2(1024, 1024)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_avllf"]
+albedo_color = Color(0, 0.3529412, 0.5176471, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_qdacc"]
+size = Vector2(200, 200)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gbiby"]
+albedo_color = Color(0.24900988, 0.2850765, 0.034604132, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2qiab"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
+
+[node name="TestTopDownRetro" type="Node3D" unique_id=1464963890]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=661741395]
+environment = SubResource("Environment_eal42")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=694666204]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 1.0
+
+[node name="Character" parent="." unique_id=1863040094 instance=ExtResource("2_0ibic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.11173, 54.566654, 28.850128)
+max_character_speed_walking = 1.5
+max_character_speed_running = 4.0
+max_character_speed_crouched = 0.5
+reaction_character_speed_on_air = 2.0
+
+[node name="CameraMount" type="Node3D" parent="." unique_id=527114092 node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 3.724)
+script = ExtResource("3_4t08s")
+target = NodePath("../Character")
+offset = Vector3(0, 2.5, 2)
+update_speed = 7.0
+camera_vertical_limit = Vector2(-30, 60)
+mouse_sensitivity = 1.0
+
+[node name="Camera3D" type="Camera3D" parent="CameraMount" unique_id=1529298141]
+transform = Transform3D(1, 0, 0, 0, 0.85890627, 0.5121329, 0, -0.5121329, 0.85890627, 0, -0.3933077, -0.23191977)
+
+[node name="Env" type="Node3D" parent="." unique_id=888472716]
+
+[node name="Water" type="MeshInstance3D" parent="Env" unique_id=583053145]
+mesh = SubResource("PlaneMesh_xbusd")
+surface_material_override/0 = SubResource("StandardMaterial3D_avllf")
+
+[node name="Ground" type="MeshInstance3D" parent="Env" unique_id=1462232076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("QuadMesh_qdacc")
+surface_material_override/0 = SubResource("StandardMaterial3D_gbiby")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Env/Ground" unique_id=1699166090]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Env/Ground/StaticBody3D" unique_id=680645249]
+shape = SubResource("ConcavePolygonShape3D_2qiab")
