@@ -1,4 +1,8 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://crb7yl6ebhwlu"]
 
 [resource]
+transparency = 2
+alpha_scissor_threshold = 0.849
+alpha_antialiasing_mode = 0
 albedo_color = Color(0.541176, 0.227451, 0.227451, 1)
+stencil_flags = 2

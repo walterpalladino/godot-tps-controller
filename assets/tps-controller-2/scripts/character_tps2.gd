@@ -130,6 +130,7 @@ func update_character_locomotion(delta):
 	movement = Vector2(input_dir.x, -input_dir.y)
 	
 	if is_on_wall() and input_dir.y < 0.0:
+
 		# check wall first
 		if check_can_climb_wall(get_facing_direction()):
 			# can climb

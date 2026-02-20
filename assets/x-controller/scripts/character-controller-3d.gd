@@ -289,7 +289,7 @@ func check_can_climb_wall(direction : Vector3):
 	wall_ray_top_result = result
 	if result:
 		wall_collision_result |= WALL_COLLISION_RESULT.COLLISION_TOP
-
+	
 	#	second ray : middle	
 	origin = transform.origin + Vector3.UP * wall_ray_mid_offset
 	end = origin + direction.normalized() * wall_max_cast_dist
@@ -305,7 +305,7 @@ func check_can_climb_wall(direction : Vector3):
 	wall_ray_mid_result = result
 	if result:
 		wall_collision_result |= WALL_COLLISION_RESULT.COLLISION_MID
-		
+
 	#	third ray : bottom	
 	origin = transform.origin + Vector3.UP * wall_ray_bottom_offset
 	end = origin + direction.normalized() * wall_max_cast_dist
