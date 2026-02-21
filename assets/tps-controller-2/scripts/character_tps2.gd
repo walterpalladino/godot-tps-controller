@@ -327,7 +327,7 @@ func get_facing_direction() -> Vector3:
 #-----------------------------------------------------
 func update_model_facing():
 	
-	if movement.y > 0:
+	if movement.length() > 0:
 		model.global_rotation.y = lerp_angle( model.global_rotation.y, camera_mount.rotation.y, get_physics_process_delta_time() * rotation_speed )
 
 
