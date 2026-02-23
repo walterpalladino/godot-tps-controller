@@ -159,9 +159,8 @@ func update_character_locomotion(delta):
 	var target_speed = 0.0	# depends on if the target is stand or crouched 
 	
 	if direction.length() > 0:
+
 		update_model_facing()
-#		turning = sign(model.rotation.y - camera_mount.rotation.y)
-#		model.rotation.y = lerp_angle(model.rotation.y, camera_mount.rotation.y, rotation_speed * delta)
 		
 		if is_crouched:
 			target_speed = max_character_speed_crouched
@@ -194,7 +193,6 @@ func update_character_locomotion(delta):
 	velocity = new_velocity
 	check_step_move_and_slide()
 	
-	#update_model_facing()
 
 
 func align_model_to_wall() :
@@ -262,7 +260,6 @@ func update_character_on_air(delta):
 	
 	move_and_slide()
 	
-	#update_model_facing()
 
 
 #-----------------------------------------------------	
@@ -322,7 +319,7 @@ func update_character_climbing_leaving_from_top (delta):
 #	Returns character facing direction	
 func get_facing_direction() -> Vector3:
 	return Vector3.FORWARD.rotated(Vector3.UP, model.rotation.y)
-
+	#return -global_transform.basis.z.normalized()
 
 #-----------------------------------------------------
 func update_model_facing():

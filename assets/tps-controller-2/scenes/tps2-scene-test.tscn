@@ -101,6 +101,7 @@ shadow_enabled = true
 environment = SubResource("Environment_j0rvk")
 
 [node name="Character" parent="." unique_id=520193857 instance=ExtResource("1_xxqa8")]
+max_character_speed_crouched = 0.5
 rotation_speed = 6.0
 mouse_sensitivity = 1.0
 climbing_leaving_from_top_offset = Vector3(0.5, 1.35, 0)

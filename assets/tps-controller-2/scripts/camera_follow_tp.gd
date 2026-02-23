@@ -2,6 +2,12 @@ extends Node3D
 
 @export var target : Node3D
 
+#	Option 1
+#	0.3	1.8	1.0
+#	0.0	1.8	0.0
+#	Option 2
+#	0.3	1.5	1.2
+#	0.0	1.5	0.0
 @export var offset : Vector3 = Vector3.ZERO
 @export var target_offset : Vector3 = Vector3.ZERO
 
