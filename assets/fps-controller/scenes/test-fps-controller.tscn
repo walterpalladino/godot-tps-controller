@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://drhvkn2b4d2rk"]
+
+[ext_resource type="PackedScene" uid="uid://clmjk4l041rlb" path="res://assets/fps-controller/prefabs/fps-character.tscn" id="1_12he1"]
+[ext_resource type="PackedScene" uid="uid://lo2yu6ia66ix" path="res://assets/models/stairs-001.fbx" id="1_41mbl"]
+[ext_resource type="PackedScene" uid="uid://bbfeftwve86hr" path="res://assets/models/stairs-45.fbx" id="2_0k08s"]
+[ext_resource type="PackedScene" uid="uid://b6t4xccl1jy8f" path="res://assets/fps-controller/prefabs/fps-player_hud.tscn" id="2_ou2h7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_12he1"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_ou2h7"]
+sky_material = SubResource("ProceduralSkyMaterial_12he1")
+
+[sub_resource type="Environment" id="Environment_41mbl"]
+background_mode = 2
+sky = SubResource("Sky_ou2h7")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j6yxg"]
+size = Vector2(50, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_12he1"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_12he1"]
+size = Vector3(2, 3, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ou2h7"]
+size = Vector3(2, 3, 2)
+
+[node name="Test-fps-controller" type="Node3D" unique_id=2090487625]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=82722679]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1213476721]
+environment = SubResource("Environment_41mbl")
+
+[node name="Env" type="Node3D" parent="." unique_id=785172397]
+
+[node name="Ground" type="Node3D" parent="Env" unique_id=2001041832]
+
+[node name="Ground Mesh" type="MeshInstance3D" parent="Env/Ground" unique_id=861785378]
+mesh = SubResource("PlaneMesh_j6yxg")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Env/Ground" unique_id=347362114]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Env/Ground/StaticBody3D" unique_id=2029225497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("BoxShape3D_12he1")
+
+[node name="Obstacle" type="Node3D" parent="Env" unique_id=220238944]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.71193)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Env/Obstacle" unique_id=1268212641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("BoxMesh_12he1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Env/Obstacle" unique_id=1182704756]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Env/Obstacle/StaticBody3D" unique_id=309564498]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_ou2h7")
+
+[node name="stairs-001" parent="Env" unique_id=1582451277 instance=ExtResource("1_41mbl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.799, -0.15, 0)
+
+[node name="stairs-45" parent="Env" unique_id=103767321 instance=ExtResource("2_0k08s")]
+transform = Transform3D(-0.87546456, 0, 0.48328233, 0, 1, 0, -0.48328233, 0, -0.87546456, -3.633, -0.15, -2.364)
+
+[node name="stairs-46" parent="Env" unique_id=1399742498 instance=ExtResource("2_0k08s")]
+transform = Transform3D(-0.87546456, 0, 0.48328233, 0, 1, 0, -0.48328233, 0, -0.87546456, -4.4019794, 0.60667145, -2.7824984)
+
+[node name="Fps-character" parent="." unique_id=1470347137 instance=ExtResource("1_12he1")]
+
+[node name="PlayerHUD" parent="." unique_id=1471952095 instance=ExtResource("2_ou2h7")]

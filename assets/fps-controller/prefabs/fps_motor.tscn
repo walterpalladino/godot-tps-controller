@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bul0uukf7tdxq"]
+
+[ext_resource type="Script" uid="uid://dw6faqx2haqgt" path="res://assets/fps-controller/scripts/fps-movement-controller.gd" id="1_bo21n"]
+
+[node name="FPSMotor" type="Node3D" unique_id=1021265056]
+script = ExtResource("1_bo21n")

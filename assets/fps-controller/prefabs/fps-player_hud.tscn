@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://b6t4xccl1jy8f"]
+
+[ext_resource type="Script" uid="uid://cjgdviiflgnei" path="res://assets/fps-controller/scripts/fps-player-hud.gd" id="1_46o0h"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_36xsh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_46o0h"]
+bg_color = Color(0.39215687, 0.5764706, 0.29803923, 0.69411767)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="PlayerHUD" type="Control" unique_id=1883414132]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_46o0h")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1481022703]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.5
+offset_top = -1.5
+offset_right = 1.5
+offset_bottom = 1.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+mouse_filter = 2
+texture = SubResource("CanvasTexture_36xsh")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=2068474176]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -256.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 44.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_46o0h")
+value = 50.0
+rounded = true
+show_percentage = false

@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://clmjk4l041rlb"]
+
+[ext_resource type="Script" uid="uid://p13r2fhgcb88" path="res://assets/fps-controller/scripts/fps-controller.gd" id="1_tj78y"]
+[ext_resource type="Script" uid="uid://c161dcl2rs6r8" path="res://assets/fps-controller/scripts/fps-input-controller.gd" id="2_2icbn"]
+[ext_resource type="Script" uid="uid://dw6faqx2haqgt" path="res://assets/fps-controller/scripts/fps-movement-controller.gd" id="3_62gb4"]
+[ext_resource type="Script" uid="uid://ydfppvnuwdky" path="res://assets/fps-controller/scripts/fps-animation-controller.gd" id="4_bdogi"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jrgb6"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_758ao"]
+radius = 0.35
+height = 1.8
+
+[node name="Fps-character" type="CharacterBody3D" unique_id=1470347137]
+script = ExtResource("1_tj78y")
+mouse_sensitivity = 2.0
+wall_collision_mask = 16777217
+
+[node name="Model" type="Node3D" parent="." unique_id=713956836]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model" unique_id=1837103397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("CapsuleMesh_jrgb6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=116598223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_758ao")
+
+[node name="CameraMount" type="Node3D" parent="." unique_id=1954488917]
+
+[node name="Camera3D" type="Camera3D" parent="CameraMount" unique_id=1330710285]
+
+[node name="InputController" type="Node" parent="." unique_id=148589036]
+script = ExtResource("2_2icbn")
+
+[node name="MovementController" type="Node" parent="." unique_id=2078470685]
+script = ExtResource("3_62gb4")
+
+[node name="AnimationController" type="Node" parent="." unique_id=1172948002]
+script = ExtResource("4_bdogi")
+metadata/_custom_type_script = "uid://ydfppvnuwdky"
