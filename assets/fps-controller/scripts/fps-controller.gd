@@ -1,14 +1,12 @@
 extends CharacterController3D
 
-enum CONTROLLER_STATE {LOCOMOTION, ON_AIR, CLIMBING }
+enum CONTROLLER_STATE {LOCOMOTION, ON_AIR, CLIMBING, CLIMBING_LEAVING_FROM_TOP }
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 
 @onready var _input_controller : InputController = $InputController
 @onready var _animation_controller : AnimationController = $AnimationController
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
 
 @export_category("Mouse Settings")
 @export var mouse_sensitivity : float = 3.0
@@ -17,11 +15,6 @@ const JUMP_VELOCITY = 4.5
 @export var min_pitch : float = -60.0
 @export var max_pitch : float = 60.0
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-#@export var gravity : float = 9.8
-
-#@onready var camera = $Camera3D
-#@onready var model : Node3D = $Model
 @onready var camera_mount : Node3D = $CameraMount
 
 
@@ -62,12 +55,24 @@ var is_crouched : bool = false
 var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
 
+@export_category("Wall Movement")
+@export var climbing_speed : float = 1
+
+#	offset used to adjust end of climbing to top animation
+@export var climbing_leaving_from_top_offset : Vector3 = Vector3(-0.50, 1.35, 0.0)
+
+
+
+var hit_box : Area3D
+var hit_box_bodies : Array[Node3D] = []
 
 
 func _ready():
 
 	set_camera_position()
 	_update_collision_shape()
+	set_hit_box()
+	
 	
 
 func _physics_process(delta):
@@ -123,48 +128,11 @@ func update_character(delta : float):
 			update_character_locomotion(delta)
 		CONTROLLER_STATE.ON_AIR:
 			update_character_on_air(delta)
-		#CONTROLLER_STATE.CLIMBING:
-			#update_character_climbing(delta)
-		#CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP:
-			#update_character_climbing_leaving_from_top(delta)
+		CONTROLLER_STATE.CLIMBING:
+			update_character_climbing(delta)
+		CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP:
+			update_character_climbing_leaving_from_top(delta)
 
-
-func dummy(delta):
-	
-	if _input_controller.crouch :
-		is_crouched = !is_crouched 
-		
-		_update_collision_shape()
-
-
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y -= gravity * delta
-
-	# Handle jump.
-	if _input_controller.jump and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Handle shooting.
-	#if Input.is_action_just_pressed("shoot"):
-	#	shoot()
-
-	# Handle reloading.
-	#if Input.is_action_just_pressed("reload"):
-	#	reload()
-
-
-	# Get the input direction and handle the movement/deceleration.
-	var input_dir = _input_controller.input_dir
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-
-	move_and_slide()
 
 
 #-----------------------------------------------------
@@ -179,14 +147,15 @@ func update_character_locomotion(delta):
 	
 	movement = Vector2(input_dir.x, -input_dir.y)
 	
-	#if is_on_wall() and input_dir.y < 0.0:
-#
+	if is_on_wall() and input_dir.y < 0.0:
+
 		## check wall first
-		#if check_can_climb_wall(get_facing_direction()):
-			## can climb
-			#align_model_to_wall()
-			#controller_state = CONTROLLER_STATE.CLIMBING
-			#return
+		if check_can_climb_wall(get_facing_direction()):
+			# can climb
+			print("can climb")
+			align_model_to_wall()
+			controller_state = CONTROLLER_STATE.CLIMBING
+			return
 
 	# Get the input direction and handle the movement/deceleration.
 #	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
@@ -245,6 +214,7 @@ func update_character_locomotion(delta):
 		#	add a bit to keep the character grounded
 		new_velocity.y = -0.1
 
+	#	TODO : Add acceleration?
 	velocity = new_velocity
 	check_step_move_and_slide()
 	
@@ -266,11 +236,11 @@ func update_character_on_air(delta):
 		controller_state = CONTROLLER_STATE.LOCOMOTION
 		return
 
-	#if is_on_wall() and input_dir.y < 0.0:
-		#
-		#if check_can_climb_wall(get_facing_direction()):
-			#controller_state = CONTROLLER_STATE.CLIMBING
-			#return
+	if is_on_wall() and input_dir.y < 0.0:
+		
+		if check_can_climb_wall(get_facing_direction()):
+			controller_state = CONTROLLER_STATE.CLIMBING
+			return
 
 #	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
@@ -314,6 +284,67 @@ func update_character_on_air(delta):
 	
 
 
+#-----------------------------------------------------	
+func update_character_climbing(delta):
+		
+	# Get the input direction and handle the movement/deceleration.
+	var input_dir : Vector2 = _input_controller.input_dir
+	
+	#	leaving from the ground
+	if is_on_floor() and input_dir.y > 0.0:
+		controller_state = CONTROLLER_STATE.LOCOMOTION
+		return
+
+	#	jumps away the wall
+	if input_dir.x != 0:
+		velocity = transform.basis.x * 6.0 * sign(input_dir.x)
+		velocity.y = 2.0
+		move_and_slide()
+		controller_state = CONTROLLER_STATE.ON_AIR
+		return
+
+	if !check_can_climb_wall(get_facing_direction()):
+		
+		if wall_collision_result == (WALL_COLLISION_RESULT.COLLISION_MID | WALL_COLLISION_RESULT.COLLISION_BOTTOM):
+			#	climbing to the top
+			print("climb leaving from top")
+			controller_state = CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP
+			return
+		else:
+			# nothing to hold on to...
+			move_and_slide()
+			controller_state = CONTROLLER_STATE.ON_AIR
+			return
+
+	var new_velocity : Vector3 = Vector3.ZERO
+	new_velocity = get_facing_direction() * 0.1
+	new_velocity += Vector3.UP * climbing_speed * -input_dir.y
+
+	velocity = new_velocity
+	move_and_slide()
+	
+
+func update_character_climbing_leaving_from_top (delta):
+	
+	#is_crouched = true
+	
+	var offset : Vector3 = get_facing_direction() * climbing_leaving_from_top_offset.x 
+	offset.y += climbing_leaving_from_top_offset.y
+	global_transform.origin += offset
+
+	controller_state = CONTROLLER_STATE.LOCOMOTION
+	
+	velocity = Vector3.ZERO
+
+	move_and_slide()
+	
+	
+	
+#	Returns character facing direction	
+func get_facing_direction() -> Vector3:
+	#return Vector3.FORWARD.rotated(Vector3.UP, model.rotation.y)
+	return -global_transform.basis.z.normalized()
+
 func align_model_to_wall() :
 
 	var inv_normal = Vector2(get_wall_normal().z, get_wall_normal().x).normalized() 
@@ -330,6 +361,8 @@ func update_animations():
 	pass
 
 
+#-----------------------------------------------------
+# Update collision shape based on actions
 func _update_collision_shape() :
 	
 	var new_height : float = _collision_shape_height_standing
@@ -344,3 +377,28 @@ func _update_collision_shape() :
 		#	Adjust the camera position
 		camera_offset.y = new_height - 0.3
 		set_camera_position()
+
+
+#-----------------------------------------------------
+# Setup hitbox for melee actions
+func set_hit_box():
+	
+	hit_box = $HitBox
+
+	hit_box.connect("body_entered", _on_hit_box_body_entered)
+	hit_box.connect("body_exited", _on_hit_box_body_exited)
+
+
+func _on_hit_box_body_entered(body: Node3D) :
+	print("_on_hit_box_body_entered : " + body.name)
+	
+	#if body.is_in_group("Enemy") and not hit_box_bodies.has(body):
+	hit_box_bodies.append(body)
+	
+func _on_hit_box_body_exited(body: Node3D) :
+	print("_on_hit_box_body_exited : " + body.name)
+
+	if hit_box_bodies.has(body):
+		hit_box_bodies.erase(body)
+	
+		

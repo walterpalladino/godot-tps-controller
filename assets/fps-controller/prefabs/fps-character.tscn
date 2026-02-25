@@ -13,10 +13,14 @@ height = 1.8
 radius = 0.35
 height = 1.8
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_bdogi"]
+size = Vector3(1, 1, 0.5)
+
 [node name="Fps-character" type="CharacterBody3D" unique_id=1470347137]
 script = ExtResource("1_tj78y")
 mouse_sensitivity = 2.0
-wall_collision_mask = 16777217
+climbing_leaving_from_top_offset = Vector3(0.5, 1.35, 0)
+wall_collision_mask = 16777218
 
 [node name="Model" type="Node3D" parent="." unique_id=713956836]
 
@@ -41,3 +45,12 @@ script = ExtResource("3_62gb4")
 [node name="AnimationController" type="Node" parent="." unique_id=1172948002]
 script = ExtResource("4_bdogi")
 metadata/_custom_type_script = "uid://ydfppvnuwdky"
+
+[node name="HitBox" type="Area3D" parent="." unique_id=700975277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0597419, -0.7385272)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitBox" unique_id=901011235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+shape = SubResource("BoxShape3D_bdogi")
+
+[node name="Attachements" type="Node3D" parent="." unique_id=1344798467]

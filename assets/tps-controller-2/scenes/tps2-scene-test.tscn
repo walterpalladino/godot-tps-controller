@@ -271,6 +271,27 @@ collision_layer = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ladder/StaticBody3D" unique_id=856563104]
 shape = SubResource("ConcavePolygonShape3D_jqqwu")
 
+[node name="Wall2" type="MeshInstance3D" parent="Environment" unique_id=263212029]
+transform = Transform3D(0.41003448, 0, -0.91207004, 0, 1, 0, 0.91207004, 0, 0.41003448, -6.1891866, 1.5, 8.352509)
+mesh = SubResource("BoxMesh_jqqwu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Wall2" unique_id=1632765209]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall2/StaticBody3D" unique_id=1381938911]
+shape = SubResource("ConcavePolygonShape3D_pupus")
+
+[node name="Ladder3" type="MeshInstance3D" parent="Environment" unique_id=1547531021]
+transform = Transform3D(0.41003448, 0, -0.91207004, 0, 1, 0, 0.91207004, 0, 0.41003448, -5.733152, 1.5, 8.147491)
+mesh = SubResource("BoxMesh_ronll")
+surface_material_override/0 = ExtResource("4_7fnwa")
+script = ExtResource("4_jqqwu")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ladder3" unique_id=532202488]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ladder3/StaticBody3D" unique_id=267872537]
+shape = SubResource("ConcavePolygonShape3D_jqqwu")
+
 [node name="Ladder2" type="MeshInstance3D" parent="Environment" unique_id=2092009854]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.695, 2, -4.911)
 mesh = SubResource("BoxMesh_pupus")
