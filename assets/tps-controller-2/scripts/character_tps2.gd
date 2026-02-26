@@ -54,11 +54,13 @@ var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 
 @export_category("Wall Movement")
-@export var climbing_speed : float = 1
+@export var climbing_speed : float = 1.0
+@export var climbing_sliding_speed : float = 2.0
 
 #	offset used to adjust end of climbing to top animation
 @export var climbing_leaving_from_top_offset : Vector3 = Vector3(-0.50, 1.35, 0.0)
 
+var is_sliding_on_wall : bool = false
 
 @onready var camera_mount : Node3D = get_parent().get_node("CameraMount")
 @onready var camera : Camera3D = camera_mount.get_node("Camera3D")
@@ -267,6 +269,7 @@ func update_character_climbing(delta):
 		
 	# Get the input direction and handle the movement/deceleration.
 	var input_dir : Vector2 = _input_controller.input_dir
+	is_sliding_on_wall = _input_controller.run && input_dir.y > 0
 	
 	#	leaving from the ground
 	if is_on_floor() and input_dir.y > 0.0:
@@ -295,7 +298,10 @@ func update_character_climbing(delta):
 
 	var new_velocity : Vector3 = Vector3.ZERO
 	new_velocity = get_facing_direction() * 0.1
-	new_velocity += Vector3.UP * climbing_speed * -input_dir.y
+	
+	var speed : float = climbing_speed if !is_sliding_on_wall else climbing_sliding_speed
+	
+	new_velocity += Vector3.UP * speed * -input_dir.y
 
 	velocity = new_velocity
 	move_and_slide()
