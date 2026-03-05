@@ -1,10 +1,20 @@
 class_name TPSInputController
 extends InputController
 
+#@onready var camera_mount : Node3D = get_parent().get_node("CameraMount")
+var camera_mount : Node3D 
 
+
+@export_category("Mouse Settings")
+@export var mouse_sensitivity : float = 2
+
+
+var target_rotation : float = 0.0
 
 func _ready() -> void:
 	self.setup_input()
+	
+	camera_mount = get_parent().get_parent().get_node("CameraMount")
 
 
 func _process(delta: float) -> void:
@@ -30,6 +40,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.keycode == KEY_ESCAPE:
 			#  if event.is_action_pressed("ui_cancel"):
 				release_mouse()
+
+		
+	if event is InputEventMouseMotion:
+		camera_mount.rotation.x -= event.relative.y * mouse_sensitivity / 1000.0
+		camera_mount.rotation_degrees.x = clamp(camera_mount.rotation_degrees.x, -90.0, 30.0)
+		camera_mount.rotation.y -= event.relative.x * mouse_sensitivity / 1000.0
+		
+		target_rotation = fposmod(camera_mount.rotation.y, 2.0 * PI)
 
 
 ####################################

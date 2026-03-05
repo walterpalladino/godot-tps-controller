@@ -49,10 +49,6 @@ var last_y_in_floor : float = 0.0
 var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 
-@export_category("Mouse Settings")
-@export var mouse_sensitivity : float = 2
-
-
 @export_category("Wall Movement")
 @export var climbing_speed : float = 1.0
 @export var climbing_sliding_speed : float = 2.0
@@ -62,8 +58,6 @@ var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 
 var is_sliding_on_wall : bool = false
 
-@onready var camera_mount : Node3D = get_parent().get_node("CameraMount")
-@onready var camera : Camera3D = camera_mount.get_node("Camera3D")
 
 
 var movement : Vector2 = Vector2.ZERO
@@ -78,15 +72,6 @@ func _ready() -> void:
 
 	#_interaction_controller.camera = camera
 	pass
-
-
-#-----------------------------------------------------
-func _unhandled_input(event: InputEvent) -> void:
-		
-	if event is InputEventMouseMotion:
-		camera_mount.rotation.x -= event.relative.y * mouse_sensitivity / 1000.0
-		camera_mount.rotation_degrees.x = clamp(camera_mount.rotation_degrees.x, -90.0, 30.0)
-		camera_mount.rotation.y -= event.relative.x * mouse_sensitivity / 1000.0
 
 
 #-----------------------------------------------------
@@ -141,7 +126,7 @@ func update_character_locomotion(delta):
 			return
 
 	# Get the input direction and handle the movement/deceleration.
-	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
+	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, _input_controller.target_rotation)
 
 
 	if Vector2(velocity.x, velocity.z).length() <= max_character_speed_crouched :
@@ -225,7 +210,7 @@ func update_character_on_air(delta):
 			controller_state = CONTROLLER_STATE.CLIMBING
 			return
 
-	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_mount.rotation.y)
+	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, _input_controller.target_rotation)
 
 	var new_velocity = Vector3.ZERO
 	
@@ -331,7 +316,7 @@ func get_facing_direction() -> Vector3:
 func update_model_facing():
 	
 	if movement.length() > 0:
-		model.global_rotation.y = lerp_angle( model.global_rotation.y, camera_mount.rotation.y, get_physics_process_delta_time() * rotation_speed )
+		model.global_rotation.y = lerp_angle( model.global_rotation.y, _input_controller.target_rotation, get_physics_process_delta_time() * rotation_speed )
 
 
 #-----------------------------------------------------

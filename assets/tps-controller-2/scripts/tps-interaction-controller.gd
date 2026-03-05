@@ -1,6 +1,8 @@
 class_name TPSInteractionController
 extends InteractionController
 
+var target_rotation : float = 0.0
+
 
 func _ready() -> void:
 
