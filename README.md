@@ -5,10 +5,11 @@ I worked on this controller to cover several missing features as much to add som
 ### Features
 
 - Standard locomotion standing and crouched. Different speeds for both.
-- Handle steps.
+- Extended Controller able to handle steps.
 - Jump with its own horizontal movement speed
 - Wall and ladders climbing. Jump from wall to air and onto another wall. Climbing has its own speed.
 - Retargetable Character Controller to allow use multiple models without rewriting code.
+- Looking at interactable when interacting with it
 
 ### Animations
 For this project I used only Mixamo free animations so in some cases I had to edit those animations to better fit my needs.
