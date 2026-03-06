@@ -8,9 +8,13 @@ var _camera : Camera3D
 
 @onready var _interact_label : Label = $"../InteractLabel"
 @onready var _input_controller : InputController = $"../InputController"
-@onready var _look_at_modifier : LookAtModifier3D = find_child("LookAtModifier3D")
+@onready var _look_at_modifier : LookAtModifier3D = get_parent().find_child("LookAtModifier3D")
 @onready var _animation_controller : AnimationController = $"../AnimationController"
+@onready var world : World3D = get_viewport().world_3d
 
+
+
+#var _look_at_modifier : LookAtModifier3D
 
 @export_category("Interactions")
 @export var interaction_min_distance : float = 0.60
@@ -37,12 +41,11 @@ func _process(delta: float) -> void:
 
 
 func check_interactions():
-	
+
 	if !_camera :
 		return
 
 	#	Because Node is not spatial we need to get the world3d from the viewport
-	var world = get_viewport().world_3d
 	var space_state = world.direct_space_state
 
 	var mouse_pos = get_viewport().get_mouse_position()

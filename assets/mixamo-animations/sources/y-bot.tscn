@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfcc0yqynb36c"]
+[gd_scene format=3 uid="uid://dfcc0yqynb36c"]
 
 [ext_resource type="PackedScene" uid="uid://bgrf5x75c3lwu" path="res://assets/mixamo-animations/sources/mixamo-ybot.fbx" id="1_d21ak"]
 
-[node name="y-bot" instance=ExtResource("1_d21ak")]
+[node name="y-bot" unique_id=1751209854 instance=ExtResource("1_d21ak")]
 
-[node name="LookAtModifier3D" type="LookAtModifier3D" parent="RootNode/Armature/GeneralSkeleton" index="2"]
+[node name="LookAtModifier3D" type="LookAtModifier3D" parent="RootNode/Armature/GeneralSkeleton" index="2" unique_id=2109386375]
 influence = 0.666
 bone_name = "Neck"
 bone = 4
