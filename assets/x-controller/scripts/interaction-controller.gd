@@ -2,7 +2,6 @@ class_name InteractionController
 extends Node
 
 
-#@onready var camera : Camera3D
 var _camera : Camera3D
 
 
@@ -13,12 +12,10 @@ var _camera : Camera3D
 @onready var world : World3D = get_viewport().world_3d
 
 
-
-#var _look_at_modifier : LookAtModifier3D
-
 @export_category("Interactions")
 @export var interaction_min_distance : float = 0.60
 @export var interaction_max_distance : float = 1.20
+
 
 
 var camera : Camera3D :
@@ -39,27 +36,12 @@ func _process(delta: float) -> void:
 	check_interactions()
 
 
-
 func check_interactions():
 
 	if !_camera :
 		return
 
-	#	Because Node is not spatial we need to get the world3d from the viewport
-	var space_state = world.direct_space_state
-
-	var mouse_pos = get_viewport().get_mouse_position()
-
-	var origin = _camera.project_ray_origin(mouse_pos)
-	origin += _camera.project_ray_normal(mouse_pos) * interaction_min_distance 
-	var end = origin + _camera.project_ray_normal(mouse_pos) * interaction_max_distance
-
-	var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(origin, end)
-	query.collide_with_areas = false
-	query.collide_with_bodies = true
-	query.exclude = [self.get_parent()]
-
-	var result = space_state.intersect_ray(query)
+	var result = get_cursor_position()
 
 	_interact_label.visible = false
 		
@@ -92,11 +74,31 @@ func check_interactions():
 				
 		else:
 			if _look_at_modifier && _look_at_modifier.active:
-				get_tree().create_tween().tween_property(_look_at_modifier, "influence", 0, 1).finished.connect(end_look_at_target)
+				get_tree().create_tween().tween_property(_look_at_modifier, "influence", 0, 0.5).finished.connect(end_look_at_target)
 	
 	else:
 		if _look_at_modifier && _look_at_modifier.active:
-			get_tree().create_tween().tween_property(_look_at_modifier, "influence", 0, 1).finished.connect(end_look_at_target)
+			get_tree().create_tween().tween_property(_look_at_modifier, "influence", 0, 0.5).finished.connect(end_look_at_target)
+
+
+func get_cursor_position():
+	
+	#	Because Node is not spatial we need to get the world3d from the viewport
+	var space_state = world.direct_space_state
+
+	var mouse_pos = get_viewport().get_mouse_position()
+
+	var origin = _camera.project_ray_origin(mouse_pos)
+	origin += _camera.project_ray_normal(mouse_pos) * interaction_min_distance 
+	var end = origin + _camera.project_ray_normal(mouse_pos) * interaction_max_distance
+
+	var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(origin, end)
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	query.exclude = [self.get_parent()]
+
+	return space_state.intersect_ray(query)
+
 
 
 func end_look_at_target():
