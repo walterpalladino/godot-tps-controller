@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://b7x3s8hpjvxnx"]
 
-[ext_resource type="PackedScene" uid="uid://bnu8s7s7lagmo" path="res://assets/tps-controller-2/scenes/character-tps2.tscn" id="1_xxqa8"]
+[ext_resource type="PackedScene" uid="uid://bnu8s7s7lagmo" path="res://assets/tps-controller/prefabs/character-tps.tscn" id="1_xxqa8"]
 [ext_resource type="Material" uid="uid://ccsk0p3g8edai" path="res://assets/side-action-controller/materials/ground_material.tres" id="2_g8pef"]
 [ext_resource type="Material" uid="uid://crb7yl6ebhwlu" path="res://assets/side-action-controller/materials/obstacle_material.tres" id="3_lkoj4"]
-[ext_resource type="Material" uid="uid://bcoomlc71g41n" path="res://assets/tps-controller-2/materials/ladder.tres" id="4_7fnwa"]
-[ext_resource type="PackedScene" uid="uid://cv88tvrvrgjpl" path="res://assets/tps-controller-2/scenes/doorway.tscn" id="4_hgkc8"]
+[ext_resource type="Material" uid="uid://bcoomlc71g41n" path="res://assets/tps-controller/materials/ladder.tres" id="4_7fnwa"]
+[ext_resource type="PackedScene" uid="uid://cv88tvrvrgjpl" path="res://assets/tps-controller/prefabs/doorway.tscn" id="4_hgkc8"]
 [ext_resource type="Script" uid="uid://bf6l4735b6wg1" path="res://assets/x-controller/scripts/climbable.gd" id="4_jqqwu"]
-[ext_resource type="Script" uid="uid://dja7ni1xsk80v" path="res://assets/tps-controller-2/scripts/camera_follow_tp.gd" id="5_wmsam"]
+[ext_resource type="Script" uid="uid://dja7ni1xsk80v" path="res://assets/tps-controller/scripts/camera_follow_tp.gd" id="5_wmsam"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ifwe"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -97,7 +97,7 @@ material = ExtResource("3_lkoj4")
 radius = 0.1
 height = 0.2
 
-[node name="TPS2-Scene-Test" type="Node3D" unique_id=1305980041]
+[node name="TPS-Scene-Test" type="Node3D" unique_id=1305980041]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1561946829]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)

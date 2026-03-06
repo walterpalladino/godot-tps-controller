@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://lo2yu6ia66ix" path="res://assets/models/stairs-001.fbx" id="1_41mbl"]
 [ext_resource type="PackedScene" uid="uid://bbfeftwve86hr" path="res://assets/models/stairs-45.fbx" id="2_0k08s"]
 [ext_resource type="PackedScene" uid="uid://b6t4xccl1jy8f" path="res://assets/fps-controller/prefabs/fps-player_hud.tscn" id="2_ou2h7"]
-[ext_resource type="Material" uid="uid://bcoomlc71g41n" path="res://assets/tps-controller-2/materials/ladder.tres" id="3_2ct6o"]
+[ext_resource type="Material" uid="uid://bcoomlc71g41n" path="res://assets/tps-controller/materials/ladder.tres" id="3_2ct6o"]
 [ext_resource type="Script" uid="uid://bf6l4735b6wg1" path="res://assets/x-controller/scripts/climbable.gd" id="4_3g0u3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_12he1"]
