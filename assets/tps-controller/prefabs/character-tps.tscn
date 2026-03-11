@@ -28,12 +28,6 @@ blend_point_0/pos = -1.0
 blend_point_1/node = SubResource("AnimationNodeAnimation_llm3e")
 blend_point_1/pos = 1.0
 
-[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_jlw5x"]
-filter_enabled = true
-filters = ["%GeneralSkeleton:Chest", "%GeneralSkeleton:Head", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:LeftUpperArm", "%GeneralSkeleton:Neck", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Spine", "%GeneralSkeleton:UpperChest", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1"]
-fadein_time = 0.2
-fadeout_time = 0.2
-
 [sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_t1qpm"]
 xfade_time = 0.2
 input_0/name = "idle_state"
@@ -137,6 +131,12 @@ fadeout_time = 0.3
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ikmx2"]
 animation = &"AnimationLibrary_Godot_Standard/Jump"
 
+[sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_jlw5x"]
+filter_enabled = true
+filters = ["%GeneralSkeleton:Chest", "%GeneralSkeleton:Head", "%GeneralSkeleton:LeftHand", "%GeneralSkeleton:LeftIndexDistal", "%GeneralSkeleton:LeftIndexIntermediate", "%GeneralSkeleton:LeftIndexProximal", "%GeneralSkeleton:LeftLittleDistal", "%GeneralSkeleton:LeftLittleIntermediate", "%GeneralSkeleton:LeftLittleProximal", "%GeneralSkeleton:LeftLowerArm", "%GeneralSkeleton:LeftMiddleDistal", "%GeneralSkeleton:LeftMiddleIntermediate", "%GeneralSkeleton:LeftMiddleProximal", "%GeneralSkeleton:LeftRingDistal", "%GeneralSkeleton:LeftRingIntermediate", "%GeneralSkeleton:LeftRingProximal", "%GeneralSkeleton:LeftShoulder", "%GeneralSkeleton:LeftThumbDistal", "%GeneralSkeleton:LeftThumbMetacarpal", "%GeneralSkeleton:LeftThumbProximal", "%GeneralSkeleton:LeftUpperArm", "%GeneralSkeleton:Neck", "%GeneralSkeleton:RightHand", "%GeneralSkeleton:RightIndexDistal", "%GeneralSkeleton:RightIndexIntermediate", "%GeneralSkeleton:RightIndexProximal", "%GeneralSkeleton:RightLittleDistal", "%GeneralSkeleton:RightLittleIntermediate", "%GeneralSkeleton:RightLittleProximal", "%GeneralSkeleton:RightLowerArm", "%GeneralSkeleton:RightMiddleDistal", "%GeneralSkeleton:RightMiddleIntermediate", "%GeneralSkeleton:RightMiddleProximal", "%GeneralSkeleton:RightRingDistal", "%GeneralSkeleton:RightRingIntermediate", "%GeneralSkeleton:RightRingProximal", "%GeneralSkeleton:RightShoulder", "%GeneralSkeleton:RightThumbDistal", "%GeneralSkeleton:RightThumbMetacarpal", "%GeneralSkeleton:RightThumbProximal", "%GeneralSkeleton:RightUpperArm", "%GeneralSkeleton:Spine", "%GeneralSkeleton:UpperChest", "%GeneralSkeleton:mixamorig_LeftHandIndex1", "%GeneralSkeleton:mixamorig_LeftHandMiddle1", "%GeneralSkeleton:mixamorig_LeftHandPinky1", "%GeneralSkeleton:mixamorig_LeftHandRing1", "%GeneralSkeleton:mixamorig_LeftHandThumb1", "%GeneralSkeleton:mixamorig_RightHandIndex1", "%GeneralSkeleton:mixamorig_RightHandMiddle1", "%GeneralSkeleton:mixamorig_RightHandPinky1", "%GeneralSkeleton:mixamorig_RightHandRing1", "%GeneralSkeleton:mixamorig_RightHandThumb1"]
+fadein_time = 0.2
+fadeout_time = 0.2
+
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_7qmds"]
 fadein_time = 0.2
 fadeout_time = 0.01
@@ -221,14 +221,14 @@ blend_point_4/node = SubResource("AnimationNodeAnimation_pxxee")
 blend_point_4/pos = Vector2(0, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
-graph_offset = Vector2(-621.45197, -47.384266)
+graph_offset = Vector2(265.42667, 147.4145)
 nodes/output/position = Vector2(1720, -70)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_34ei5")
 nodes/Animation/position = Vector2(-350, -250)
 nodes/Climbing/node = SubResource("AnimationNodeBlendSpace1D_105eb")
 nodes/Climbing/position = Vector2(-860, 1080)
-nodes/OpenDoor/node = SubResource("AnimationNodeOneShot_jlw5x")
-nodes/OpenDoor/position = Vector2(960, -180)
+nodes/open_door/node = SubResource("AnimationNodeOneShot_jlw5x")
+nodes/open_door/position = Vector2(960, -180)
 nodes/State/node = SubResource("AnimationNodeTransition_t1qpm")
 nodes/State/position = Vector2(-380, -40)
 "nodes/TimeScale Climbing/node" = SubResource("AnimationNodeTimeScale_ly6k1")
@@ -269,7 +269,7 @@ nodes/run_blend/node = SubResource("AnimationNodeBlendSpace2D_o3oay")
 nodes/run_blend/position = Vector2(-890, 200)
 nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
 nodes/walk_blend/position = Vector2(-890, 20)
-node_connections = [&"output", 0, &"rise_on_top", &"OpenDoor", 0, &"landed_hard", &"OpenDoor", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"State", 5, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"landed", 0, &"State", &"landed", 1, &"land_anim", &"landed_hard", 0, &"landed", &"landed_hard", 1, &"hard_land_anim", &"rise_on_top", 0, &"OpenDoor", &"rise_on_top", 1, &"rise_on_top_anim_scale", &"rise_on_top_anim_scale", 0, &"rise_on_top_anim"]
+node_connections = [&"output", 0, &"rise_on_top", &"open_door", 0, &"landed_hard", &"open_door", 1, &"TimeScaleOpenDoor", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"State", 5, &"TimeScale Climbing", &"TimeScale Climbing", 0, &"Climbing", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"TimeScaleOpenDoor", 0, &"Animation", &"landed", 0, &"State", &"landed", 1, &"land_anim", &"landed_hard", 0, &"landed", &"landed_hard", 1, &"hard_land_anim", &"rise_on_top", 0, &"open_door", &"rise_on_top", 1, &"rise_on_top_anim_scale", &"rise_on_top_anim_scale", 0, &"rise_on_top_anim"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_p52ah"]
 
@@ -300,9 +300,9 @@ root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
 parameters/Climbing/blend_position = 0.0
-parameters/OpenDoor/active = false
-parameters/OpenDoor/internal_active = false
-parameters/OpenDoor/request = 0
+parameters/open_door/active = false
+parameters/open_door/internal_active = false
+parameters/open_door/request = 0
 parameters/State/current_state = "idle_state"
 parameters/State/transition_request = ""
 parameters/State/current_index = 0

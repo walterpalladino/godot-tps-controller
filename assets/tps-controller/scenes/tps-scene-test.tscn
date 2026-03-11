@@ -92,6 +92,15 @@ size = Vector3(0.8, 4, 0.1)
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ronll"]
 data = PackedVector3Array(-0.39999998, 2, 0.049999997, 0.39999998, 2, 0.049999997, -0.39999998, -2, 0.049999997, 0.39999998, 2, 0.049999997, 0.39999998, -2, 0.049999997, -0.39999998, -2, 0.049999997, 0.39999998, 2, -0.049999997, -0.39999998, 2, -0.049999997, 0.39999998, -2, -0.049999997, -0.39999998, 2, -0.049999997, -0.39999998, -2, -0.049999997, 0.39999998, -2, -0.049999997, 0.39999998, 2, 0.049999997, 0.39999998, 2, -0.049999997, 0.39999998, -2, 0.049999997, 0.39999998, 2, -0.049999997, 0.39999998, -2, -0.049999997, 0.39999998, -2, 0.049999997, -0.39999998, 2, -0.049999997, -0.39999998, 2, 0.049999997, -0.39999998, -2, -0.049999997, -0.39999998, 2, 0.049999997, -0.39999998, -2, 0.049999997, -0.39999998, -2, -0.049999997, 0.39999998, 2, 0.049999997, -0.39999998, 2, 0.049999997, 0.39999998, 2, -0.049999997, -0.39999998, 2, 0.049999997, -0.39999998, 2, -0.049999997, 0.39999998, 2, -0.049999997, -0.39999998, -2, 0.049999997, 0.39999998, -2, 0.049999997, -0.39999998, -2, -0.049999997, 0.39999998, -2, 0.049999997, 0.39999998, -2, -0.049999997, -0.39999998, -2, -0.049999997)
 
+[sub_resource type="BoxMesh" id="BoxMesh_42pj7"]
+size = Vector3(2, 1.6, 0.8)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_wcg8e"]
+data = PackedVector3Array(-1, 0.79999995, 0.39999998, 1, 0.79999995, 0.39999998, -1, -0.79999995, 0.39999998, 1, 0.79999995, 0.39999998, 1, -0.79999995, 0.39999998, -1, -0.79999995, 0.39999998, 1, 0.79999995, -0.39999998, -1, 0.79999995, -0.39999998, 1, -0.79999995, -0.39999998, -1, 0.79999995, -0.39999998, -1, -0.79999995, -0.39999998, 1, -0.79999995, -0.39999998, 1, 0.79999995, 0.39999998, 1, 0.79999995, -0.39999998, 1, -0.79999995, 0.39999998, 1, 0.79999995, -0.39999998, 1, -0.79999995, -0.39999998, 1, -0.79999995, 0.39999998, -1, 0.79999995, -0.39999998, -1, 0.79999995, 0.39999998, -1, -0.79999995, -0.39999998, -1, 0.79999995, 0.39999998, -1, -0.79999995, 0.39999998, -1, -0.79999995, -0.39999998, 1, 0.79999995, 0.39999998, -1, 0.79999995, 0.39999998, 1, 0.79999995, -0.39999998, -1, 0.79999995, 0.39999998, -1, 0.79999995, -0.39999998, 1, 0.79999995, -0.39999998, -1, -0.79999995, 0.39999998, 1, -0.79999995, 0.39999998, -1, -0.79999995, -0.39999998, 1, -0.79999995, 0.39999998, 1, -0.79999995, -0.39999998, -1, -0.79999995, -0.39999998)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_42pj7"]
+size = Vector3(2, 1.6, 0.1)
+
 [sub_resource type="SphereMesh" id="SphereMesh_ht3q5"]
 material = ExtResource("3_lkoj4")
 radius = 0.1
@@ -106,7 +115,7 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=607382063]
 environment = SubResource("Environment_j0rvk")
 
-[node name="Character" parent="." unique_id=520193857 instance=ExtResource("1_xxqa8")]
+[node name="Character" parent="." unique_id=2065701138 instance=ExtResource("1_xxqa8")]
 max_character_speed_crouched = 0.5
 rotation_speed = 6.0
 climbing_sliding_speed = 5.0
@@ -309,6 +318,22 @@ collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ladder2/StaticBody3D" unique_id=720410471]
 shape = SubResource("ConcavePolygonShape3D_ronll")
+
+[node name="Wall3" type="MeshInstance3D" parent="Environment" unique_id=920179016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.283, 0.8, -8.241)
+mesh = SubResource("BoxMesh_42pj7")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Wall3" unique_id=1810773071]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall3/StaticBody3D" unique_id=2692396]
+shape = SubResource("ConcavePolygonShape3D_wcg8e")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Environment/Wall3" unique_id=274781898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.4376154)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Wall3/StaticBody3D2" unique_id=1394208269]
+shape = SubResource("BoxShape3D_42pj7")
 
 [node name="Doorway" parent="." unique_id=919597534 instance=ExtResource("4_hgkc8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)

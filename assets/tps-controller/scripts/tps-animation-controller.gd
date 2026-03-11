@@ -46,7 +46,7 @@ func animate_locomotion_ground(is_crouched : bool, is_running : bool, movement :
 func animate_interactable(interactable) :
 
 	if interactable is Doorway:
-		_animation_tree.set("parameters/OpenDoor/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+		_animation_tree.set("parameters/open_door/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	
 	
 #-----------------------------------------------------
@@ -87,13 +87,19 @@ func animate_climbing_leaving_from_top():
 #	the cahracter interaction
 func is_blocking_animation_running():
 	
+#	var state_machine = _animation_tree.get_property_list()
+#	print(_animation_tree.get("parameters"))
+#	print(state_machine)
+	#var current_anim = state_machine.get_current_node()
+	#print("Playing: ", current_anim)
+	
 	if _animation_tree.get("parameters/landed/active"):
 		return true
 	
 	if _animation_tree.get("parameters/rise_on_top/active"):
 		return true
 
-	if _animation_tree.get("parameters/OpenDoor/active"):
+	if _animation_tree.get("parameters/open_door/active"):
 		return true
 
 	return false

@@ -69,7 +69,7 @@ func check_interactions():
 			_interact_label.visible = true
 
 			if _input_controller.interact :
-				_animation_controller.animate_interactable(result.collider.is_open)
+				_animation_controller.animate_interactable(result.collider)
 				result.collider.interact()
 				
 		else:

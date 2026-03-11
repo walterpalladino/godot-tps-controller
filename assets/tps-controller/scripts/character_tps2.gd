@@ -124,6 +124,13 @@ func update_character_locomotion(delta):
 			align_model_to_wall()
 			controller_state = CONTROLLER_STATE.CLIMBING
 			return
+			
+		else:	
+			if wall_collision_result == (WALL_COLLISION_RESULT.COLLISION_MID | WALL_COLLISION_RESULT.COLLISION_BOTTOM):
+				#	climbing to the top
+				controller_state = CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP
+				return
+			
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, _input_controller.target_rotation)
@@ -330,5 +337,5 @@ func update_animations():
 			_animation_controller.animate_on_air()
 		CONTROLLER_STATE.CLIMBING:
 			_animation_controller.animate_climbing(velocity.y / climbing_speed)
-		CONTROLLER_STATE.CLIMBING:
+		CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP:
 			_animation_controller.animate_climbing_leaving_from_top()
