@@ -11,15 +11,14 @@ enum CONTROLLER_STATE {
 
 
 @onready var _input_controller : InputController = $InputController
-#@onready var _movement_controller : MovementController = $MovementController
 @onready var _animation_controller : AnimationController = $AnimationController
-@onready var _interaction_controller : InteractionController = $InteractionController
-
 
 @onready var collision_shape = get_node("CollisionShape3D")
 @onready var model = get_node("Model")
 
 @onready var look_at_modifier : LookAtModifier3D = find_child("LookAtModifier3D")
+
+
 
 @export_category("Ground Movement")
 
@@ -46,18 +45,15 @@ var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
 
 
-var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
-
-
 @export_category("Wall Movement")
 @export var climbing_speed : float = 1.0
 @export var climbing_sliding_speed : float = 2.0
+@export var jump_away_wall_speed : float = 2.0
 
 #	offset used to adjust end of climbing to top animation
 @export var climbing_leaving_from_top_offset : Vector3 = Vector3(-0.50, 1.35, 0.0)
 
 var is_sliding_on_wall : bool = false
-
 
 
 var movement : Vector2 = Vector2.ZERO
@@ -66,11 +62,12 @@ var is_running : bool = false
 
 var turning : float = 0.0
 
+var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
+
+
 
 #-----------------------------------------------------
 func _ready() -> void:
-
-	#_interaction_controller.camera = camera
 	pass
 
 
@@ -131,10 +128,8 @@ func update_character_locomotion(delta):
 				controller_state = CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP
 				return
 			
-
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, _input_controller.target_rotation)
-
 
 	if Vector2(velocity.x, velocity.z).length() <= max_character_speed_crouched :
 		if _input_controller.crouch :
@@ -270,9 +265,11 @@ func update_character_climbing(delta):
 
 	#	jumps away the wall
 	if input_dir.x != 0:
-		velocity = transform.basis.x * 6.0 * sign(input_dir.x)
-		velocity.y = 2.0
+		velocity = model.basis.x * jump_away_wall_speed * sign(input_dir.x)
+		#velocity.y = 2.0
+
 		move_and_slide()
+
 		controller_state = CONTROLLER_STATE.ON_AIR
 		return
 
@@ -318,6 +315,7 @@ func update_character_climbing_leaving_from_top (delta):
 func get_facing_direction() -> Vector3:
 	return Vector3.FORWARD.rotated(Vector3.UP, model.rotation.y)
 	#return -global_transform.basis.z.normalized()
+
 
 #-----------------------------------------------------
 func update_model_facing():
