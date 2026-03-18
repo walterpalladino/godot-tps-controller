@@ -34,7 +34,9 @@ shape = SubResource("CapsuleShape3D_758ao")
 
 [node name="CameraMount" type="Node3D" parent="." unique_id=1954488917]
 
-[node name="Camera3D" type="Camera3D" parent="CameraMount" unique_id=1330710285]
+[node name="BobPoint" type="Node3D" parent="CameraMount" unique_id=238899882]
+
+[node name="Camera3D" type="Camera3D" parent="CameraMount/BobPoint" unique_id=1330710285]
 
 [node name="InputController" type="Node" parent="." unique_id=148589036]
 script = ExtResource("2_2icbn")

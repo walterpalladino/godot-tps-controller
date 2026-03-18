@@ -16,6 +16,7 @@ var controller_state : CONTROLLER_STATE = CONTROLLER_STATE.ON_AIR
 @export var max_pitch : float = 60.0
 
 @onready var camera_mount : Node3D = $CameraMount
+@onready var camera_bob_point : Node3D = $CameraMount/BobPoint
 
 
 @export var camera_offset : Vector3 = Vector3(0.0, 1.5, 0.0)
@@ -56,10 +57,15 @@ var last_jump_time : float = 0.0
 var last_y_in_floor : float = 0.0
 
 @export_category("Wall Movement")
-@export var climbing_speed : float = 1
+@export var climbing_speed : float = 1.0
 
 #	offset used to adjust end of climbing to top animation
 @export var climbing_leaving_from_top_offset : Vector3 = Vector3(-0.50, 1.35, 0.0)
+
+
+@export_category("Camera Bob")
+@export_range(0.0, 1.0, 0.1) var vertical_bob_amount : float = 1.0
+@export_range(0.0, 1.0, 0.1) var horizontal_bob_amount : float = 1.0
 
 
 
@@ -126,6 +132,8 @@ func update_character(delta : float):
 	match controller_state:
 		CONTROLLER_STATE.LOCOMOTION:
 			update_character_locomotion(delta)
+			camera_bob_update(delta, velocity.length())
+
 		CONTROLLER_STATE.ON_AIR:
 			update_character_on_air(delta)
 		CONTROLLER_STATE.CLIMBING:
@@ -281,7 +289,6 @@ func update_character_on_air(delta):
 	move_and_slide()
 	
 	#update_model_facing()
-	
 
 
 #-----------------------------------------------------	
@@ -402,3 +409,15 @@ func _on_hit_box_body_exited(body: Node3D) :
 		hit_box_bodies.erase(body)
 	
 		
+func camera_bob_update(delta : float, movement_speed : float):
+
+	if !is_grounded():
+		return
+
+	var v_offset = vertical_bob_amount / 10.0 * sin( 0.005 * movement_speed * Time.get_ticks_msec())
+	camera_bob_point.position.y = v_offset
+
+	var h_offset = horizontal_bob_amount / 10.0 * cos( 0.005 * movement_speed * Time.get_ticks_msec())
+	camera_bob_point.position.x = h_offset
+	
+	

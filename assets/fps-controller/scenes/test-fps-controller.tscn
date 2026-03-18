@@ -112,5 +112,7 @@ shape = SubResource("ConcavePolygonShape3D_iswsn")
 
 [node name="Fps-character" parent="." unique_id=1470347137 instance=ExtResource("1_12he1")]
 climbing_leaving_from_top_offset = Vector3(0.4, 1.35, 0)
+vertical_bob_amount = 0.4
+horizontal_bob_amount = 0.3
 
 [node name="PlayerHUD" parent="." unique_id=1471952095 instance=ExtResource("2_ou2h7")]
