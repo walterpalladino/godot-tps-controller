@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://de8bjxjwwtt2u"]
+[gd_scene format=3 uid="uid://de8bjxjwwtt2u"]
 
 [ext_resource type="Script" uid="uid://co7stxvd0rxt3" path="res://assets/point-and-click/scripts/character-pac.gd" id="1_6gsui"]
 [ext_resource type="PackedScene" uid="uid://dfcc0yqynb36c" path="res://assets/mixamo-animations/sources/y-bot.tscn" id="2_dllxq"]
@@ -216,6 +216,7 @@ blend_point_4/pos = Vector2(0, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_k3gqr"]
 graph_offset = Vector2(-740.102, -33.5604)
+nodes/output/position = Vector2(250, -30)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_2swil")
 nodes/OneShot/position = Vector2(90, 110)
 nodes/State/node = SubResource("AnimationNodeTransition_t1qpm")
@@ -238,34 +239,31 @@ nodes/in_place_blend/node = SubResource("AnimationNodeBlendSpace1D_ftpw8")
 nodes/in_place_blend/position = Vector2(-890, -140)
 nodes/on_air_anim/node = SubResource("AnimationNodeAnimation_ikmx2")
 nodes/on_air_anim/position = Vector2(-920, 380)
-nodes/output/position = Vector2(250, -30)
 nodes/run_blend/node = SubResource("AnimationNodeBlendSpace2D_o3oay")
 nodes/run_blend/position = Vector2(-890, 200)
 nodes/side_scroller_sm/node = SubResource("AnimationNodeStateMachine_x14bm")
 nodes/side_scroller_sm/position = Vector2(390, 220)
 nodes/walk_blend/node = SubResource("AnimationNodeBlendSpace2D_d5vtv")
 nodes/walk_blend/position = Vector2(-890, 20)
-node_connections = [&"OneShot", 0, &"State", &"OneShot", 1, &"hard_land_anim", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend", &"output", 0, &"OneShot"]
+node_connections = [&"output", 0, &"OneShot", &"OneShot", 0, &"State", &"OneShot", 1, &"hard_land_anim", &"State", 0, &"TimeScale In Place", &"State", 1, &"TimeScale Walk", &"State", 2, &"TimeScale Run", &"State", 3, &"on_air_anim", &"State", 4, &"TimeScale Crouch", &"TimeScale Crouch", 0, &"crouch_blend", &"TimeScale In Place", 0, &"in_place_blend", &"TimeScale Run", 0, &"run_blend", &"TimeScale Walk", 0, &"walk_blend"]
 
-[node name="Character" type="Node3D"]
+[node name="Character" type="Node3D" unique_id=2013906896]
 script = ExtResource("1_6gsui")
 
-[node name="Model" type="Node3D" parent="."]
+[node name="Model" type="Node3D" parent="." unique_id=1466026227]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 
-[node name="y-bot" parent="Model" instance=ExtResource("2_dllxq")]
+[node name="y-bot" parent="Model" unique_id=2136338562 instance=ExtResource("2_dllxq")]
 
-[node name="x-bot" parent="Model" instance=ExtResource("3_4pqtr")]
+[node name="x-bot" parent="Model" unique_id=1592502999 instance=ExtResource("3_4pqtr")]
 visible = false
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1664846255]
 root_node = NodePath("../Model/y-bot")
-libraries = {
-"AnimationLibrary_Godot_Standard": ExtResource("4_n6y4j"),
-"mixamo-basic-locomotion": ExtResource("5_alar3")
-}
+libraries/AnimationLibrary_Godot_Standard = ExtResource("4_n6y4j")
+libraries/mixamo-basic-locomotion = ExtResource("5_alar3")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=951213382]
 root_node = NodePath("../Model/y-bot")
 tree_root = SubResource("AnimationNodeBlendTree_k3gqr")
 anim_player = NodePath("../AnimationPlayer")
@@ -288,5 +286,7 @@ parameters/side_scroller_sm/conditions/on_air = false
 parameters/side_scroller_sm/conditions/walking = false
 parameters/walk_blend/blend_position = Vector2(0.000673413, -0.994962)
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=641659878]
+path_desired_distance = 0.5
+target_desired_distance = 0.75
 debug_enabled = true
