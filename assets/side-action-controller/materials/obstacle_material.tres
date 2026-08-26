@@ -1,7 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://crb7yl6ebhwlu"]
-
-[resource]
-render_priority = 1
-transparency = 1
-albedo_color = Color(0.541176, 0.227451, 0.227451, 1)
-stencil_flags = 2
