@@ -148,6 +148,19 @@ func check_step(check_velocity:Vector3):
 			#	so will leave the engine to handle this
 			return false
 		
+		#	Check for small height differences that can happen
+		#	between collider alligmnement
+		var transform_test2 : Transform3D = global_transform
+		transform_test2.origin += Vector3.UP * (min_step_height + step_margin)
+		var small_step : bool = false
+		is_character_collided = check_movement(
+			transform_test2,
+			motion,
+			test_motion_result
+		)
+		if !is_character_collided:			
+			small_step = true
+
 		#	now try to move the controller up to the step height
 		#	and check if can move from there
 		transform_test.origin += Vector3.UP * (max_step_height + step_margin)
@@ -161,8 +174,18 @@ func check_step(check_velocity:Vector3):
 		if is_character_collided:
 			#	cant walk there. higher than step
 			#print_debug("cant walk there. higher than step")
-			return false
 
+			if small_step:
+				#	Can make small step instead
+				#	adjust the character position
+				global_transform.origin += (min_step_height + step_margin) * Vector3.UP
+				
+				move_and_slide()
+				apply_floor_snap()
+
+				return false
+			else:
+				return false
 		#	if we reached here then the movement was blocked as normal
 		#	but not at a tep higher so will try to check if movement
 		#	is possible
@@ -201,6 +224,18 @@ func check_step(check_velocity:Vector3):
 			return true
 		
 	return false
+
+
+func check_movement(transform_test : Transform3D, motion : Vector3, test_motion_result : PhysicsTestMotionResult3D) -> bool :
+	
+	var test_motion_params : PhysicsTestMotionParameters3D = PhysicsTestMotionParameters3D.new()
+	test_motion_params.from = transform_test
+	test_motion_params.motion = motion
+	test_motion_params.recovery_as_collision = true
+	
+	var is_character_collided : bool = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+
+	return is_character_collided
 
 
 func is_on_step() -> bool:
