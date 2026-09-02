@@ -85,14 +85,15 @@ func check_step(check_velocity:Vector3):
 	# ---------------------------------------
 	# 1 - test first if can horizontally move
 	# ---------------------------------------
-	var test_motion_params: PhysicsTestMotionParameters3D = PhysicsTestMotionParameters3D.new()
 
-	test_motion_params.from = transform_test
-	test_motion_params.motion = motion
-	test_motion_params.recovery_as_collision = true
+	var is_character_collided: bool
+	#var is_character_collided: bool = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+	is_character_collided = check_movement(
+		transform_test,
+		motion,
+		test_motion_result
+	)
 
-	var is_character_collided: bool = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
-	
 	#	the character could move to the end
 	#	the engine do not include movement on slopes on this category
 	#	so will check it later
@@ -103,12 +104,11 @@ func check_step(check_velocity:Vector3):
 		transform_test.origin += motion
 		motion = Vector3.DOWN * (max_step_height + step_margin)
 
-		test_motion_params.from = transform_test
-		test_motion_params.motion = motion
-		test_motion_params.recovery_as_collision = true
-
-		is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
-
+		is_character_collided = check_movement(
+			transform_test,
+			motion,
+			test_motion_result
+		)
 		if not is_character_collided:
 			#	there is no floor or step below the character
 			return false
@@ -165,11 +165,11 @@ func check_step(check_velocity:Vector3):
 		#	and check if can move from there
 		transform_test.origin += Vector3.UP * (max_step_height + step_margin)
 
-		test_motion_params.from = transform_test
-		test_motion_params.motion = motion
-		test_motion_params.recovery_as_collision = true
-
-		is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+		is_character_collided = check_movement(
+			transform_test,
+			motion,
+			test_motion_result
+		)
 
 		if is_character_collided:
 			#	cant walk there. higher than step
@@ -195,11 +195,11 @@ func check_step(check_velocity:Vector3):
 		transform_test.origin += motion 
 		motion = Vector3.DOWN * (max_step_height + step_margin)
 					
-		test_motion_params.from = transform_test
-		test_motion_params.motion = motion
-		test_motion_params.recovery_as_collision = true
-
-		is_character_collided = PhysicsServer3D.body_test_motion(self.get_rid(), test_motion_params, test_motion_result)
+		is_character_collided = check_movement(
+			transform_test,
+			motion,
+			test_motion_result
+		)
 
 		if not is_character_collided:
 			#	this should never happend
