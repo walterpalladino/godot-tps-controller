@@ -5,7 +5,7 @@
 [ext_resource type="Material" uid="uid://cx7w7e74lple0" path="res://assets/tps-controller/materials/obstacle.tres" id="3_lkoj4"]
 [ext_resource type="Material" uid="uid://bcoomlc71g41n" path="res://assets/tps-controller/materials/ladder.tres" id="4_7fnwa"]
 [ext_resource type="PackedScene" uid="uid://cv88tvrvrgjpl" path="res://assets/tps-controller/prefabs/doorway.tscn" id="4_hgkc8"]
-[ext_resource type="Script" uid="uid://bf6l4735b6wg1" path="res://assets/x-controller/scripts/climbable.gd" id="4_jqqwu"]
+[ext_resource type="Script" uid="uid://bf6l4735b6wg1" path="res://assets/x-controller/scripts/climb/climbable.gd" id="4_jqqwu"]
 [ext_resource type="Script" uid="uid://dja7ni1xsk80v" path="res://assets/tps-controller/scripts/camera_follow_tp.gd" id="5_wmsam"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2ifwe"]

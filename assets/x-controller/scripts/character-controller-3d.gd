@@ -55,10 +55,11 @@ var wall_collision_result : WALL_COLLISION_RESULT = WALL_COLLISION_RESULT.COLLIS
 func check_step_move_and_slide():
 	var check_velocity : Vector3 = velocity
 	check_velocity.y = 0.0
+	#	If there was no step then move normally
 	if !check_step(check_velocity):
 		move_and_slide()
 		apply_floor_snap()
-	
+
 	
 ####################################
 ##	Steps Movement
@@ -111,6 +112,7 @@ func check_step(check_velocity:Vector3):
 		)
 		if not is_character_collided:
 			#	there is no floor or step below the character
+			#	
 			return false
 
 		#	if collided with something check if could be a valid step
@@ -180,14 +182,14 @@ func check_step(check_velocity:Vector3):
 				#	adjust the character position
 				global_transform.origin += (min_step_height + step_margin) * Vector3.UP
 				
+				#	Will not count as step
 				move_and_slide()
 				apply_floor_snap()
 
 				return false
-			else:
-				return false
+				
 		#	if we reached here then the movement was blocked as normal
-		#	but not at a tep higher so will try to check if movement
+		#	but not at a step higher so will try to check if movement
 		#	is possible
 
 		#print_debug(test_motion_result)
@@ -202,8 +204,8 @@ func check_step(check_velocity:Vector3):
 		)
 
 		if not is_character_collided:
-			#	this should never happend
-			print("this should never happened")
+			#	this should never happend on proper geometry
+			#print("this should never happend on proper geometry")
 			return false
 		
 		if test_motion_result.get_travel().y < (max_step_height + step_margin) :#and collision_angle <= step_max_slope_degree:

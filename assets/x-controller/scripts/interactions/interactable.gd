@@ -7,3 +7,9 @@ extends Node3D
 
 func interact():
 	pass
+
+func get_status() -> String:
+	return ""
+
+func get_interaction_description() -> String:
+	return ""

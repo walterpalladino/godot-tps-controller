@@ -40,7 +40,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.keycode == KEY_ESCAPE:
 			#  if event.is_action_pressed("ui_cancel"):
 				release_mouse()
-
 		
 	if event is InputEventMouseMotion:
 		camera_mount.rotation.x -= event.relative.y * mouse_sensitivity / 1000.0
@@ -48,6 +47,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera_mount.rotation.y -= event.relative.x * mouse_sensitivity / 1000.0
 		
 		target_rotation = fposmod(camera_mount.rotation.y, 2.0 * PI)
+
 
 
 ####################################

@@ -50,6 +50,7 @@ func _process(delta: float) -> void:
 		if marker:
 			marker.position = result.position
 		new_position = position.move_toward(result.position, delta * update_speed)
+		#new_position = result.position
 
 	position = new_position
 	

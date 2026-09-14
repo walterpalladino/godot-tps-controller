@@ -28,7 +28,6 @@ func track_target():
 		return
 
 	var result = get_cursor_position()
-
 		
 	if _look_at_modifier :
 

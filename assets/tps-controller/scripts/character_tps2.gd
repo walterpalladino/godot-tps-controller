@@ -28,6 +28,10 @@ enum CONTROLLER_STATE {
 
 @export var rotation_speed = 12.0
 
+@export var collider_stand_height : float = 1.8
+@export var collider_crouched_height : float = 1.0
+
+#	Don't set it directly. Use set_crouched method
 var is_crouched : bool = false
 
 
@@ -133,7 +137,7 @@ func update_character_locomotion(delta):
 
 	if Vector2(velocity.x, velocity.z).length() <= max_character_speed_crouched :
 		if _input_controller.crouch :
-			is_crouched = !is_crouched 
+			set_crouched( !is_crouched )
 			
 	var jump : bool = _input_controller.jump
 	var running : bool = _input_controller.run
@@ -164,7 +168,7 @@ func update_character_locomotion(delta):
 	# Handle Jump.
 	if jump and Time.get_ticks_msec() > last_jump_time + min_time_between_jumps * 1000.0:
 
-		is_crouched = false
+		set_crouched( false )
 		new_velocity.y = calculate_jump_vertical_speed()
 
 		last_jump_time = Time.get_ticks_msec()
@@ -298,7 +302,7 @@ func update_character_climbing(delta):
 
 func update_character_climbing_leaving_from_top (delta):
 	
-	is_crouched = true
+	set_crouched( true )
 	
 	var offset : Vector3 = get_facing_direction() * climbing_leaving_from_top_offset.x 
 	offset.y += climbing_leaving_from_top_offset.y
@@ -337,3 +341,13 @@ func update_animations():
 			_animation_controller.animate_climbing(velocity.y / climbing_speed)
 		CONTROLLER_STATE.CLIMBING_LEAVING_FROM_TOP:
 			_animation_controller.animate_climbing_leaving_from_top()
+
+
+func set_crouched(crouched : bool):
+	
+	is_crouched = crouched
+	
+	var shape = collision_shape.shape
+	if shape is CylinderShape3D:
+		shape.height = collider_stand_height if !is_crouched else collider_crouched_height
+		collision_shape.position.y = collider_stand_height / 2.0 if !is_crouched else collider_crouched_height / 2.0
